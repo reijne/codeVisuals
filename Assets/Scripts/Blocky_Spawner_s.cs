@@ -5,16 +5,20 @@ using UnityEngine;
 public class Blocky_Spawner_s : MonoBehaviour
 {
   public GameObject blocky_prefab;
+  private static int blockyCount = 0;
   // Start is called before the first frame update
   void Start()
   {
-    GameObject blocky_start = Object.Instantiate(blocky_prefab);
-    blocky_start.GetComponent<Blocky_s>().setName("start");
-    GameObject blocky_program = Object.Instantiate(blocky_prefab, new Vector3(0, 0, 1), Quaternion.identity);
-    blocky_program.GetComponent<Blocky_s>().setName("program");
-    GameObject blocky_end = Object.Instantiate(blocky_prefab, new Vector3(0, 0, 2), Quaternion.identity);
-    blocky_end.GetComponent<Blocky_s>().setName("end");
+    spawnBlocky("number threshold = 4");
+    spawnBlocky("boolean isBig = false");
+    spawnBlocky("string name = ``Bob``");
     Debug.Log("done");
+  }
+
+  private void spawnBlocky(string name) {
+    GameObject blocky_obj = Object.Instantiate(blocky_prefab, new Vector3(0, 0, blockyCount*blocky_prefab.transform.localScale.x), Quaternion.identity);
+    blocky_obj.GetComponent<Blocky_s>().setName(name);
+    blockyCount += 1;
   }
 
   // Update is called once per frame

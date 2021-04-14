@@ -26,7 +26,7 @@ public class Blocky_s : MonoBehaviour
     
     if (isHighlighted) {
       mat.color = Color.white;
-      Camera_s.target = this.transform;
+      Camera_s.target = this.gameObject;
     }
   }
 
