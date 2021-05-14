@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Blocky_s : MonoBehaviour
+public class Text_Blocky_s : MonoBehaviour
 {
   public TextMeshPro textMesh;
   public Material mat;
+  public Text variablesText;
+  public string variablesSnapshot;
   private bool isHighlighted = false; 
 
   private void Start() {
@@ -21,6 +23,10 @@ public class Blocky_s : MonoBehaviour
     this.transform.localScale += new Vector3(x, y, z);
   }
 
+  public void setVariables(string vars) {
+    variablesSnapshot = vars;
+  }
+
   public void highlight(bool doHighlight) {
     isHighlighted = doHighlight;
     
@@ -32,5 +38,6 @@ public class Blocky_s : MonoBehaviour
 
   private void OnMouseDown() {
     highlight(!isHighlighted);
+    variablesText.text = variablesSnapshot;
   }
 }
