@@ -5,23 +5,22 @@ using UnityEngine.UI;
 
 public class TextualHandler : MonoBehaviour
 {
+  private void Start() {
+    Tile guan = new Tile("((1,1,1), red)");
+  }
   public InputField textualRepresentation;
-  private string textrep = "";
+  public Blocky_s blocky;
   private bool showTextual = false;
   public void toggleTextualRepresentation() {
     showTextual = !showTextual;
-    
   }
   private void updateTextualRepresentation() {
-    if (!showTextual) return;
-
-    textrep = "[";
-    foreach (Vector3Int gridpos in SquareHandler.aliveGridPositions) {
-      textrep += "\n\t(" + gridpos.x.ToString() + ", " + gridpos.y.ToString() + ", " + gridpos.z.ToString() + ")"; 
+    if (!showTextual)  {
+      textualRepresentation.text = "";
     }
-    textrep += "\n]";
-
-    if (textrep != textualRepresentation.text) textualRepresentation.text = textrep;
+    else if (blocky.toString() != textualRepresentation.text) {
+      textualRepresentation.text = blocky.toString();
+    }
   }
 
   private void FixedUpdate() {

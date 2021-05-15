@@ -9,6 +9,7 @@ public class SelectSquare_s : MonoBehaviour
   public Vector3Int gridpos;
 
   public void init() {
+    GetComponent<Image>().color = Color.gray;
     squareHandler = transform.parent.gameObject.GetComponent<SquareHandler>();
   }
   

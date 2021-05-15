@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Blocky_Spawner_s : MonoBehaviour
 {
-  public static int BLOCKSIZE = 5;
   public GameObject blocky_prefab;
   
   /* HARDCODED example for visualising:
@@ -47,7 +46,7 @@ public class Blocky_Spawner_s : MonoBehaviour
     Blocky_s decl = centre.GetComponent<Blocky_s>();
     decl.setTilePositions(tilepos);
 
-    GameObject next = GameObject.Instantiate(blocky_prefab, new Vector3((BLOCKSIZE+1),0,0), Quaternion.identity);
+    GameObject next = GameObject.Instantiate(blocky_prefab, new Vector3((Blocky_s.SIZE+1),0,0), Quaternion.identity);
     Blocky_s decl2 = next.GetComponent<Blocky_s>();
     decl2.setTilePositions(tilepos);
 
@@ -59,11 +58,11 @@ public class Blocky_Spawner_s : MonoBehaviour
 	  ass.Add(new Vector3Int(0, 0, -1));  
 	  ass.Add(new Vector3Int(1, 0, -1)); 
 
-    GameObject ass1 = GameObject.Instantiate(blocky_prefab, new Vector3(2*(BLOCKSIZE+1),0,0), Quaternion.identity);
+    GameObject ass1 = GameObject.Instantiate(blocky_prefab, new Vector3(2*(Blocky_s.SIZE+1),0,0), Quaternion.identity);
     Blocky_s bass1 = ass1.GetComponent<Blocky_s>();
     bass1.setTilePositions(ass); 
 
-    GameObject ass2 = GameObject.Instantiate(blocky_prefab, new Vector3(3*(BLOCKSIZE+1),0,0), Quaternion.identity);
+    GameObject ass2 = GameObject.Instantiate(blocky_prefab, new Vector3(3*(Blocky_s.SIZE+1),0,0), Quaternion.identity);
     Blocky_s bass2 = ass2.GetComponent<Blocky_s>();
     bass2.setTilePositions(ass); 
 
@@ -78,7 +77,7 @@ public class Blocky_Spawner_s : MonoBehaviour
     tilepos2.Add(new Vector3Int(1, -1, -1));
     tilepos2.Add(new Vector3Int(2, -1, -1));
 
-    GameObject right = GameObject.Instantiate(blocky_prefab, new Vector3(4*(BLOCKSIZE+1),0,0), Quaternion.identity);
+    GameObject right = GameObject.Instantiate(blocky_prefab, new Vector3(4*(Blocky_s.SIZE+1),0,0), Quaternion.identity);
     Blocky_s b2 = right.GetComponent<Blocky_s>();
     b2.setTilePositions(tilepos2);
 
@@ -97,11 +96,11 @@ public class Blocky_Spawner_s : MonoBehaviour
 	  outy.Add(new Vector3Int(0, 0, -2));
 	  outy.Add(new Vector3Int(-1, 0, -1));
 
-    GameObject out1 = GameObject.Instantiate(blocky_prefab, new Vector3(5*(BLOCKSIZE+1),0,0), Quaternion.identity);
+    GameObject out1 = GameObject.Instantiate(blocky_prefab, new Vector3(5*(Blocky_s.SIZE+1),0,0), Quaternion.identity);
     Blocky_s bout1 = out1.GetComponent<Blocky_s>();
     bout1.setTilePositions(outy);
 
-    GameObject out2 = GameObject.Instantiate(blocky_prefab, new Vector3(6*(BLOCKSIZE+1),0,0), Quaternion.identity);
+    GameObject out2 = GameObject.Instantiate(blocky_prefab, new Vector3(6*(Blocky_s.SIZE+1),0,0), Quaternion.identity);
     Blocky_s bout2 = out2.GetComponent<Blocky_s>();
     bout2.setTilePositions(outy);
 
