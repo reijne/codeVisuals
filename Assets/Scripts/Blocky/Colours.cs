@@ -8,6 +8,7 @@ public class Colours
     {Color.red, "red"},
     {Color.blue, "blue"},
     {Color.cyan, "cyan"},
+    {Color.white, "white"},
     {Color.green, "green"},
     {Color.yellow, "yellow"},
     {Color.magenta, "magenta"}
@@ -16,6 +17,7 @@ public class Colours
     {"red", Color.red},
     {"blue", Color.blue},
     {"cyan", Color.cyan},
+    {"white", Color.white},
     {"green", Color.green},
     {"yellow", Color.yellow},
     {"magenta", Color.magenta}

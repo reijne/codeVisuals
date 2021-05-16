@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class TextualHandler : MonoBehaviour
 {
   private void Start() {
-    Tile guan = new Tile("((1,1,1), red)");
+    // Tile guan = new Tile("((1,1,1) | red)");
   }
-  public InputField textualRepresentation;
-  public Blocky_s blocky;
+  [SerializeField] private InputField textualRepresentation;
+  [SerializeField] private Blocky_s blocky;
   private bool showTextual = false;
   public void toggleTextualRepresentation() {
     showTextual = !showTextual;

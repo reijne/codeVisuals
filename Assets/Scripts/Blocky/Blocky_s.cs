@@ -8,25 +8,31 @@ using UnityEngine;
 public class Blocky_s : MonoBehaviour
 {
   public static int SIZE; // For ease of use all the blockys are the same size i.e. static var
+  [SerializeField] GameObject tile_prefab;
   private List<GameObject> tiles = new List<GameObject>();
-  public List<Vector3Int> tilePositions = new List<Vector3Int>();
+  public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();
   
-  public void setTilePositions(List<Vector3Int> tilePositions) {
-    this.tilePositions = tilePositions;
-    spawnTiles();
+  public void setTilePositions(List<(Vector3Int, Color)> tilePosCols) {
+    this.tilePosCols = tilePosCols;
   }
 
   public void spawnTiles() {
     if (tiles.Count > 0) removeTiles();
 
-    foreach (Vector3Int tilepos in tilePositions) {
+    foreach ((Vector3Int tilepos, Color col) in tilePosCols) {
       if (tileOutsideBlock(tilepos)) {
         Debug.LogError("Tile position: " + tilepos + " outside of block with size" + SIZE);
         continue;
       }
+
       GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
+      // Option using Tile_s class and prefab
+      // GameObject tile = GameObject.Instantiate(tile_prefab);
+      // tile.GetComponent<Tile_s>().gridpos = tilepos;
+      // tile.GetComponent<Tile_s>().color = col;
       tile.transform.SetParent(this.transform);
       tile.transform.position = this.transform.position + tilepos;
+      tile.GetComponent<Renderer>().material.color = col;
       tiles.Add(tile);
     }
   }
@@ -38,7 +44,17 @@ public class Blocky_s : MonoBehaviour
   }
 
   public void removeTilePositions() {
-    tilePositions = new List<Vector3Int>();
+    tilePosCols = new List<(Vector3Int, Color)>();
+  }
+
+  public void removeTilesOutsideBlock() {
+    List<(Vector3Int, Color)> inBounds = new List<(Vector3Int, Color)>();
+    foreach ((Vector3Int tilepos, Color col) in tilePosCols) {
+      if (tileOutsideBlock(tilepos)) continue;
+      inBounds.Add((tilepos, col));
+    }
+    tilePosCols = inBounds;
+    spawnTiles();
   }
 
   public bool tileOutsideBlock(Vector3Int tilepos) {
@@ -50,41 +66,46 @@ public class Blocky_s : MonoBehaviour
 
   public string toString() {
     string textrep = "[";
-    foreach (Vector3Int tilePos in tilePositions) {
-      textrep += "\n\t(" + tilePos.x.ToString() + ", " + tilePos.y.ToString() + ", " + tilePos.z.ToString() + ")"; 
+    foreach ((Vector3Int tilePos, Color col) in tilePosCols) {
+      textrep += "\n\t(" + tilePos.x.ToString() + ", " 
+                         + tilePos.y.ToString() + ", " 
+                         + tilePos.z.ToString() +  " | " 
+                         + Colours.ColorToString[col] + ")"; 
     }
+    // Option using Tile_s class and prefab
+    // foreach (GameObject tile in tiles) {
+    //   textrep += "\n\t" + tile.GetComponent<Tile_s>().toString();
+    // }
     return textrep + "\n]";
   }
 
-  public void addTile(Vector3Int tilepos) {
-    if (tilePositions.Contains(tilepos)) return;
-    tilePositions.Add(tilepos);
+  public void addTile(Vector3Int tilepos, Color col) {
+    if (containsTilepos(tilepos)) return;
+    tilePosCols.Add((tilepos, col));
     spawnTiles();
   }
 
-  public void removeTile(Vector3Int tilepos) {
-    tilePositions.Remove(tilepos);
+  public void removeTile(Vector3Int gridpos) {
+    foreach ((Vector3Int tilepos, Color col) in tilePosCols) {
+      if (tilepos == gridpos) {
+        Debug.Log("Found em");
+        tilePosCols.Remove((tilepos, col)); break;
+      }
+    }
     spawnTiles();
   }
-}
 
-public class Tile {
-  private Vector3Int position {get;}
-  public Color color {get;}
-  public Tile(Vector3Int position, Color color) {
-    this.position = position;
-    this.color = color;
+  public bool containsTilepos(Vector3Int gridpos) {
+    foreach ((Vector3Int tilepos, _) in tilePosCols) {
+      if (tilepos == gridpos) return true;
+    }
+    return false;
   }
 
-  public Tile(string posAndColor) {
-    string[] split = posAndColor.Split('|');
-    Debug.Log(split[0]);
-    Debug.Log(split[1]);
-    // (x, y, z | "c")
+  public Color getColor(Vector3Int gridpos) {
+    foreach ((Vector3Int tilepos, Color col) in tilePosCols) {
+      if (tilepos == gridpos) return col;
+    }
+    return Color.gray;
   }
-
-  public string toString() {
-    return "(" + position.x.ToString() + "," + position.y.ToString() + "," + position.z.ToString() 
-          + "|" + Colours.ColorToString[color] + ")";
-  }  
 }
