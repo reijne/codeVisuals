@@ -88,7 +88,6 @@ public class Blocky_s : MonoBehaviour
   public void removeTile(Vector3Int gridpos) {
     foreach ((Vector3Int tilepos, Color col) in tilePosCols) {
       if (tilepos == gridpos) {
-        Debug.Log("Found em");
         tilePosCols.Remove((tilepos, col)); break;
       }
     }

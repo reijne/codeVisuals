@@ -21,15 +21,13 @@ public class SquareHandler : MonoBehaviour
   public void spawnSelectSquares() {
     clearSquares();
     float width = screen.GetComponent<RectTransform>().rect.width;
-    // float fieldSize = width * 0.40f;
-    // origin = new Vector3(0, -0.5f*width - 0.5f*fieldSize, 0);
     float tileSize = (width * 0.4f) / Blocky_s.SIZE; 
     float BorderedTileSize = tileSize * 0.95f;
     int radius = (int) (Blocky_s.SIZE-1) / 2;
     sizeMem = Blocky_s.SIZE;
     heightMem = height;
 
-    Vector3 offset;
+    Vector3 offset; // TODO clean this shit up pleasae
     for (int z = -radius; z <= radius; z++) {
       for (int x = -radius; x <= radius; x++) {
         offset = new Vector3(x*tileSize, z*tileSize, 0);
@@ -37,6 +35,7 @@ public class SquareHandler : MonoBehaviour
         ss.transform.SetParent(this.transform);
         Vector3Int gridpos = new Vector3Int(x, height, z);
         SelectSquare_s sscomponent = ss.GetComponent<SelectSquare_s>();
+        sscomponent.init();
         sscomponent.gridpos = gridpos;
         Color squareColor = blocky.getColor(gridpos);
         if (squareColor != Color.gray) {
@@ -96,8 +95,4 @@ public class SquareHandler : MonoBehaviour
     blocky.removeTile(gridpos);
     blocky.spawnTiles();
   }
-
-  // public void spawnTiles() {
-  //   blocky. (blocky.tilePositions);
-  // }
 }
