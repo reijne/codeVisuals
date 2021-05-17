@@ -25,8 +25,6 @@ public class Blocky_s : MonoBehaviour
         continue;
       }
 
-      // GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
-      // Option using Tile_s class and prefab
       GameObject tile = GameObject.Instantiate(tile_prefab);
       // tile.GetComponent<Tile_s>().gridpos = tilepos;
       // tile.GetComponent<Tile_s>().color = col;

@@ -60,19 +60,6 @@ public class SquareHandler : MonoBehaviour
     spawnSelectSquares();
   }
 
-  private void clearOutOfBounds() {
-    List<(Vector3Int, Color)> inBoundsGridpos = new List<(Vector3Int, Color)>();
-    int radius = (Blocky_s.SIZE - 1) / 2;
-    Blocky_s bs = blocky;
-    
-    foreach ((Vector3Int gridpos, Color col) in blocky.tilePosCols) {
-      if (!bs.tileOutsideBlock(gridpos)) continue;
-      inBoundsGridpos.Add((gridpos, col));
-    }
-
-    blocky.tilePosCols = inBoundsGridpos;
-  }
-
   private void FixedUpdate() {
     if (sizeMem != Blocky_s.SIZE || heightMem != height) {
       if (sizeMem > Blocky_s.SIZE) {
@@ -88,10 +75,6 @@ public class SquareHandler : MonoBehaviour
     blocky.spawnTiles(true);
   }
   public void removeGridPos(Vector3Int gridpos) {
-    blocky.removeTile(gridpos);
-    blocky.spawnTiles(true);
-  }
-  public void removeGridPos(Vector3Int gridpos, Color col) {
     blocky.removeTile(gridpos);
     blocky.spawnTiles(true);
   }
