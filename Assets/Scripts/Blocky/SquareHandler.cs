@@ -20,7 +20,7 @@ public class SquareHandler : MonoBehaviour
   }
   public void spawnSelectSquares() {
     clearSquares();
-    float width = screen.GetComponent<RectTransform>().rect.width;
+    float width = Screen.width;
     float tileSize = (width * 0.4f) / Blocky_s.SIZE; 
     float BorderedTileSize = tileSize * 0.95f;
     int radius = (int) (Blocky_s.SIZE-1) / 2;
@@ -76,7 +76,7 @@ public class SquareHandler : MonoBehaviour
   private void FixedUpdate() {
     if (sizeMem != Blocky_s.SIZE || heightMem != height) {
       if (sizeMem > Blocky_s.SIZE) {
-        clearOutOfBounds();
+        blocky.removeTilesOutsideBlock();
         blocky.spawnTiles();
       }
       spawnSelectSquares();
@@ -85,14 +85,14 @@ public class SquareHandler : MonoBehaviour
 
   public void addGridPos(Vector3Int gridpos, Color col) {
     blocky.addTile(gridpos, col);
-    blocky.spawnTiles();
+    blocky.spawnTiles(true);
   }
   public void removeGridPos(Vector3Int gridpos) {
     blocky.removeTile(gridpos);
-    blocky.spawnTiles();
+    blocky.spawnTiles(true);
   }
   public void removeGridPos(Vector3Int gridpos, Color col) {
     blocky.removeTile(gridpos);
-    blocky.spawnTiles();
+    blocky.spawnTiles(true);
   }
 }

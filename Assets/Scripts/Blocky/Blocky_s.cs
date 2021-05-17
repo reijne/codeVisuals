@@ -16,7 +16,7 @@ public class Blocky_s : MonoBehaviour
     this.tilePosCols = tilePosCols;
   }
 
-  public void spawnTiles() {
+  public void spawnTiles(bool lookAtMe=false) {
     if (tiles.Count > 0) removeTiles();
 
     foreach ((Vector3Int tilepos, Color col) in tilePosCols) {
@@ -25,15 +25,20 @@ public class Blocky_s : MonoBehaviour
         continue;
       }
 
-      GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
+      // GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Cube);
       // Option using Tile_s class and prefab
-      // GameObject tile = GameObject.Instantiate(tile_prefab);
+      GameObject tile = GameObject.Instantiate(tile_prefab);
       // tile.GetComponent<Tile_s>().gridpos = tilepos;
       // tile.GetComponent<Tile_s>().color = col;
       tile.transform.SetParent(this.transform);
       tile.transform.position = this.transform.position + tilepos;
       tile.GetComponent<Renderer>().material.color = col;
       tiles.Add(tile);
+
+      if (lookAtMe) {
+        GameObject cam = GameObject.FindWithTag("MainCamera");
+        cam.GetComponent<UserMovement>().moveCam(new Vector3(0,5,-10), transform.position);
+      }
     }
   }
 

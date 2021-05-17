@@ -25,5 +25,6 @@ public class TextualHandler : MonoBehaviour
 
   private void FixedUpdate() {
     updateTextualRepresentation();
+    textualRepresentation.Select();
   }
 }
