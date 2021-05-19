@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // ref: https://learn.unity.com/tutorial/controlling-unity-camera-behaviour#5fc3f6a3edbc2a459f91c6ae
 public class UserMovement : MonoBehaviour
 {
   public static Vector3 startPos;
-  public float speed = 20;
+  public bool disabled = true;
+  [SerializeField] private Button toggleMovementButton;
+  [SerializeField] private float speed = 20;
+  [SerializeField] private float updateSpeed = 10;
+  [SerializeField] private float sensitivity = 100f;
+  [SerializeField] private float clampAngle = 80f;
   private Vector3 motion;
-  public float updateSpeed = 10;
-  public float sensitivity = 100f;
-  public float clampAngle = 80f;
   private float rotY = 0.0f; // rotation around the up/y axis
   private float rotX = 0.0f; // rotation around the right/x axis
   private bool moving = false;
@@ -20,6 +23,13 @@ public class UserMovement : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
+    startPos = this.transform.position;
+    if (toggleMovementButton) {
+      Debug.Log(toggleMovementButton.image.color);
+      toggleMovementButton.image.color = Color.gray;
+      Debug.Log(toggleMovementButton.image.color);
+    }
+    moveToStart();
     // setRotation();
   }
 
@@ -36,6 +46,7 @@ public class UserMovement : MonoBehaviour
       moving = false;
       return;
     }
+    if (disabled) return;
     if (!Input.GetKey(KeyCode.LeftAlt) && !moving) {
       float mouseX = Input.GetAxis("Mouse X");
       float mouseY = -Input.GetAxis("Mouse Y");
@@ -65,6 +76,11 @@ public class UserMovement : MonoBehaviour
     // cc.Move(transform.TransformDirection(new Vector3(dx, dy, dz)));
   }
 
+  private void Update() {
+    if (Input.GetKeyDown(KeyCode.T)) toggleMovement();
+    if (Input.GetKeyDown(KeyCode.R)) moveToStart();
+  }
+
   public void setRotation() {
     Vector3 rot = transform.localRotation.eulerAngles;
     rotY = rot.y;
@@ -78,8 +94,20 @@ public class UserMovement : MonoBehaviour
 
   public static void moveToStart() {
     if (startPos != null) {
-      UserMovement ut = GameObject.Find("User").GetComponent<UserMovement>();
+      UserMovement ut = GameObject.FindWithTag("MainCamera").GetComponent<UserMovement>();
       ut.moveCam(startPos, Vector3.zero);
+    }
+  }
+
+  public void toggleMovement() {
+    disabled = !disabled;
+    // UserMovement ut = GameObject.FindWithTag("MainCamera").GetComponent<UserMovement>();
+    if (toggleMovementButton) {
+      if (toggleMovementButton.image.color == Color.gray) {
+        toggleMovementButton.image.color = Color.white;
+      } else {
+        toggleMovementButton.image.color = Color.gray;
+      }
     }
   }
 }

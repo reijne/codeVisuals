@@ -26,6 +26,7 @@ public class Blocky_s : MonoBehaviour
       }
 
       GameObject tile = GameObject.Instantiate(tile_prefab);
+      Debug.Log(tile);
       // tile.GetComponent<Tile_s>().gridpos = tilepos;
       // tile.GetComponent<Tile_s>().color = col;
       tile.transform.SetParent(this.transform);
@@ -33,10 +34,10 @@ public class Blocky_s : MonoBehaviour
       tile.GetComponent<Renderer>().material.color = col;
       tiles.Add(tile);
 
-      if (lookAtMe) {
-        GameObject cam = GameObject.FindWithTag("MainCamera");
-        cam.GetComponent<UserMovement>().moveCam(new Vector3(0,5,-10), transform.position);
-      }
+      // if (lookAtMe) {
+      //   GameObject cam = GameObject.FindWithTag("MainCamera");
+      //   cam.GetComponent<UserMovement>().moveCam(new Vector3(0,5,-10), transform.position);
+      // }
     }
   }
 
