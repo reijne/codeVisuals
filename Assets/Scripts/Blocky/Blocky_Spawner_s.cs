@@ -85,13 +85,11 @@ public class Blocky_Spawner_s : MonoBehaviour
     generalDirection = dirMap[generalDirectionString];
     relative = false;
     if (relativeDirectionString == null) relativeDirectionString = generalDirectionString;
-    Debug.Log(relativeDirectionString);
   }
 
   public void setRelativeDirection(string relDir) {
     if (!relativeDirections.Contains(relDir)) Debug.LogError("Relative direction: " + relDir + " is not a valid relative direction, [left, right, up, down]");
 
-    Debug.Log(relativeDirectionString + " " + relDir);
     relativeDirectionString= relDirMap[(relativeDirectionString, relDir)];
 
     relativeDirection = dirMap[relativeDirectionString];
