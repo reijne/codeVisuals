@@ -26,7 +26,6 @@ public class Blocky_s : MonoBehaviour
       }
 
       GameObject tile = GameObject.Instantiate(tile_prefab);
-      Debug.Log(tile);
       // tile.GetComponent<Tile_s>().gridpos = tilepos;
       // tile.GetComponent<Tile_s>().color = col;
       tile.transform.SetParent(this.transform);

@@ -14,7 +14,7 @@ public class Text_Blocky_Spawner_s : MonoBehaviour
     // // spawnBlocky("boolean isBig = false");
     // spawnBlocky("string name = ``lol``");
     // spawnBlocky("if (varName == 5):\n\tsomeName=``hahano``");
-    Debug.Log("done");
+    // Debug.Log("done");
   }
 
   private void spawnBlocky(string name, string variablesSnapshot) {
