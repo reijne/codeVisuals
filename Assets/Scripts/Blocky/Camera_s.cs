@@ -39,3 +39,4 @@ public class Camera_s : MonoBehaviour
     this.transform.LookAt(target.transform);
   }
 }
+// << Hehe
