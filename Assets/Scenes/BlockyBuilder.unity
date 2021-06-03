@@ -165,7 +165,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 84179349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce802510a8222d54eb880266abd024fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 71a22828329f9604fafd30f25550f5be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   textualRepresentation: {fileID: 1075260175}
@@ -891,10 +891,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 428924374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f77a6f8990406a41bd213df85336485, type: 3}
+  m_Script: {fileID: 11500000, guid: 0213e69c4b703054baa9f52e6156c82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toggleMovementButton: {fileID: 2142592998}
+  disabled: 1
+  toggleMovementButton: {fileID: 0}
   speed: 20
   updateSpeed: 10
   sensitivity: 100
@@ -2330,7 +2331,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 852033581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fda46294d5c22749b3a29caf20b0795, type: 3}
+  m_Script: {fileID: 11500000, guid: 1deb4ebee5086274d81a79f8731074cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   selectsquare_prefab: {fileID: 4290959046430874464, guid: d9923190d2eceea43997c193c30b9d91, type: 3}
@@ -2731,7 +2732,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1235907174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a86d97245d4d64485b6954af329f3b, type: 3}
+  m_Script: {fileID: 11500000, guid: 69a72d4b87ed4fb44b614260fb0e1e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   colorButtons:
@@ -3354,7 +3355,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1630162970}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2380d1d192199884c88c217c3b92c62e, type: 3}
+  m_Script: {fileID: 11500000, guid: 98dddb7a62dda354999a88b4d254612a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SizeHolder: {fileID: 1820441146}
@@ -3650,7 +3651,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1790043560}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c11a0034fa420df4f8b48508ef9c15d2, type: 3}
+  m_Script: {fileID: 11500000, guid: 853c097e124128247959344ea27469c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   heightHolder: {fileID: 1554259210}

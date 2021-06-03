@@ -1,5 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+// UI element to handle the size of the desired blocky.
+// Author: Youri Reijne
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,10 +10,12 @@ public class SizeHandler : MonoBehaviour
   public Slider sizeSlider;
   public Slider heightSlider;
 
+  /// <summary> Set the size of the blocky to be the minimal value of the slider, such that is is never null. </summary>
   private void Awake() {
     Blocky_s.SIZE = (int) sizeSlider.minValue;
   }
 
+  /// <summary> Update the size text, and the height slider accordingly. </summary>
   public void onSizeSliderChange(Slider sizeSlider) {
     if (sizeSlider.value % 2 == 0) sizeSlider.value += 1; 
     SizeHolder.text = sizeSlider.value.ToString();

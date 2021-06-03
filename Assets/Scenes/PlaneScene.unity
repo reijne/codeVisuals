@@ -673,8 +673,8 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194229}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -756,11 +756,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20bcc065633d3584db13947ae264a1a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 0213e69c4b703054baa9f52e6156c82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.1
-  offset: {x: 0, y: 4, z: -1}
+  disabled: 0
+  toggleMovementButton: {fileID: 0}
+  speed: 20
+  updateSpeed: 10
+  sensitivity: 100
+  clampAngle: 80
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770,15 +774,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f77a6f8990406a41bd213df85336485, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e4c23d212cf01244af915e74948a055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disabled: 0
-  toggleMovementButton: {fileID: 0}
-  speed: 20
-  updateSpeed: 10
-  sensitivity: 100
-  clampAngle: 80
+  smoothTime: 0.2
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1439294662
 GameObject:
   m_ObjectHideFlags: 0

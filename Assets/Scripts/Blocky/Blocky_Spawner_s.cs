@@ -58,20 +58,7 @@ public class Blocky_Spawner_s : MonoBehaviour
   private Vector3 generalOrigin = Vector3.zero;
   private Vector3 relativeOrigin = Vector3.zero;
   private bool relative = false;
-  
-  /* HARDCODED example for visualising:
-      number small
-      number big
 
-      small = input()
-      big = input()
-
-      if (big > 2*small)
-        output("really big")
-      else 
-        output("quite big")
-      end if
-  */
   public void setDirection(string dir) {
     dir = dir.Trim();
     
@@ -114,38 +101,59 @@ public class Blocky_Spawner_s : MonoBehaviour
 
   void Start() {
     Blocky_s.SIZE = 5;
-    setDirection("-x");
+    setDirection("+x");
     setBlockyDefs("Definitions of blockys go here in JSON or somethin lol");
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["ADD"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["ADD"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
 
-    setRelativeDirection("up");
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // setRelativeDirection("up");
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["ADD"], getNextPosition());
 
-    relative = false;
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // relative = false;
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["ADD"], getNextPosition());
 
+    // setRelativeDirection("right");
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+
+    // setRelativeDirection("left");
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["ADD"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    
+    // setRelativeDirection("down");
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    // createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+
+    //Snek
+    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
     setRelativeDirection("right");
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-
     setRelativeDirection("left");
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-    
-    setRelativeDirection("down");
+    setRelativeDirection("left");
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    setRelativeDirection("right");
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    setRelativeDirection("right");
+    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+    createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
+
+
 
   }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ref: https://learn.unity.com/tutorial/controlling-unity-camera-behaviour#5fc3f6a3edbc2a459f91c6ae
-public class UserMovement : MonoBehaviour
+public class FlyingMovement : MonoBehaviour
 {
   public static Vector3 startPos;
   public bool disabled = true;
@@ -37,6 +37,7 @@ public class UserMovement : MonoBehaviour
   // ref: https://forum.unity.com/threads/flying-character.34783/
   // ref: https://answers.unity.com/questions/29741/mouse-look-script.html
   void FixedUpdate() {
+    if (Camera_s.camMode != Camera_s.CameraMode.Debug) return;
     if (moving) {
       if (!Input.GetKey(KeyCode.LeftControl)) {
         this.transform.position = desiredPos;
@@ -94,8 +95,8 @@ public class UserMovement : MonoBehaviour
 
   public static void moveToStart() {
     if (startPos != null) {
-      UserMovement ut = GameObject.FindWithTag("MainCamera").GetComponent<UserMovement>();
-      ut.moveCam(startPos, Vector3.zero);
+      FlyingMovement ft = GameObject.FindWithTag("MainCamera").GetComponent<FlyingMovement>();
+      ft.moveCam(startPos, Vector3.zero);
     }
   }
 

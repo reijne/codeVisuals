@@ -1,7 +1,8 @@
-using System.Collections;
+// Spawner of the grid of select squares UI elements.
+// Author: Youri Reijne
+
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SquareHandler : MonoBehaviour
 {
@@ -15,9 +16,12 @@ public class SquareHandler : MonoBehaviour
   private int sizeMem;
   private int heightMem;
 
+  /// <summary> Initialise the grid of squares. </summary>
   private void Start() {
     spawnSelectSquares();
   }
+
+  /// <summary> Spawn a grid of Select Square UI elements on the left side of the screen. </summary>
   public void spawnSelectSquares() {
     clearSquares();
     float width = Screen.width;
@@ -48,18 +52,21 @@ public class SquareHandler : MonoBehaviour
     }
   }
 
+  /// <summary> Remove all the squares that are currently spawned. </summary>
   private void clearSquares() {
     foreach (GameObject ss in squares) {
       Destroy(ss);
     }
   }
 
+  /// <summary> Clear all the 1x1x1 tiles within the Blocky. </summary>
   public void clearTiles() {
     blocky.removeTiles();
     blocky.removeTilePositions();
     spawnSelectSquares();
   }
 
+  /// <summary> Upon size change, remove tiles outside the Blocky. Upon Height change show the proper layer of squares. </summary>
   private void FixedUpdate() {
     if (sizeMem != Blocky_s.SIZE || heightMem != height) {
       if (sizeMem > Blocky_s.SIZE) {
@@ -70,10 +77,13 @@ public class SquareHandler : MonoBehaviour
     }
   }
 
+  /// <summary> Add a tile to the Blocky. </summary>
   public void addGridPos(Vector3Int gridpos, Color col) {
     blocky.addTile(gridpos, col);
     blocky.spawnTiles(true);
   }
+
+  /// <summary> Remove a tile from the Blocky. </summary>
   public void removeGridPos(Vector3Int gridpos) {
     blocky.removeTile(gridpos);
     blocky.spawnTiles(true);

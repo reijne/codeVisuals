@@ -1,5 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+// UI element to show the textual representation of the designed Blocky.
+// Author: Youri Reijne
+
 using UnityEngine;
 using UnityEngine.UI;
 

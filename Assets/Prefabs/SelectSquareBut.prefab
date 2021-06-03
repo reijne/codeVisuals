@@ -222,8 +222,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4290959046430874464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b7bea22815a26e49a6a92b329f7afc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 481f9b60fc9b0914291453cf184b9e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squareHandler: {fileID: 0}
   gridpos: {x: 0, y: 0, z: 0}
+  desiredColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

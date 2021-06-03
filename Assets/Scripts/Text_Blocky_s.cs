@@ -32,7 +32,7 @@ public class Text_Blocky_s : MonoBehaviour
     
     if (isHighlighted) {
       mat.color = Color.white;
-      Camera_s.target = this.gameObject;
+      // Camera_s.target = this.gameObject;
     }
   }
 
