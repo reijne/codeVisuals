@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Blocky_s : MonoBehaviour
 {
-  public static int SIZE; // For ease of use all the blockys are the same size i.e. static var
+  public static int SIZE = 3; // For spawning consistency, all the blockys are the same size i.e. static var
   [SerializeField] GameObject tile_prefab;
   private List<GameObject> tiles = new List<GameObject>();
   public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();

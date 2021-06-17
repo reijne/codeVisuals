@@ -30,6 +30,16 @@ public class Maps
     {"NW", "N"}
   };
 
+  // Dictionary to cycle between the blocky sizes
+  public static Dictionary<string, string> blockySizeMap = new Dictionary<string, string>() {
+    {"3", "5"},
+    {"5", "7"},
+    {"7", "9"},
+    {"9", "11"},
+    {"11", "13"},
+    {"13", "3"},
+  };
+
   // Dictionary giving the position to the sign indicator for a given direction
   public static Dictionary<string, Vector3> signPositionMap = new Dictionary<string, Vector3>() {
     {"x", new Vector3(0.5f, 0f, 0f)},

@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 public class TextualHandler : MonoBehaviour
 {
-  private void Start() {
-    // Tile guan = new Tile("((1,1,1) | red)");
-  }
   [SerializeField] private InputField textualRepresentation;
+  [SerializeField] private bool alwaysSelected = true;
   [SerializeField] private Blocky_s blocky;
   private bool showTextual = false;
   public void toggleTextualRepresentation() {
@@ -26,6 +24,6 @@ public class TextualHandler : MonoBehaviour
 
   private void FixedUpdate() {
     updateTextualRepresentation();
-    textualRepresentation.Select();
+    if (alwaysSelected) textualRepresentation.Select();
   }
 }
