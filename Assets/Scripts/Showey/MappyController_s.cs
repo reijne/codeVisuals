@@ -10,6 +10,8 @@ public class MappyController_s : MonoBehaviour
   [SerializeField] private Button prevCategoryButton;
   [SerializeField] private GameObject nodePrefab;
   [SerializeField] private Transform nodeSpawnPoint;
+  [SerializeField] private RectTransform nodeScrollView;
+  [SerializeField] private Scrollbar nodeScrollBar;
   private Dictionary<string, List<GameObject>> categoryNodeMap = new Dictionary<string, List<GameObject>>();
   private List<string> categories = new List<string>();
   private int currentCategoryIndex = 0;
@@ -61,13 +63,14 @@ public class MappyController_s : MonoBehaviour
     foreach(GameObject node in categoryNodeMap[categories[currentCategoryIndex]]) {
       node.SetActive(true);
     }
+    nodeScrollBar.value = 1;
   }
 
   public GameObject createNode(string name, List<string> childrenNames=null) {
     GameObject node = Instantiate(nodePrefab, nodeSpawnPoint.position + nodeSpawnOffset, Quaternion.identity);
     Node_s node_s = node.GetComponent<Node_s>();
     node_s.setName(name);
-    node.transform.SetParent(nodeSpawnPoint);
+    node.transform.SetParent(nodeScrollView);
     if (childrenNames != null) {
       foreach (string childname in childrenNames) {
         node_s.addChild(childname);
