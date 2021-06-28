@@ -1,4 +1,6 @@
-using System.Collections;
+// Mappings used for the ShoweyBuilder interface
+// Author: Youri Reijne
+ 
 using System.Collections.Generic;
 using UnityEngine;
 

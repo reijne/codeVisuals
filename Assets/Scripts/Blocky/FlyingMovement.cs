@@ -33,7 +33,6 @@ public class FlyingMovement : MonoBehaviour
     // setRotation();
   }
 
-  // Update is called once per frame
   // ref: https://forum.unity.com/threads/flying-character.34783/
   // ref: https://answers.unity.com/questions/29741/mouse-look-script.html
   void FixedUpdate() {

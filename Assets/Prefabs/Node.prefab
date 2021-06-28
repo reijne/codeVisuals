@@ -1071,7 +1071,7 @@ MonoBehaviour:
   nodeDropdownLabel: {fileID: 3025205399708598192}
   childPrefab: {fileID: 2855274063114917707, guid: d7d0dd4646a5f3b4e97c01d0d57bc722, type: 3}
   nodeName: 
-  blockyName: 
+  blockyName: skip
   children: []
 --- !u!1 &3025205399994066439
 GameObject:

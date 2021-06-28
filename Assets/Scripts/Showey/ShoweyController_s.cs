@@ -33,6 +33,16 @@ public class ShoweyController_s : MonoBehaviour
     updateVisualRepresentation();
   }
 
+  /// <summary> Load the 
+  public void loadShoweyVars(string sign, string genDir, string camMode, string camDir) {
+    this.sign = sign;
+    this.genDir = genDir;
+    this.camMode = camMode;
+    this.camDir = camDir;
+    updateButtons();
+    updateVisualRepresentation();
+  }
+
   /// <summary> Create the scaling maps given the size of the direction visualisation </summary>
   private void createMaps() {
     genDirScaleMap = new Dictionary<string, Vector3>() {
@@ -134,4 +144,11 @@ public class ShoweyController_s : MonoBehaviour
     camDirText.text = camDir;
   }
   #endregion
+
+  /// <summary> Contain all the valuable information for the ShoweyController in a string. </summary>
+  public string toString() {
+    string showeyInfo = "";
+    showeyInfo = "sign=\"+\";\ngenDir=\"x\";\ncamMode=\"user\";\ncamDir=\"NE\";\n";
+    return showeyInfo; 
+  }
 }
