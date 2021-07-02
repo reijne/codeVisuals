@@ -19,7 +19,7 @@ public class MappyController_s : MonoBehaviour
   
   // TODO remove this test, hook it up to the Socketeer!
   private void Start() {
-    createCategoryMap("Program category\nprogram{\nStmt_statements\n}\nParameter category\nparameter{\nstr_datatype\nstr_id\n}\nBlock category\nblock{\nStmt_statements\n}\nExpr category\nfunCall{\nstr_id\nExpr_args\n}\ndivExpr{\nExpr_lhs\nExpr_rhs\n}\neqExpr{\nExpr_lhs\nExpr_rhs\n}\nboolExpr{\nBoolean_boolean\n}\nmodExpr{\nExpr_lhs\nExpr_rhs\n}\nidExpr{\nstr_id\n}\nminExpr{\nExpr_lhs\nExpr_rhs\n}\ngtExpr{\nExpr_lhs\nExpr_rhs\n}\npowExpr{\nExpr_lhs\nExpr_rhs\n}\ngteExpr{\nExpr_lhs\nExpr_rhs\n}\nandExpr{\nExpr_lhs\nExpr_rhs\n}\naddExpr{\nExpr_lhs\nExpr_rhs\n}\nnumExpr{\nint_number\n}\nlteExpr{\nExpr_lhs\nExpr_rhs\n}\nlistExpr{\nExpr_items\n}\nltExpr{\nExpr_lhs\nExpr_rhs\n}\nstrExpr{\nstr_string\n}\nmulExpr{\nExpr_lhs\nExpr_rhs\n}\nnotExpr{\nExpr_expr\n}\norExpr{\nExpr_lhs\nExpr_rhs\n}\nType category\nt_list{}\nt_bool{}\nt_str{}\nt_num{}\nBoolean category\nb_true{}\nb_false{}\nStmt category\nwhileStmt{\nExpr_cond\nBlock_block\n}\ndecl{\nType_datatype\nstr_id\n}\nreturnStmt{\nExpr_expr\n}\nexprStmt{\nExpr_expr\n}\nifStmt{\nExpr_cond\nBlock_block\n}\nfunDef{\nType_datatype\nstr_id\nParameter_parameters\nBlock_block\n}\noutputStmt{\nExpr_expr\n}\ninputStmt{}\nifElseStmt{\nExpr_cond\nBlock_thenBlock\nBlock_elseBlock\n}\nassStmt{\nstr_id\nExpr_expr\n}\nrepeatStmt{\nint_iter\nBlock_block\n}\n");
+    createCategoryMap("Program category\nprogram{\nlist[Stmt]_statements\n}\nParameter category\nparameter{}\nBlock category\nblock{\nlist[Stmt]_statements\n}\nExpr category\nfunCall{\nlist[Expr]_args\n}\ndivExpr{\nExpr_lhs\nExpr_rhs\n}\neqExpr{\nExpr_lhs\nExpr_rhs\n}\ngtExpr{\nExpr_lhs\nExpr_rhs\n}\nandExpr{\nExpr_lhs\nExpr_rhs\n}\nboolExpr{\nBoolean_boolean\n}\nmodExpr{\nExpr_lhs\nExpr_rhs\n}\naddExpr{\nExpr_lhs\nExpr_rhs\n}\nnumExpr{}\nlteExpr{\nExpr_lhs\nExpr_rhs\n}\nidExpr{}\nminExpr{\nExpr_lhs\nExpr_rhs\n}\npowExpr{\nExpr_lhs\nExpr_rhs\n}\nbracketExpr{\nExpr_expr\n}\ngteExpr{\nExpr_lhs\nExpr_rhs\n}\nlistExpr{\nlist[Expr]_items\n}\nltExpr{\nExpr_lhs\nExpr_rhs\n}\nstrExpr{}\nmulExpr{\nExpr_lhs\nExpr_rhs\n}\nnotExpr{\nExpr_expr\n}\norExpr{\nExpr_lhs\nExpr_rhs\n}\nType category\nt_list{}\nt_str{}\nt_num{}\nt_bool{}\nBoolean category\nb_false{}\nb_true{}\nStmt category\ndecl{\nType_datatype\n}\nreturnStmt{\nExpr_expr\n}\nfunDef{\nType_datatype\nlist[Parameter]_parameters\nBlock_block\n}\noutputStmt{\nExpr_expr\n}\ninputStmt{}\nwhileStmt{\nExpr_cond\nBlock_block\n}\nexprStmt{\nExpr_expr\n}\nifStmt{\nExpr_cond\nBlock_block\n}\nifElseStmt{\nExpr_cond\nBlock_thenBlock\nBlock_elseBlock\n}\nassStmt{\nExpr_expr\n}\nrepeatStmt{\nBlock_block\n}\n");
   }
 
   /// <summary> Parse the intermediate representation containing an AST definition</summary>
@@ -56,17 +56,33 @@ public class MappyController_s : MonoBehaviour
 
   /// <summary> overload createCategoryMap with the dictionary of Category_D type </summary>
   public void loadCategoryMap(Dictionary<string, Category_D> loadCategoryMap) {
+    if (categories.Count > 0) clearCategories();
     categoryNodeMap = new Dictionary<string, List<GameObject>>();
+    categories = new List<string>();
     foreach (string categoryName in loadCategoryMap.Keys) {
+      nodeSpawnOffset = new Vector3(0,0,0);
+      categories.Add(categoryName);
       categoryNodeMap[categoryName] = new List<GameObject>();
       foreach (string nodeName in loadCategoryMap[categoryName].nodes.Keys) {
         categoryNodeMap[categoryName].Add(createNode(nodeName, loadCategoryMap[categoryName].nodes[nodeName]));
       }
     }
+    currentCategoryIndex = categories.Count-1;
+    cycleCategory(true);
+  }
+
+  /// <summary> Clear the category list and map, with all the existing GameObjects. </summary>
+  private void clearCategories() {
+    foreach(string categoryName in categoryNodeMap.Keys) {
+      foreach (GameObject node in categoryNodeMap[categoryName]) Destroy(node);
+    }
+    categoryNodeMap = new Dictionary<string, List<GameObject>>();
+    categories = new List<string>();
   }
 
   /// <summary> Cycle through the possible categories and show their encompassed nodes and children. </summary>
   public void cycleCategory(bool next) {
+    if (categories.Count == 0) return;
     foreach(GameObject node in categoryNodeMap[categories[currentCategoryIndex]]) {
       node.SetActive(false);
     }
@@ -104,10 +120,12 @@ public class MappyController_s : MonoBehaviour
     GameObject nodeGameObject = Instantiate(nodePrefab, nodeSpawnPoint.position + nodeSpawnOffset, Quaternion.identity);
     Node_s node_s = nodeGameObject.GetComponent<Node_s>();
     node_s.setName(name);
+    node_s.setBlockyName(node.blockyName);
     nodeGameObject.transform.SetParent(nodeScrollView);
 
     foreach (string childname in node.children.Keys) {
-      node_s.addChild(childname);
+      Child child = node.children[childname];
+      node_s.addChild(childname, child.relativeDirection, child.offset);
     }
     
     nodeSpawnOffset += new Vector3(0, -(1+node.children.Count)*25, 0);

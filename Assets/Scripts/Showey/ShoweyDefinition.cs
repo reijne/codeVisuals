@@ -2,12 +2,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable] public struct ShoweyVars {
+  public string sign;
+  public string genDir;
+  public string camMode;
+  public string camDir;
+  public int blockySize;
+  public ShoweyVars(string sign, string genDir, string camMode, string camDir, int blockySize) {
+    this.sign = sign;
+    this.genDir = genDir;
+    this.camMode = camMode;
+    this.camDir = camDir;
+    this.blockySize = blockySize;
+  }
+}
+
 /// <summary> An entire Showey definition used within unity to map nodes and children to the 3D world. </summary>
 public class ShoweyDefinition {
-  public string sign = "+";
-  public string genDir = "x";
-  public string camMode = "user";
-  public string camDir = "NE";
+  public ShoweyVars vars;
   public Dictionary<string, List<(Vector3Int, Color)>> blockyMap;
   public Dictionary<string, Category_D> categoryNodeMap = new Dictionary<string, Category_D>();
 
@@ -16,10 +28,11 @@ public class ShoweyDefinition {
   public static ShoweyDefinition fromSerialise(string json) {
     SeriShoweyDefinition serShow = JsonUtility.FromJson<SeriShoweyDefinition>(json);
     ShoweyDefinition showdef = new ShoweyDefinition();
-    showdef.sign = serShow.sign;
-    showdef.genDir = serShow.genDir;
-    showdef.camMode = serShow.camMode;
-    showdef.camDir = serShow.camDir;
+    showdef.vars.sign = serShow.vars.sign;
+    showdef.vars.genDir = serShow.vars.genDir;
+    showdef.vars.camMode = serShow.vars.camMode;
+    showdef.vars.camDir = serShow.vars.camDir;
+    showdef.vars.blockySize = serShow.vars.blockySize;
 
     showdef.blockyMap = makeBlockyMap(serShow.blockyDefinitions);
     showdef.categoryNodeMap = makeCategoryMap(serShow.categoryList);
@@ -82,12 +95,13 @@ public class Node_D {
 #region Serializable definition of every component of Showey
 /// <summary> An entire Showey definition contained in a serializable class. </summary>
 [Serializable] public class SeriShoweyDefinition {
-  public string sign;
-  public string genDir;
-  public string camMode;
-  public string camDir;
+  public ShoweyVars vars;
   public List<BlockyDefinition> blockyDefinitions;
   public List<Category> categoryList;
+
+  public string serialize() {
+    return JsonUtility.ToJson(this);
+  }
 }
 
 /// <summary> A serializable Blocky definition containing the name, and tile positions with colours. </summary>

@@ -11,8 +11,10 @@ public class Child_s : MonoBehaviour
   [SerializeField] private InputField LRinput;
   [SerializeField] private InputField UDinput;
   [SerializeField] private InputField BFinput;
+  public static string noChangeKeyword = "noChange";
+
   public string childName;
-  public string relativeDirection = "noChange";
+  public string relativeDirection = noChangeKeyword;
   public Vector3Int offset = new Vector3Int(0, 0, 0);
 
   /// <summary> Set the name of the child, should be called upon instantiation. </summary>
@@ -26,9 +28,28 @@ public class Child_s : MonoBehaviour
     onDirectionSelect();
   }
 
+  /// <summary> Set the relative direction for the child and select this in the dropdown. </summary>
+  public void setDirection(string direction) {
+    relativeDirection = direction;
+    int i;
+    for (i = 0; i < childDropdown.options.Count; i++) {
+      if (childDropdown.options[i].text == relativeDirection) break;
+    }
+    childDropdown.value = i;
+    onDirectionSelect();
+  }
+
   /// <summary> Set the relative direction to the selection. </summary>
   public void onDirectionSelect() {
     relativeDirection = childDropdown.options[childDropdown.value].text;
+  }
+  
+  /// <summary> Set the offset and reflect this in the input fields in the interface. </summary>
+  public void setOffset(Vector3Int offset) {
+    this.offset = offset;
+    LRinput.text = offset.x.ToString();
+    UDinput.text = offset.y.ToString();
+    BFinput.text = offset.z.ToString();
   }
 
   /// <summary> Update the offset of the child and the interface text inputs. </summary>

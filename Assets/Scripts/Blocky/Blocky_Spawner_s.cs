@@ -152,9 +152,6 @@ public class Blocky_Spawner_s : MonoBehaviour
     setRelativeDirection("right");
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
     createBlockyFromString(blockyDefMap["DECL"], getNextPosition());
-
-
-
   }
 
   // Update is called once per frame

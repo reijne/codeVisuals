@@ -34,11 +34,12 @@ public class ShoweyController_s : MonoBehaviour
   }
 
   /// <summary> Load the 
-  public void loadShoweyVars(string sign, string genDir, string camMode, string camDir) {
-    this.sign = sign;
-    this.genDir = genDir;
-    this.camMode = camMode;
-    this.camDir = camDir;
+  public void loadShoweyVars(ShoweyVars vars) {
+    this.sign = vars.sign;
+    this.genDir = vars.genDir;
+    this.camMode = vars.camMode;
+    this.camDir = vars.camDir;
+    Blocky_s.SIZE = vars.blockySize;
     updateButtons();
     updateVisualRepresentation();
   }
@@ -118,15 +119,18 @@ public class ShoweyController_s : MonoBehaviour
   /// <summary> Cycle the camera mode from static -> kinematic -> user </summary> 
   public void cycleCameraMode() {
     camMode = Maps.camModeMap[camMode];
+    activateCameraDirection();
+    updateButtons();
+    updateVisualRepresentation();
+  }
 
+  /// <summary> Enable the camera direction controls if the camera mode is not user </summary>
+  public void activateCameraDirection() {
     if (camMode == "user") {
       cameraDirectionControls.SetActive(false);
     } else {
       cameraDirectionControls.SetActive(true);
     }
-
-    updateButtons();
-    updateVisualRepresentation();
   }
 
   /// <summary> Cycle the camera directions from N -> NE -> E -> SE -> S -> SW -> W -> NW </summary>

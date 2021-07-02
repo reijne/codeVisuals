@@ -80,12 +80,12 @@ public class SquareHandler : MonoBehaviour
   /// <summary> Add a tile to the Blocky. </summary>
   public void addGridPos(Vector3Int gridpos, Color col) {
     blocky.addTile(gridpos, col);
-    blocky.spawnTiles(true);
+    blocky.spawnTiles();
   }
 
   /// <summary> Remove a tile from the Blocky. </summary>
   public void removeGridPos(Vector3Int gridpos) {
     blocky.removeTile(gridpos);
-    blocky.spawnTiles(true);
+    blocky.spawnTiles();
   }
 }

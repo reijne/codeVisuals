@@ -29,8 +29,10 @@ public class BlockyController_s : MonoBehaviour
     showBlockyStandardPosition = showBlocky.transform.position;
   }
   
+  /// <summary> Load in a Map of Blockys using name to list of coloured tiles. </summary>
   public void loadBlockyMap(Dictionary<string, List<(Vector3Int, Color)>> blockyMap) {
     this.blockyMap = blockyMap;
+    addOptions();
     selectLastBlocky();
   }
 
@@ -51,13 +53,14 @@ public class BlockyController_s : MonoBehaviour
     if (blockySelectorLabel.text == "") return;
     blockyMap.Remove(blockySelector.options[blockySelector.value].text);
     blockySelector.options.RemoveAt(blockySelector.value);
+    showBlocky.removeTiles();
     if (blockyMap.Count == 0) {
       sizeButton.interactable = true;
       blockySelectorLabel.text = "";
     } else {
+      blockySelector.value = blockySelector.options.Count -1; 
       onBlockySelection(blockySelector);
     }
-    showBlocky.removeTiles();
   }
 
   /// <summary> Save the creation of Blocky Builder with the given name.isValid => return to the Showey Interface. </summary>
@@ -82,7 +85,7 @@ public class BlockyController_s : MonoBehaviour
 
   /// <summary> Select a blocky definition and show it in 3D space. </summary>
   public void onBlockySelection(Dropdown selector) {
-    showBlocky.tilePosCols = blockyMap[selector.options[selector.value].text];
+    showBlocky.setTilePositions(blockyMap[selector.options[selector.value].text]);
     showBlocky.spawnTiles();
     Vector3 oldpos = showBlocky.transform.position;
     showBlocky.transform.position = showBlockyStandardPosition + new Vector3(0, Blocky_s.SIZE, Blocky_s.SIZE + (Blocky_s.SIZE * 2)); 
@@ -93,7 +96,7 @@ public class BlockyController_s : MonoBehaviour
   private void saveNewBlocky(string blockyName) {
     blockyMap[createBlockyNameField.text] = createBlocky.tilePosCols;
     clearCreateBlocky();
-    addNewOption();
+    addOptions();
     switchInterfaces();
     selectLastBlocky();
   }
@@ -104,13 +107,14 @@ public class BlockyController_s : MonoBehaviour
   }
 
   /// <summary> Set the options to include all the created Blockys. </summary>
-  private void addNewOption() {
+  private void addOptions() {
     blockySelector.ClearOptions();
     List<string> newOptions = new List<string>();
     foreach (string key in blockyMap.Keys) {
       newOptions.Add(key);
     }
     blockySelector.AddOptions(newOptions);
+    if (newOptions.Count > 0) sizeButton.interactable = false;
   }
 
   /// <summary> Select the lastly created Blocky. </summary>

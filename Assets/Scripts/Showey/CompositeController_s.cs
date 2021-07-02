@@ -1,9 +1,10 @@
-// Gathers all the information from the different controllers to create the textual definition of Showey.
+// Gathers all the information from the components of showey to Save and Load from and to the interface.
 // Author: Youri Reijne
 
-using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class CompositeController_s : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class CompositeController_s : MonoBehaviour
 
   private void Start() {
     // toString();
-    toSerialize();
+    // toSerialize();
   }
 
   /// <summary> Create a string from all the components. </summary>
@@ -31,17 +32,43 @@ public class CompositeController_s : MonoBehaviour
     Debug.Log(toSerialize());
   }
 
+  /// <summary> Load in a Serialized Showey Definition through file. </summary>
+  public void loadShoweyDefinition() {
+    var path = EditorUtility.OpenFilePanel("Load Showey Definition", "", "show");
+    if (path.Length != 0) {
+      StreamReader reader = new StreamReader(path);
+      loadShoweyDefinition(reader.ReadLine());
+    }
+  }
+
+  /// <summary> Load in a Serialized Showey Definition into the interface. </summary>
+  public void loadShoweyDefinition(string json) {
+    ShoweyDefinition showdef = ShoweyDefinition.fromSerialise(json);
+    showeyController.loadShoweyVars(showdef.vars);
+    showeyController.activateCameraDirection();
+    blockyController.loadBlockyMap(showdef.blockyMap);
+    mappyController.loadCategoryMap(showdef.categoryNodeMap);
+  }
+
+  /// <summary> Save a Serialized Showey Definition through a pop-up save window. </summary>
+  public void saveShoweyDefinition() {
+    string json = toSerialize();
+    var path = EditorUtility.SaveFilePanel("Save Showey Definition", "", "showdef", "show");
+    if (path.Length != 0) {
+      StreamWriter writer = new StreamWriter(path, false);
+      writer.WriteLine(json);
+      writer.Close();
+    }
+  }
+
   /// <summary> Make a serializable showey definition with all the information from the interface. </summary>
   public string toSerialize() {
     SeriShoweyDefinition showdef = new SeriShoweyDefinition();
-    showdef.sign = showeyController.sign;
-    showdef.genDir = showeyController.genDir;
-    showdef.camMode = showeyController.camMode;
-    showdef.camDir = showeyController.camDir;
-
+    showdef.vars = new ShoweyVars(showeyController.sign, showeyController.genDir, 
+                                  showeyController.camMode, showeyController.camDir, Blocky_s.SIZE);
     showdef.blockyDefinitions = makeBlockyDefinitions();
     showdef.categoryList = makeCategoryList();
-    return JsonUtility.ToJson(showdef);
+    return showdef.serialize();
   }
 
   /// <summary> Create a list of Blocky definitions from the created artifacts. </summary>

@@ -28,10 +28,22 @@ public class Node_s : MonoBehaviour
     nodeNameText.text = name;
   }
 
+  /// <summary> Set the blockyname and select it in the dropdown. </summary>
+  public void setBlockyName(string name) {
+    if (name == skipKeyword) return;
+    blockyName = name;
+    int i;
+    for (i = 0; i < nodeDropdown.options.Count; i++) {
+      if (nodeDropdown.options[i].text == blockyName) break;
+    }
+    nodeDropdown.value = i;
+    onBlockySelection();
+  } 
+
   /// <summary> Select standard if none selected. </summary>
   private void FixedUpdate() {
     if (nodeDropdownLabel.text == "" && nodeDropdown.options.Count > 0) {
-      nodeDropdown.value = 1;
+      nodeDropdown.value = 0;
       onBlockySelection();
     }
     makeNodeOptions();
@@ -39,8 +51,9 @@ public class Node_s : MonoBehaviour
 
   /// <summary> Make the static dropdown options for the Blocky visualisation and set . </summary>
   private void makeNodeOptions() {
-    bool blockyStillExists = false;
+    bool blockyStillExists = true;
     if (nodeOptions.Count != blockyController.blockySelector.options.Count+1) {
+      blockyStillExists = false;
       nodeOptions = new List<Dropdown.OptionData>(){new Dropdown.OptionData(skipKeyword)};
       foreach (Dropdown.OptionData blocky in blockyController.blockySelector.options) {
         nodeOptions.Add(blocky);
@@ -53,11 +66,9 @@ public class Node_s : MonoBehaviour
     }
 
     if (blockyName != skipKeyword && !blockyStillExists) {
-      Debug.Log("reset the name");
-      Debug.Log(blockyName);
       blockyName = skipKeyword;
-      Debug.Log(blockyName);
-      Debug.Log("/n");
+      nodeDropdown.value = 0;
+      onBlockySelection();
     }
   }
 
@@ -75,6 +86,19 @@ public class Node_s : MonoBehaviour
     child.GetComponent<Child_s>().setName(name);
     children.Add(child);
   }
+
+  public void addChild(string name, string relativeDirection, Vector3Int offset) {
+    GameObject child = Instantiate(childPrefab);
+    child.transform.SetParent(this.transform);
+    child.transform.position = this.transform.position + new Vector3(10, -(1+children.Count)*25, 0);
+    Child_s childClass = child.GetComponent<Child_s>();
+    childClass.setName(name);
+    childClass.setDirection(relativeDirection);
+    childClass.setOffset(offset);
+    children.Add(child);
+  }
+
+  // TODO addChild overload with Child type
 
   /// <summary> Contain all the information about the node into a string. </summary>
   public string toString() {
