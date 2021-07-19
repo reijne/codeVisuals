@@ -57,6 +57,7 @@ public class SquareHandler : MonoBehaviour
     foreach (GameObject ss in squares) {
       Destroy(ss);
     }
+    System.GC.Collect();
   }
 
   /// <summary> Clear all the 1x1x1 tiles within the Blocky. </summary>
@@ -80,12 +81,10 @@ public class SquareHandler : MonoBehaviour
   /// <summary> Add a tile to the Blocky. </summary>
   public void addGridPos(Vector3Int gridpos, Color col) {
     blocky.addTile(gridpos, col);
-    blocky.spawnTiles();
   }
 
   /// <summary> Remove a tile from the Blocky. </summary>
   public void removeGridPos(Vector3Int gridpos) {
     blocky.removeTile(gridpos);
-    blocky.spawnTiles();
   }
 }

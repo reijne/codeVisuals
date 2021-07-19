@@ -16,7 +16,7 @@ public class Node_s : MonoBehaviour
   public List<GameObject> children = new List<GameObject>();
   private static List<Dropdown.OptionData> nodeOptions = new List<Dropdown.OptionData>() {new Dropdown.OptionData("skip")};
 
-  /// <summary> Gather the blockyController and set the options on instantiate. </summary>
+  /// <summary> Gather the blockyController and set the options on awake. </summary>
   private void Awake() {
     if (blockyController == null) blockyController = GameObject.FindWithTag("BlockyController").GetComponent<BlockyController_s>();
     makeNodeOptions();
@@ -61,9 +61,7 @@ public class Node_s : MonoBehaviour
       }
     }
 
-    if (nodeDropdown.options != nodeOptions) {
-      nodeDropdown.options = nodeOptions;
-    }
+    if (nodeDropdown.options != nodeOptions) nodeDropdown.options = nodeOptions;
 
     if (blockyName != skipKeyword && !blockyStillExists) {
       blockyName = skipKeyword;
@@ -87,6 +85,7 @@ public class Node_s : MonoBehaviour
     children.Add(child);
   }
 
+  /// <summary> Instantiate the child, set its position, parent transform and name.  </summary>
   public void addChild(string name, string relativeDirection, Vector3Int offset) {
     GameObject child = Instantiate(childPrefab);
     child.transform.SetParent(this.transform);
@@ -100,7 +99,7 @@ public class Node_s : MonoBehaviour
 
   // TODO addChild overload with Child type
 
-  /// <summary> Contain all the information about the node into a string. </summary>
+  /// <summary> Get a textual representation of a node . </summary>
   public string toString() {
     string nodeInfo = nodeName + ":" + blockyName + "{";
     foreach (GameObject child in children) {

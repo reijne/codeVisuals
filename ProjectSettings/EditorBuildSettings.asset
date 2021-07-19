@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BlockyBuilder.unity
     guid: 43bc3005edc86724ab78edf461891369
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/PlaneScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/Scenes/ShoweyBuilder.unity
+    guid: b2571be31f428664087385ae79e8a3b2
   m_configObjects: {}

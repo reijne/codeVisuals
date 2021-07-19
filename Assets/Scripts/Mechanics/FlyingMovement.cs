@@ -13,7 +13,6 @@ public class FlyingMovement : MonoBehaviour
   [SerializeField] private float updateSpeed = 10;
   [SerializeField] private float sensitivity = 100f;
   [SerializeField] private float clampAngle = 80f;
-  private Vector3 motion;
   private float rotY = 0.0f; // rotation around the up/y axis
   private float rotX = 0.0f; // rotation around the right/x axis
   private bool moving = false;
@@ -36,7 +35,7 @@ public class FlyingMovement : MonoBehaviour
   // ref: https://forum.unity.com/threads/flying-character.34783/
   // ref: https://answers.unity.com/questions/29741/mouse-look-script.html
   void FixedUpdate() {
-    if (Camera_s.camMode != Camera_s.CameraMode.Debug) return;
+    // if (Camera_s.camMode != Camera_s.CameraMode.Debug) return;
     if (moving) {
       if (!Input.GetKey(KeyCode.LeftControl)) {
         this.transform.position = desiredPos;

@@ -14,6 +14,7 @@ public class BlockyController_s : MonoBehaviour
   [SerializeField] private SquareHandler squareHandler;
   [SerializeField] private InputField createBlockyNameField;
   [SerializeField] private Button sizeButton;
+  [SerializeField] private Slider sizeSlider;
   [SerializeField] private Text sizeText;
   [SerializeField] private Button addBlockyButton;
   [SerializeField] private Button removeSelectedButton;
@@ -34,6 +35,7 @@ public class BlockyController_s : MonoBehaviour
     this.blockyMap = blockyMap;
     addOptions();
     selectLastBlocky();
+    sizeText.text = Blocky_s.SIZE.ToString();
   }
 
   #region Button Logic
@@ -41,6 +43,14 @@ public class BlockyController_s : MonoBehaviour
   public void cycleBlockySize() {
     sizeText.text = Maps.blockySizeMap[sizeText.text];
     Blocky_s.SIZE = int.Parse(sizeText.text);
+  }
+
+  public void changeSize() {
+    if (sizeSlider.value % 2 == 0) {
+      sizeSlider.value += 1;
+    }
+    sizeText.text = sizeSlider.value.ToString();
+    Blocky_s.SIZE = (int) sizeSlider.value;
   }
   
   /// <summary> Switch to the integrated Blocky builder interface. </summary>
@@ -55,7 +65,7 @@ public class BlockyController_s : MonoBehaviour
     blockySelector.options.RemoveAt(blockySelector.value);
     showBlocky.removeTiles();
     if (blockyMap.Count == 0) {
-      sizeButton.interactable = true;
+      sizeSlider.interactable = true;
       blockySelectorLabel.text = "";
     } else {
       blockySelector.value = blockySelector.options.Count -1; 
@@ -78,7 +88,7 @@ public class BlockyController_s : MonoBehaviour
       createBlockyNameField.placeholder.GetComponent<Text>().text = "Name Cannot be "+ Node_s.skipKeyword +" keyword!";
     } else {
       saveNewBlocky(createBlockyNameField.text);
-      sizeButton.interactable = false;
+      sizeSlider.interactable = false;
     }
   }
   #endregion
@@ -114,7 +124,7 @@ public class BlockyController_s : MonoBehaviour
       newOptions.Add(key);
     }
     blockySelector.AddOptions(newOptions);
-    if (newOptions.Count > 0) sizeButton.interactable = false;
+    if (newOptions.Count > 0) sizeSlider.interactable = false;
   }
 
   /// <summary> Select the lastly created Blocky. </summary>

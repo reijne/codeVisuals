@@ -1,10 +1,11 @@
 // Gathers all the information from the components of showey to Save and Load from and to the interface.
 // Author: Youri Reijne
 
+using SFB;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+
 
 public class CompositeController_s : MonoBehaviour
 {
@@ -12,9 +13,9 @@ public class CompositeController_s : MonoBehaviour
   [SerializeField] BlockyController_s blockyController;
   [SerializeField] MappyController_s mappyController;
 
-  private void Start() {
-    // toString();
-    // toSerialize();
+  /// <summary> Create a new showey definition using the flattened abstract tree of a language. </summary>
+  public void createShowey(string abstractTree) {
+    mappyController.createCategoryMap(abstractTree);
   }
 
   /// <summary> Create a string from all the components. </summary>
@@ -29,14 +30,15 @@ public class CompositeController_s : MonoBehaviour
 
   private void FixedUpdate() {
     // toString();
-    Debug.Log(toSerialize());
+    // Debug.Log(toSerialize()); // Why was this still on ;-;
   }
 
   /// <summary> Load in a Serialized Showey Definition through file. </summary>
   public void loadShoweyDefinition() {
-    var path = EditorUtility.OpenFilePanel("Load Showey Definition", "", "show");
-    if (path.Length != 0) {
-      StreamReader reader = new StreamReader(path);
+    // Open file
+    var paths = StandaloneFileBrowser.OpenFilePanel("Load Showey Definition", "", "show", false);
+    if (paths.Length != 0 && paths[0].Length != 0) {
+      StreamReader reader = new StreamReader(paths[0]);
       loadShoweyDefinition(reader.ReadLine());
     }
   }
@@ -53,7 +55,9 @@ public class CompositeController_s : MonoBehaviour
   /// <summary> Save a Serialized Showey Definition through a pop-up save window. </summary>
   public void saveShoweyDefinition() {
     string json = toSerialize();
-    var path = EditorUtility.SaveFilePanel("Save Showey Definition", "", "showdef", "show");
+    // Save file
+    var path = StandaloneFileBrowser.SaveFilePanel("Save Showey Definition", "", "showdef", "show");
+    // var path = EditorUtility.SaveFilePanel("Save Showey Definition", "", "showdef", "show");
     if (path.Length != 0) {
       StreamWriter writer = new StreamWriter(path, false);
       writer.WriteLine(json);
