@@ -6,7 +6,7 @@ using SFB;
 
 public class SceneSpawner_s : MonoBehaviour
 {
-  [SerializeField] PlayerMovement player;
+  [SerializeField] Camera_s player;
   [SerializeField] GameObject blocky_prefab;
   private ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();

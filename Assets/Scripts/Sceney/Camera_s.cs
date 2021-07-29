@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class Camera_s : MonoBehaviour
 {
   [SerializeField] float moveSpeed;
   [SerializeField] float jumpHeight;
@@ -99,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
     charController.Move(velocity * Time.deltaTime);
   }
 
+  /// <summary> Check whether the player is currently standing on the ground. </summary>
   private bool isGrounded() {
     return Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundCheckMask);
   }

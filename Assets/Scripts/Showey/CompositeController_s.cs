@@ -13,6 +13,10 @@ public class CompositeController_s : MonoBehaviour
   [SerializeField] BlockyController_s blockyController;
   [SerializeField] MappyController_s mappyController;
 
+  // private void Start() {
+  //   loadShoweyDefinition();
+  // }
+
   /// <summary> Create a new showey definition using the flattened abstract tree of a language. </summary>
   public void createShowey(string abstractTree) {
     mappyController.createCategoryMap(abstractTree);
@@ -33,14 +37,24 @@ public class CompositeController_s : MonoBehaviour
     // Debug.Log(toSerialize()); // Why was this still on ;-;
   }
 
+  public void loadShoweyDefinition() {loadShoweyDefinition(false);}  
+
   /// <summary> Load in a Serialized Showey Definition through file. </summary>
-  public void loadShoweyDefinition() {
+  public void loadShoweyDefinition(bool onlyImport) {
     // Open file
     var paths = StandaloneFileBrowser.OpenFilePanel("Load Showey Definition", "", "show", false);
     if (paths.Length != 0 && paths[0].Length != 0) {
       StreamReader reader = new StreamReader(paths[0]);
-      loadShoweyDefinition(reader.ReadLine());
+      if (onlyImport) importBlockys(reader.ReadLine());
+      else loadShoweyDefinition(reader.ReadLine());
     }
+  }
+
+  /// <summary> Import solely the blockys from a Serialized Showey definition. </summary>
+  public void importBlockys(string json) {
+    ShoweyDefinition showdef = ShoweyDefinition.fromSerialise(json);
+    Blocky_s.SIZE = showdef.vars.blockySize;
+    blockyController.loadBlockyMap(showdef.blockyMap);
   }
 
   /// <summary> Load in a Serialized Showey Definition into the interface. </summary>

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SceneController_s : MonoBehaviour
 {
+  [SerializeField] Camera_s player;
   [SerializeField] SceneSpawner_s sceneSpawner;
 
   /// <summary> Create a new Sceney instance using the showeydefintion. </summary>
