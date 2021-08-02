@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneMaps {
+  /// <summary> Takes a direction string and gives back a directional vector.  </summary>
   public static Dictionary<string, Vector3Int> str2dir = new Dictionary<string, Vector3Int>() {
     {"+x", new Vector3Int(1, 0, 0)},
     {"-x", new Vector3Int(-1, 0, 0)},
@@ -12,6 +13,7 @@ public class SceneMaps {
     {"-z", new Vector3Int(0, 0, -1)},
   };
 
+  /// <summary> Takes a directional vectory and gives back the string representation. </summary>
   public static Dictionary<Vector3Int, string> dir2str = new Dictionary<Vector3Int, string>() {
     {new Vector3Int(1, 0, 0), "+x"},
     {new Vector3Int(-1, 0, 0), "-x"},
