@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 using SFB;
 
 public class SceneSpawner_s : MonoBehaviour
 {
-  [SerializeField] Camera_s player;
+  [SerializeField] Movement player;
   [SerializeField] GameObject blocky_prefab;
   private ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
@@ -15,10 +16,11 @@ public class SceneSpawner_s : MonoBehaviour
   private List<GameObject> blockys = new List<GameObject>();
   private List<Vector3> spawns = new List<Vector3>(); 
   private Vector3Int currentDirection;
-  // private void Start() {
-  //   initFromFile();
-  //   parseLabeledTraversal("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\n-out-Stmt-statements\nout-Program-program");
-  // }
+  private bool isPlayerPositioned = false;
+  private void Start() {
+    initFromFile("D:\\School\\master_software_engineering\\Thesis\\Puzzle\\src\\Puzzle\\serialised.show");
+    parseLabeledTraversal("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\n-out-Stmt-statements\nout-Program-program");
+  }
 
   /// <summary> Initialise the spawner with a showeydefinition from json. </summary>
   public void initFromJSON(string serialisedShoweyDefinition) {
@@ -28,16 +30,24 @@ public class SceneSpawner_s : MonoBehaviour
     // Debug.Log("Initialised using JSON, blocky suze:: " + Blocky_s.SIZE);
   }
 
-  /// <summary> Initialise the spawner with a showeydefinition from file. </summary>
-  public void initFromFile() {
-    var paths = StandaloneFileBrowser.OpenFilePanel("Load Showey Definition", "", "show", false);
+  /// <summary> Open a file panel to select a showeydefinition file. </summary>
+    public void initFromFile() {
+    string[] paths = StandaloneFileBrowser.OpenFilePanel("Load Showey Definition", "", "show", false);
     if (paths.Length != 0 && paths[0].Length != 0) {
-      StreamReader reader = new StreamReader(paths[0]);
-      showdef = ShoweyDefinition.fromSerialise(reader.ReadLine());
+      initFromFile(paths[0]);
     }
+  }
+
+  /// <summary> Initialise the spawner with a showeydefinition from file. </summary>
+  public void initFromFile(string path) {
+    Debug.Log(path);
+    StreamReader reader = new StreamReader(path);
+    showdef = ShoweyDefinition.fromSerialise(reader.ReadLine());
     currentDirection = SceneMaps.str2dir[showdef.vars.sign + showdef.vars.genDir];
     Blocky_s.SIZE = showdef.vars.blockySize;
   }
+
+  
 
   /// <summary> Clear the scene by removing all gameobjects and reinitialising the variables. </summary>
   public void clearScene() {
@@ -50,6 +60,7 @@ public class SceneSpawner_s : MonoBehaviour
     System.GC.Collect();
   }
 
+  #region Parser
   /// <summary> Parse the labeled traversal of the AST containing nodes and children. </summary>
   public void parseLabeledTraversal(string labels) {
     if (labels == "") return;
@@ -92,7 +103,9 @@ public class SceneSpawner_s : MonoBehaviour
       catNodeStack.RemoveAt(catNodeStack.Count-1);
     }
   }
+  #endregion // Parser
 
+  #region Spawning
   /// <summary> Spawn a node into the scene using the showeyDefinition</summary>
   private void spawnNode(string category, string node) {
     // Debug.Log(category + " - "+ node);
@@ -100,7 +113,16 @@ public class SceneSpawner_s : MonoBehaviour
     if (blockyName == Node_s.skipKeyword) return;
     // Debug.Log("Spawnpoint before adding:  @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     incrementSpawnpoint();
-    player.setDesiredPosition(player.transform.position, spawnPoint);
+    if (!isPlayerPositioned) {
+      Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
+      Debug.Log(String.Format("up vector :: {0}", up));
+      Vector3 lookAt = Blocky_s.SIZE*currentDirection + up;
+      Debug.Log(String.Format("lookAt first part :: {0}", Blocky_s.SIZE*currentDirection));
+      Debug.Log(String.Format("lookAt vector :: {0}", lookAt));
+      player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
+      // player.cleanLookAt(lookAt);
+      isPlayerPositioned = true;
+    }
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
@@ -158,4 +180,5 @@ public class SceneSpawner_s : MonoBehaviour
     // Debug.Log("Set spawnpoint back to: " + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     dirPosStack.RemoveAt(dirPosStack.Count-1); 
   }
+  #endregion // Spawning
 }

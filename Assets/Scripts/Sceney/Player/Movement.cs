@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Camera_s : MonoBehaviour
+public class Movement : MonoBehaviour
 {
   [SerializeField] float moveSpeed;
   [SerializeField] float jumpHeight;
@@ -13,17 +13,16 @@ public class Camera_s : MonoBehaviour
   [SerializeField] CharacterController charController;
   [SerializeField] Transform groundCheck;
   public static float GRAVITY = -9.81f;
-  private float groundCheckDistance = 0.25f;
+  public enum MovementType {running, flying};
+  private float groundCheckDistance = 0.5f;
   private LayerMask groundCheckMask;
-  private enum MovementType {running, flying};
   private MovementType moveType = MovementType.flying;
   private Vector3 startPosition;
   private Vector3 velocity;
   private Quaternion startRotation;
   private Vector3 desiredPosition;
   private Vector3 desiredLookat;
-  private bool isKinematic = false;
-  private bool isInputDisabled = true;
+  private bool doInput = false;
   private float rotY = 0.0f; // rotation around the up/y axis
   private float rotX = 0.0f; // rotation around the right/x axis
 
@@ -34,17 +33,45 @@ public class Camera_s : MonoBehaviour
     setStartPosition(transform.position, transform.rotation);
     // setDesiredPosition(new Vector3(0, 10, 0), new Vector3(1, 10, 0));
     setRotation();
-    Debug.Log(this.transform.position);
+    setMovementType(Movement.MovementType.running);
+    Debug.Log("SIZE OF SCREEN");
+    Debug.Log(Screen.width * Screen.height);
+    float calibrationSensitivity = 519915;
+    sensitivity = (sensitivity * Screen.width * Screen.height) / calibrationSensitivity;
   }
+
+  #region (Re)Setters
+  /// <summary> Set the movementType according to the Sceney initialisation. </summary>
+  public void setMovementType(MovementType moveType) {
+    Debug.Log(String.Format("Setting move to :: {0}", moveType));
+    this.moveType = moveType;
+    Debug.Log(this.moveType);
+  }
+
+  /// <summary> Store the starting position and rotation, used for resetting the player </summary>
   public void setStartPosition(Vector3 position, Quaternion rotation) {
     startPosition = position;
     startRotation = rotation;
   }
 
+  /// <summary> Reset the player to the starting position and rotation. </summary>
+  public void resetPosition() {
+    transform.position = startPosition;
+    transform.rotation = startRotation;
+  }
+
+  /// <summary> Move the player to a position and make them look at the Lookat position. </summary>
   public void setDesiredPosition(Vector3 position, Vector3 lookAt) {
-    isInputDisabled = true;
-    desiredPosition = position;
-    desiredLookat = lookAt;
+    Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
+    doInput = true;
+    transform.position = position;
+    transform.LookAt(lookAt);
+    doInput = false;
+  }
+
+  /// <summary> Look at a spot while matching height so rotation is clean is the y axis. </summary>
+  public void cleanLookAt(Vector3 lookAt) {
+    setDesiredPosition(new Vector3(transform.position.x, lookAt.y, transform.position.z), lookAt);
   }
 
   public void setRotation() {
@@ -52,27 +79,16 @@ public class Camera_s : MonoBehaviour
     rotY = rot.y;
     rotX = rot.x;
   }
-
-  public void moveTo() {
-    // transform.position += (transform.TransformDirection(desiredPosition) / 100);
-    transform.position = desiredPosition;
-    transform.LookAt(desiredLookat);
-    // if (transform.position == desiredPosition) isInputDisabled = false;
-    isInputDisabled = false;
-  }
+  #endregion // (Re)Setters
 
   private void Update() {
     handleInput();
-    if (!isInputDisabled) {
+    if (!doInput) {
       switch (moveType) {
         case MovementType.flying: doFlyingController(); break;
         default: doCharacterController(); break;
       }
       updateCameraRotation();
-    } else {
-      Debug.Log("moving through script");
-      Debug.Log(transform.position);
-      moveTo();
     }
   }
 
@@ -87,7 +103,6 @@ public class Camera_s : MonoBehaviour
     float x = Input.GetAxis("Horizontal");
     float z = Input.GetAxis("Vertical");
     Vector3 move = transform.right * x + transform.forward * z;
-    // Vector3 move = transform.TransformDirection(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
     charController.Move(move * Time.deltaTime * moveSpeed);
 
     if (isGrounded() && Input.GetButtonDown("Jump")) {
@@ -104,12 +119,6 @@ public class Camera_s : MonoBehaviour
     return Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundCheckMask);
   }
 
-  // private void updateCameraRotation() {
-  //   getMouseRotation(sensitivity, verticalViewClampAngle);
-  //   // transform.rotation = getMouseRotation(sensitivity, verticalViewClampAngle);
-  //   // camTransform.rotation = transform.rotation;
-  // }
-
   private void doFlyingController() {
     float dt = Time.deltaTime;
     float dx = Input.GetAxis("Horizontal") * moveSpeed * dt;
@@ -117,16 +126,7 @@ public class Camera_s : MonoBehaviour
     float dy = 0;
 
     dy = handleUpDown(dt);
-    transform.position += transform.TransformDirection(new Vector3(dx, dy, dz));
-    // if (moveType == MovementType.flying) {
-    // } else {
-    //   if (charController.isGrounded && Input.GetKeyDown(KeyCode.Space)) {
-    //     dy = jumpHeight * dt;
-    //     transform.position += new Vector3(dx, dy, dz);
-    //   } 
-    // }
-    // Debug.Log(dx + "," + dy + "," + dz);
-    
+    transform.position += transform.TransformDirection(new Vector3(dx, dy, dz));    
   }
 
   private float handleUpDown(float dt) {
@@ -136,12 +136,16 @@ public class Camera_s : MonoBehaviour
   }
 
   public void toggleMovementType() {
-    if (moveType == MovementType.flying) {
-      moveType = MovementType.running;
-    } else if (moveType == MovementType.running) {
-      moveType = MovementType.flying;
+    switch (moveType) {
+      case MovementType.flying : {
+        moveType = MovementType.running;
+        break;}
+      case MovementType.running : {
+        moveType = MovementType.flying;
+        velocity = Vector3.zero;
+        break;}
     }
-    Debug.Log("movement::" + moveType);
+
   }
 
   private void updateCameraRotation() {
