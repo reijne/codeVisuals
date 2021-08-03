@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - BlockyController
+  - Culture
   layers:
   - Default
   - TransparentFX

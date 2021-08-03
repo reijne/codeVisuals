@@ -34,8 +34,8 @@ public class Movement : MonoBehaviour
     // setDesiredPosition(new Vector3(0, 10, 0), new Vector3(1, 10, 0));
     setRotation();
     setMovementType(Movement.MovementType.running);
-    Debug.Log("SIZE OF SCREEN");
-    Debug.Log(Screen.width * Screen.height);
+    // Debug.Log("SIZE OF SCREEN");
+    // Debug.Log(Screen.width * Screen.height);
     float calibrationSensitivity = 519915;
     sensitivity = (sensitivity * Screen.width * Screen.height) / calibrationSensitivity;
   }
@@ -43,9 +43,9 @@ public class Movement : MonoBehaviour
   #region (Re)Setters
   /// <summary> Set the movementType according to the Sceney initialisation. </summary>
   public void setMovementType(MovementType moveType) {
-    Debug.Log(String.Format("Setting move to :: {0}", moveType));
+    // Debug.Log(String.Format("Setting move to :: {0}", moveType));
     this.moveType = moveType;
-    Debug.Log(this.moveType);
+    // Debug.Log(this.moveType);
   }
 
   /// <summary> Store the starting position and rotation, used for resetting the player </summary>
@@ -62,7 +62,7 @@ public class Movement : MonoBehaviour
 
   /// <summary> Move the player to a position and make them look at the Lookat position. </summary>
   public void setDesiredPosition(Vector3 position, Vector3 lookAt) {
-    Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
+    // Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
     doInput = true;
     transform.position = position;
     transform.LookAt(lookAt);

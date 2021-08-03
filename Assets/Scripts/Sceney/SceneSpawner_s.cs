@@ -9,6 +9,7 @@ public class SceneSpawner_s : MonoBehaviour
 {
   [SerializeField] Movement player;
   [SerializeField] GameObject blocky_prefab;
+  public static Vector3 firstSpawn;
   private ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
@@ -40,7 +41,7 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Initialise the spawner with a showeydefinition from file. </summary>
   public void initFromFile(string path) {
-    Debug.Log(path);
+    // Debug.Log(path);
     StreamReader reader = new StreamReader(path);
     showdef = ShoweyDefinition.fromSerialise(reader.ReadLine());
     currentDirection = SceneMaps.str2dir[showdef.vars.sign + showdef.vars.genDir];
@@ -114,14 +115,7 @@ public class SceneSpawner_s : MonoBehaviour
     // Debug.Log("Spawnpoint before adding:  @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     incrementSpawnpoint();
     if (!isPlayerPositioned) {
-      Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
-      Debug.Log(String.Format("up vector :: {0}", up));
-      Vector3 lookAt = Blocky_s.SIZE*currentDirection + up;
-      Debug.Log(String.Format("lookAt first part :: {0}", Blocky_s.SIZE*currentDirection));
-      Debug.Log(String.Format("lookAt vector :: {0}", lookAt));
-      player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
-      // player.cleanLookAt(lookAt);
-      isPlayerPositioned = true;
+      spawnPlayer();
     }
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
@@ -130,6 +124,17 @@ public class SceneSpawner_s : MonoBehaviour
     // Debug.Log("SPAWNED :: " + blockyName + " @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     blockys.Add(blockyInstance);
     spawns.Add(spawnPoint);
+  }
+
+  private void spawnPlayer() {
+    Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
+    // Debug.Log(String.Format("up vector :: {0}", up));
+    Vector3 lookAt = Blocky_s.SIZE*currentDirection + up;
+    // Debug.Log(String.Format("lookAt first part :: {0}", Blocky_s.SIZE*currentDirection));
+    // Debug.Log(String.Format("lookAt vector :: {0}", lookAt));
+    player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
+    player.cleanLookAt(spawnPoint + lookAt);
+    isPlayerPositioned = true;
   }
 
   // TODO CLEAN THIS SHIT UP
@@ -147,7 +152,7 @@ public class SceneSpawner_s : MonoBehaviour
     Child childClass = showdef.categoryNodeMap[category].nodes[node].children[typ + "_" + child];
     if (childClass.relativeDirection == Child_s.noChangeKeyword) return;
 
-    Debug.Log(childClass.relativeDirection);
+    // Debug.Log(childClass.relativeDirection);
     // Set the new direction
     string newdir = SceneMaps.relDirMap[(curdir, childClass.relativeDirection)];
     currentDirection = SceneMaps.str2dir[newdir];

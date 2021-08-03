@@ -34,6 +34,7 @@ public class FlyingMovement : MonoBehaviour
 
   // ref: https://forum.unity.com/threads/flying-character.34783/
   // ref: https://answers.unity.com/questions/29741/mouse-look-script.html
+  // ref: https://forum.unity.com/threads/how-to-correctly-setup-3d-character-movement-in-unity.981939/#post-6379746
   void FixedUpdate() {
     // if (Camera_s.camMode != Camera_s.CameraMode.Debug) return;
     if (moving) {
