@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BlockyController
   - Culture
+  - ErrorEnemy
   layers:
   - Default
   - TransparentFX

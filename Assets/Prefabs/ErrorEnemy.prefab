@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2682593675351145660}
   m_Layer: 0
   m_Name: ErrorEnemy
-  m_TagString: Untagged
+  m_TagString: ErrorEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +113,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  viewRange: 10
+  throwCube_prefab: {fileID: 5802545422607857224, guid: 5097dfe4c0f7cf541816803650cee4f0, type: 3}
+  viewRange: 20
+  firerate: 0.5
+  firePower: 10
+  eye1: {fileID: 7691307969140509433}
+  eye2: {fileID: 7691307967624271269}
 --- !u!1001 &2682593675039883519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171,6 +176,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd191c81caef45243825a1494b50e442, type: 3}
+--- !u!1 &7691307967624271269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5730689121028281690, guid: fd191c81caef45243825a1494b50e442, type: 3}
+  m_PrefabInstance: {fileID: 2682593675039883519}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7691307967624271268 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5730689121028281691, guid: fd191c81caef45243825a1494b50e442, type: 3}
@@ -233,6 +243,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd191c81caef45243825a1494b50e442, type: 3}
+--- !u!1 &7691307969140509433 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5730689121028281690, guid: fd191c81caef45243825a1494b50e442, type: 3}
+  m_PrefabInstance: {fileID: 2682593676556132259}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7691307969140509432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5730689121028281691, guid: fd191c81caef45243825a1494b50e442, type: 3}

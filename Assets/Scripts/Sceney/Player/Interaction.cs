@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Interaction : MonoBehaviour
+public class Interaction : MonoBehaviour, Target
 {
   [SerializeField] float throwingPower;
   [SerializeField] float interactionRate;
@@ -13,15 +14,21 @@ public class Interaction : MonoBehaviour
   [SerializeField] GameObject handcube;
   [SerializeField] Material handcube_m;
   [SerializeField] Transform throwSpawnpoint;
+  [SerializeField] Text healthText;
+  [SerializeField] int health;
   public enum interactionType {shooting, throwing};
-  private interactionType interType = interactionType.shooting;
+  private interactionType interType = interactionType.throwing;
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
+
+  private void Start() {
+    displayHealth();
+  }
 
   private void Update() {
     // throwCube();
     colourHandCube();
-    if (Input.GetButton("Fire1") && Time.time >= nextInteractTime) doInteraction();
+    if (Input.GetButton("Fire1") && Time.time >= nextInteractTime && Movement.doInput) doInteraction();
     if (Input.GetKeyDown(KeyCode.Y)) toggleInteractionType();
   }
 
@@ -73,6 +80,18 @@ public class Interaction : MonoBehaviour
     } else {
       cube.GetComponent<Rigidbody>().velocity = throwingPower * eyes.transform.forward;
     }
+  }
 
+  public void hit(Collision other, Transform culprit) {
+    health--;
+    displayHealth();
+  }
+
+  private void displayHealth() {
+    if (health > 0) healthText.text = String.Format("Health <3 :: {0}", health);
+    else {
+      healthText.text = "The Errors have fixed YOU!";
+      Movement.doInput = false;
+    }
   }
 }

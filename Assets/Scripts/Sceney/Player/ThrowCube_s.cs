@@ -23,5 +23,7 @@ public class ThrowCube_s : MonoBehaviour
   private void OnCollisionEnter(Collision other) {
     GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
     Destroy(boom, 2f);
+    Target t = other.gameObject.GetComponent(typeof(Target)) as Target;
+    if (t != null) t.hit(other, transform);
   }
 }

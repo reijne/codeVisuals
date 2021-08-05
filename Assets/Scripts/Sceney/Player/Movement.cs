@@ -13,6 +13,7 @@ public class Movement : MonoBehaviour
   [SerializeField] CharacterController charController;
   [SerializeField] Transform groundCheck;
   public static float GRAVITY = -9.81f;
+  public static bool doInput = true;
   public enum MovementType {running, flying};
   private float groundCheckDistance = 0.5f;
   private LayerMask groundCheckMask;
@@ -22,7 +23,6 @@ public class Movement : MonoBehaviour
   private Quaternion startRotation;
   private Vector3 desiredPosition;
   private Vector3 desiredLookat;
-  private bool doInput = false;
   private float rotY = 0.0f; // rotation around the up/y axis
   private float rotX = 0.0f; // rotation around the right/x axis
 
@@ -63,10 +63,10 @@ public class Movement : MonoBehaviour
   /// <summary> Move the player to a position and make them look at the Lookat position. </summary>
   public void setDesiredPosition(Vector3 position, Vector3 lookAt) {
     // Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
-    doInput = true;
+    doInput = false;
     transform.position = position;
     transform.LookAt(lookAt);
-    doInput = false;
+    doInput = true;
   }
 
   /// <summary> Look at a spot while matching height so rotation is clean is the y axis. </summary>
@@ -83,7 +83,7 @@ public class Movement : MonoBehaviour
 
   private void Update() {
     handleInput();
-    if (!doInput) {
+    if (doInput) {
       switch (moveType) {
         case MovementType.flying: doFlyingController(); break;
         default: doCharacterController(); break;

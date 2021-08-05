@@ -19,4 +19,11 @@ public class SceneController_s : MonoBehaviour
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
   }
+
+  public void updateErrorEnemies(string errors) {
+    sceneSpawner.clearEnemies();
+    sceneSpawner.parseErrors(errors);
+  }
 }
+// movement
+// errorenemies

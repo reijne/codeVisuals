@@ -126,5 +126,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210c9a2456ca4b34cb3295850c33cf35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
-  lifeTime: 1
+  explosion: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+  lifeTime: 3

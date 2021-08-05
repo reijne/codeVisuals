@@ -9,18 +9,24 @@ public class SceneSpawner_s : MonoBehaviour
 {
   [SerializeField] Movement player;
   [SerializeField] GameObject blocky_prefab;
+  [SerializeField] GameObject errorEnemy_prefab;
   public static Vector3 firstSpawn;
+  public static Dictionary<int, Vector3> nodePositions = new Dictionary<int, Vector3>();
   private ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
   private Vector3 spawnPoint = Vector3Int.zero;
   private List<GameObject> blockys = new List<GameObject>();
+  private List<GameObject> enemies = new List<GameObject>();
   private List<Vector3> spawns = new List<Vector3>(); 
   private Vector3Int currentDirection;
   private bool isPlayerPositioned = false;
+  private int nodeID = 0;
   private void Start() {
     initFromFile("D:\\School\\master_software_engineering\\Thesis\\Puzzle\\src\\Puzzle\\serialised.show");
     parseLabeledTraversal("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\n-out-Stmt-statements\nout-Program-program");
+    spawnErrorEnemy(2);
+    spawnErrorEnemy(1);
   }
 
   /// <summary> Initialise the spawner with a showeydefinition from json. </summary>
@@ -48,8 +54,6 @@ public class SceneSpawner_s : MonoBehaviour
     Blocky_s.SIZE = showdef.vars.blockySize;
   }
 
-  
-
   /// <summary> Clear the scene by removing all gameobjects and reinitialising the variables. </summary>
   public void clearScene() {
     catNodeStack = new List<(string, string)>();
@@ -61,7 +65,14 @@ public class SceneSpawner_s : MonoBehaviour
     System.GC.Collect();
   }
 
-  #region Parser
+  /// <summary> Clear all the enemies in the scene. </summary>
+  public void clearEnemies() {
+    foreach (GameObject enemy in enemies) Destroy(enemy);
+    enemies = new List<GameObject>();
+    System.GC.Collect();
+  }
+
+  #region Parsing
   /// <summary> Parse the labeled traversal of the AST containing nodes and children. </summary>
   public void parseLabeledTraversal(string labels) {
     if (labels == "") return;
@@ -103,8 +114,16 @@ public class SceneSpawner_s : MonoBehaviour
     } else if (operation == "out") {
       catNodeStack.RemoveAt(catNodeStack.Count-1);
     }
+    // TODO remember which nodeID : spawned places
+    nodePositions[nodeID] = spawnPoint;
+    // Debug.Log(String.Format("New node position added ID{0} POS{1}", nodeID, nodePositions[nodeID]));
+    nodeID++;
   }
-  #endregion // Parser
+
+  public void parseErrors(string errors) {
+    // TODO actually parse the errors and spawn in the enemies
+  }
+  #endregion // Parsing
 
   #region Spawning
   /// <summary> Spawn a node into the scene using the showeyDefinition</summary>
@@ -135,6 +154,15 @@ public class SceneSpawner_s : MonoBehaviour
     player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
     player.cleanLookAt(spawnPoint + lookAt);
     isPlayerPositioned = true;
+  }
+
+  private void spawnErrorEnemy(int nodeID) {
+    if (nodePositions[nodeID] != null) spawnErrorEnemy(nodePositions[nodeID]);
+  }
+
+  private void spawnErrorEnemy(Vector3 pos) {
+    GameObject enemy = Instantiate(errorEnemy_prefab, pos, Quaternion.identity);
+    enemies.Add(enemy);
   }
 
   // TODO CLEAN THIS SHIT UP
