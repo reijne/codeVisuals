@@ -21,7 +21,8 @@ public class Socketeer_s : MonoBehaviour
   [SerializeField] SceneController_s sceneController;
   public static bool doSocket = true;
   private static string request = "";
-  private static Thread _thread;
+  private static Thread creator_thread;
+  private static Thread reader_thread;
   private static Mutex mut = new Mutex();
   int local_port = 530;
   IPAddress address = IPAddress.Parse("127.0.0.1");
@@ -29,27 +30,32 @@ public class Socketeer_s : MonoBehaviour
   static Stream s;
   static StreamReader sr;
   Socket soc;
-  bool firstFrame = true;
+  bool isSocketCreated = false;
+  bool isReaderAlive = false;
   
   // Start is called before the first frame update
   void Start() {
     if (doSocket) {
-      Debug.Log("start of start");
-      listener = new TcpListener(address, local_port);
-      Debug.Log("Created a new TCP listener");
-      listener.Start();
-      Debug.Log("Going to wait for a socket connection.");
-      soc = listener.AcceptSocket(); // blocks
-      Debug.Log("Found connection");
-      s = new NetworkStream(soc);
-      Debug.Log("Made a stream for communication");
-      sr = new StreamReader(s);
-      Debug.Log("Made a stream Reader");
-      _thread = new Thread(new ThreadStart(readSocket));
-      _thread.Start();
+      creator_thread = new Thread(new ThreadStart(createSocket));
+      creator_thread.Start();
     }
     // s.Close();
     // soc.Close();
+  }
+
+  void createSocket() {
+    // Debug.Log("Creating a socket");
+    listener = new TcpListener(address, local_port);
+    // Debug.Log("Created a new TCP listener");
+    listener.Start();
+    // Debug.Log("Going to wait for a socket connection.");
+    soc = listener.AcceptSocket(); // blocks
+    // Debug.Log("Found connection");
+    s = new NetworkStream(soc);
+    // Debug.Log("Made a stream for communication");
+    sr = new StreamReader(s);
+    // Debug.Log("Made a stream Reader");
+    isSocketCreated = true;
   }
 
   // IEnumerator createSocket() {
@@ -64,6 +70,11 @@ public class Socketeer_s : MonoBehaviour
   // } 
   void Update()
   {
+    if (isSocketCreated && !isReaderAlive) {
+      isReaderAlive = true;
+      reader_thread = new Thread(new ThreadStart(readSocket));
+      reader_thread.Start();
+    }
     // if (firstFrame) {
     //   StartCoroutine("createSocket");
     //   soc = listener.AcceptSocket(); // blocks
@@ -74,17 +85,18 @@ public class Socketeer_s : MonoBehaviour
     //   Debug.Log("Made a stream Reader");
     //   firstFrame = false;
     // } else 
+    Debug.Log(String.Format("Current request:: {0}", request));
     if (request != "") {
-      Debug.Log("Received:: >" + request + "<");
+      // Debug.Log("Received:: >" + request + "<");
       CreateUpdate cu = JsonUtility.FromJson<CreateUpdate>(request);
       handleRequest(cu);
-      sr.DiscardBufferedData();
+      // sr.DiscardBufferedData();
       mut.WaitOne();
       request = "";
       mut.ReleaseMutex();
-      Debug.Log("set the request back to null");
+      // Debug.Log("set the request back to null");
       if (cu.close) {
-        Debug.Log("Closed the connection");
+        // Debug.Log("Closed the connection");
         s.Close();
         soc.Close();
       } 
@@ -120,7 +132,7 @@ public class Socketeer_s : MonoBehaviour
   // }
   private void readSocket() {
     while (doSocket) {
-      if (s.CanRead) {
+      if (s.CanRead && request == "") {
         string requestLine = sr.ReadLine();
         if (requestLine == null || requestLine == "") continue;
         mut.WaitOne();
@@ -138,6 +150,7 @@ public class Socketeer_s : MonoBehaviour
   }
 
   void handleRequest(CreateUpdate cu) {
+    Debug.Log(cu.method);
     switch (cu.method) {
       case "createShowey": compositeController.createShowey(cu.param);          break;
       case "updateShowey": compositeController.loadShoweyDefinition(cu.param);  break;
@@ -148,7 +161,7 @@ public class Socketeer_s : MonoBehaviour
     }
   }
   private void OnApplicationQuit() {
-    _thread.Abort();
+    reader_thread.Abort();
     s.Close();
     soc.Close();
   }

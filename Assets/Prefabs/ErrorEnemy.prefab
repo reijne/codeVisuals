@@ -114,8 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   throwCube_prefab: {fileID: 5802545422607857224, guid: 5097dfe4c0f7cf541816803650cee4f0, type: 3}
-  viewRange: 20
-  firerate: 0.5
+  viewRange: 50
+  firerate: 1
   firePower: 10
   eye1: {fileID: 7691307969140509433}
   eye2: {fileID: 7691307967624271269}

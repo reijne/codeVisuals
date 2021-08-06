@@ -552,6 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b500ff904e21914fb893c90eda8b265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mat: {fileID: 0}
 --- !u!1 &280632142
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,7 +694,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9de124c6c61bfd46829d7cf77346da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocky_prefab: {fileID: 2856741433102284052, guid: cbdc225c141751b46a9d6276aab8806b, type: 3}
 --- !u!4 &398194099
 Transform:
   m_ObjectHideFlags: 0
@@ -1341,7 +1341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1439294663
 MonoBehaviour:
   m_ObjectHideFlags: 0

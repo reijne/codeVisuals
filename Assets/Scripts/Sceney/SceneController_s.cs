@@ -16,11 +16,13 @@ public class SceneController_s : MonoBehaviour
 
   /// <summary> Update the Sceney instance to show the labeled traversal visually. </summary>
   public void updateSceney(string labeledTraversal) {
+    Debug.Log("updateing the scene");
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
   }
 
   public void updateErrors(string errors) {
+    Debug.Log("updateing the errors");
     sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
   }
