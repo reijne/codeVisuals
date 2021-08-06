@@ -426,7 +426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8ab990d16c9ee47a4f72420b1c70eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  playerInteraction: {fileID: 127868370}
+  playerMovement: {fileID: 127868369}
   sceneSpawner: {fileID: 389835536}
 --- !u!4 &228124118
 Transform:
@@ -552,7 +553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b500ff904e21914fb893c90eda8b265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 0}
 --- !u!1 &280632142
 GameObject:
   m_ObjectHideFlags: 0

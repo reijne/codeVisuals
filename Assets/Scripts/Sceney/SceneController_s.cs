@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SceneController_s : MonoBehaviour
 {
-  [SerializeField] Movement player;
+  [SerializeField] Interaction playerInteraction;
+  [SerializeField] Movement playerMovement;
   [SerializeField] SceneSpawner_s sceneSpawner;
 
   /// <summary> Create a new Sceney instance using the showeydefintion. </summary>
@@ -19,12 +20,15 @@ public class SceneController_s : MonoBehaviour
     Debug.Log("updateing the scene");
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
+    
   }
 
   public void updateErrors(string errors) {
     Debug.Log("updateing the errors");
     sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
+    playerInteraction.resetHealth();
+    Movement.doInput = true;
   }
 }
 // movement

@@ -63,6 +63,8 @@ public class SceneSpawner_s : MonoBehaviour
     foreach (GameObject blocky in blockys) Destroy(blocky);
     blockys = new List<GameObject>();
     spawns = new List<Vector3>();
+    nodePositions = new Dictionary<int, Vector3>();
+    nodeID = 0;
     System.GC.Collect();
   }
 
@@ -112,13 +114,14 @@ public class SceneSpawner_s : MonoBehaviour
     if (operation == "in") {
       spawnNode(category, node);
       catNodeStack.Add((category, node));
+      nodePositions[nodeID] = spawnPoint;
+      Debug.Log(String.Format("New node {2} position added ID{0} POS{1}", nodeID, nodePositions[nodeID], node));
+      nodeID++;
     } else if (operation == "out") {
       catNodeStack.RemoveAt(catNodeStack.Count-1);
     }
     // TODO remember which nodeID : spawned places
-    nodePositions[nodeID] = spawnPoint;
-    // Debug.Log(String.Format("New node position added ID{0} POS{1}", nodeID, nodePositions[nodeID]));
-    nodeID++;
+    
   }
 
   /// <summary> Parse the errors consisting of nodeID and msg. </summary>
@@ -171,11 +174,13 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Spawn in an error enemy on a node location </summary>
   private void spawnErrorEnemy(int nodeID) {
+    Debug.Log(String.Format("Spawning enemy on nodeID :: {0}", nodeID));
     if (nodePositions[nodeID] != null) spawnErrorEnemy(nodePositions[nodeID]);
   }
 
   /// <summary> Spawn in an error enemy on the specified position. </summary>
   private void spawnErrorEnemy(Vector3 pos) {
+    Debug.Log(String.Format("Spawning enemy @ {0}", pos));
     GameObject enemy = Instantiate(errorEnemy_prefab, pos, Quaternion.identity);
     enemies.Add(enemy);
   }

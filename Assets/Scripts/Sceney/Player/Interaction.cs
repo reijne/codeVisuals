@@ -20,8 +20,14 @@ public class Interaction : MonoBehaviour, Target
   private interactionType interType = interactionType.throwing;
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
-
+  private int startingHealth;
   private void Start() {
+    displayHealth();
+    startingHealth = health;
+  }
+
+  public void resetHealth() {
+    health = startingHealth;
     displayHealth();
   }
 
