@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ref: https://learn.unity.com/tutorial/controlling-unity-camera-behaviour#5fc3f6a3edbc2a459f91c6ae
+// TODO Clean this boi up
 public class FlyingMovement : MonoBehaviour
 {
   public static Vector3 startPos;

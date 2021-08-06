@@ -143,6 +143,7 @@ public class Socketeer_s : MonoBehaviour
       case "updateShowey": compositeController.loadShoweyDefinition(cu.param);  break;
       case "createSceney": sceneController.createSceney(cu.param);              break;
       case "updateSceney": sceneController.updateSceney(cu.param);              break;
+      case "updateErrors": sceneController.updateErrors(cu.param);              break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
   }

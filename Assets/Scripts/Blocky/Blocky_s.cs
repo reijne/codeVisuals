@@ -127,4 +127,30 @@ public class Blocky_s : MonoBehaviour
     }
     return Color.gray;
   }
+
+  // TODO salavge this boi
+  void createBlockyFromString(string blockyString, Vector3 blockpos) {
+    List<(Vector3Int, Color)> tilePositionsColors = new List<(Vector3Int, Color)>();
+    string[] blockySplit = blockyString.Split('\n');
+    char[] brackets = {'(', ')'};
+    char[] whiteSpace = {' ', '\t'};
+
+    for (int i = 1; i < blockySplit.Length-1; i++) {
+      string[] tileSplit = blockySplit[i].Trim(brackets).Split('|');
+      string position = tileSplit[0];
+      string color = tileSplit[1].Trim(brackets).Trim(whiteSpace);
+
+      string[] coords = position.Split(',');
+      Vector3Int tilepos = new Vector3Int(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
+      tilePositionsColors.Add((tilepos, Colours.StringToColor[color]));
+    }
+
+    // if (blockyPositions.Contains(blockpos)) Debug.LogError("Overlapping Blockys detected at position: " + blockpos.ToString());
+
+    // GameObject blocky = Instantiate(blocky_prefab, blockpos, Quaternion.identity);
+    // blocky.GetComponent<Blocky_s>().setTilePositions(tilePositionsColors);
+    // blocky.GetComponent<Blocky_s>().spawnTiles();
+    // blockyList.Add(blocky);
+    // blockyPositions.Add(blockpos);
+  }
 }
