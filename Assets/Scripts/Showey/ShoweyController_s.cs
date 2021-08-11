@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Linq;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,10 +15,10 @@ public class ShoweyController_s : MonoBehaviour
   [SerializeField] private GameObject signIndicator;
   [SerializeField] private GameObject cameraIndicator;
   [SerializeField] private GameObject cameraDirectionControls;
-  public string sign = "+";
-  public string genDir = "x";
-  public string camMode = "user";
-  public string camDir = "NE";
+  [NonSerialized] public string sign = "+";
+  [NonSerialized] public string genDir;
+  [NonSerialized] public string camMode;
+  [NonSerialized] public string camDir;
 
   // Dictionary giving the scale of the direction indicator for a given direction
   private Dictionary<string, Vector3> genDirScaleMap;
@@ -28,9 +29,13 @@ public class ShoweyController_s : MonoBehaviour
   #region Setup
   /// <summary> Setup the initial state of the maps, buttons and visual representation </summary>
   private void Start() {
+    genDir = Maps.genDirMap.Keys.ElementAt(0);
+    camMode = Maps.camModeMap.Keys.ElementAt(0);
+    camDir = Maps.camDirMap.Keys.ElementAt(0);
     createMaps();
     updateButtons();
     updateVisualRepresentation();
+    activateCameraDirection();
   }
 
   /// <summary> Load the 
@@ -73,11 +78,12 @@ public class ShoweyController_s : MonoBehaviour
 
   /// <summary> Update the position of the indicator of the camera according to the chosen direction. </summary>
   private void updateCameraIndicatorPosition() {
-    if (camMode == "user") {
+    if (camMode == "first person") {
       cameraIndicator.transform.localPosition = -signIndicator.transform.localPosition + Maps.camUserOffset[genDir];
+    } else if (camMode == "third person") {
+      cameraIndicator.transform.localPosition = -signIndicator.transform.localPosition + 1.5f * Maps.camUserOffset[genDir];
     } else {
       cameraIndicator.transform.localPosition = Mathf.Sqrt(directionSize) * (Vector3) Maps.relativeDirectionMap[(sign + genDir, camDir)];
-      // cameraIndicator.transform.localPosition = signIndicator.transform.localPosition + Maps.camUserOffset[genDir];
     }
   }
 
@@ -126,10 +132,10 @@ public class ShoweyController_s : MonoBehaviour
 
   /// <summary> Enable the camera direction controls if the camera mode is not user </summary>
   public void activateCameraDirection() {
-    if (camMode == "user") {
-      cameraDirectionControls.SetActive(false);
-    } else {
+    if (camMode == "kinematic") {
       cameraDirectionControls.SetActive(true);
+    } else {
+      cameraDirectionControls.SetActive(false);
     }
   }
 

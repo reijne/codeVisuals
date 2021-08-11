@@ -134,9 +134,18 @@ public class SceneSpawner_s : MonoBehaviour
       string[] parts = error.Split('|');
       int location = int.Parse(parts[0]);
       string msg = parts[1];
+      location = getExistingLoc(location);
       errorList.Add((location, msg));
       spawnErrorEnemy(location);
     }
+  }
+
+  private int getExistingLoc(int loc) {
+    while (!nodePositions.ContainsKey(loc)) {
+      loc--;
+      if (loc == 0) break;
+    }
+    return loc;
   }
   #endregion // Parsing
 

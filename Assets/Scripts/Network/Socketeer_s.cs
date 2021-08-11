@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Net.Sockets;
 
-struct CreateUpdate {
+struct RemoteCall {
   public string method;
   public string param;
   public bool close;
@@ -33,103 +33,25 @@ public class Socketeer_s : MonoBehaviour
   bool isSocketCreated = false;
   bool isReaderAlive = false;
   
-  // Start is called before the first frame update
+  /// <summary> Make a thread to create a socket. </summary>
   void Start() {
     if (doSocket) {
       creator_thread = new Thread(new ThreadStart(createSocket));
       creator_thread.Start();
     }
-    // s.Close();
-    // soc.Close();
   }
 
+  /// <summary> Create a tcp listener to accept a connection and create a stream. </summary>
   void createSocket() {
-    // Debug.Log("Creating a socket");
     listener = new TcpListener(address, local_port);
-    // Debug.Log("Created a new TCP listener");
     listener.Start();
-    // Debug.Log("Going to wait for a socket connection.");
     soc = listener.AcceptSocket(); // blocks
-    // Debug.Log("Found connection");
     s = new NetworkStream(soc);
-    // Debug.Log("Made a stream for communication");
     sr = new StreamReader(s);
-    // Debug.Log("Made a stream Reader");
     isSocketCreated = true;
   }
 
-  // IEnumerator createSocket() {
-  //   soc = listener.AcceptSocket(); // blocks
-  //   Debug.Log("Found connection");
-  //   s = new NetworkStream(soc);
-  //   Debug.Log("Made a stream for communication");
-  //   sr = new StreamReader(s);
-  //   Debug.Log("Made a stream Reader");
-  //   firstFrame = false;
-  //   yield return null;
-  // } 
-  void Update()
-  {
-    if (isSocketCreated && !isReaderAlive) {
-      isReaderAlive = true;
-      reader_thread = new Thread(new ThreadStart(readSocket));
-      reader_thread.Start();
-    }
-    // if (firstFrame) {
-    //   StartCoroutine("createSocket");
-    //   soc = listener.AcceptSocket(); // blocks
-    //   Debug.Log("Found connection");
-    //   s = new NetworkStream(soc);
-    //   Debug.Log("Made a stream for communication");
-    //   sr = new StreamReader(s);
-    //   Debug.Log("Made a stream Reader");
-    //   firstFrame = false;
-    // } else 
-    Debug.Log(String.Format("Current request:: {0}", request));
-    if (request != "") {
-      // Debug.Log("Received:: >" + request + "<");
-      CreateUpdate cu = JsonUtility.FromJson<CreateUpdate>(request);
-      handleRequest(cu);
-      // sr.DiscardBufferedData();
-      mut.WaitOne();
-      request = "";
-      mut.ReleaseMutex();
-      // Debug.Log("set the request back to null");
-      if (cu.close) {
-        // Debug.Log("Closed the connection");
-        s.Close();
-        soc.Close();
-      } 
-    }
-    
-    // if (Input.GetKeyDown(KeyCode.Escape)) {
-    //   s.Close();
-    //   soc.Close();
-    // }
-  }
-
-  // private async void readSocket() {
-  //   if (s.CanRead) {
-  //     string request;
-  //     await request = sr.ReadLineAsync();
-            
-  //     if (request != "") {
-  //       Debug.Log("Received:: " + request);
-  //       CreateUpdate cu = JsonUtility.FromJson<CreateUpdate>(request);
-  //       handleRequest(cu);
-  //       sr.DiscardBufferedData();
-  //       if (cu.close) {
-  //         Debug.Log("Closed the connection");
-  //         s.Close();
-  //         soc.Close();
-  //       } 
-  //     }
-  //     // else {
-  //     //   Byte[] buffer = Encoding.ASCII.GetBytes("received");
-  //     //   s.Write(buffer, 0, 0);
-  //     // }
-  //   }
-  // }
+  /// <summary> Read from the socket and store the request for handling. </summary>
   private void readSocket() {
     while (doSocket) {
       if (s.CanRead && request == "") {
@@ -139,17 +61,45 @@ public class Socketeer_s : MonoBehaviour
         request = requestLine;
         mut.ReleaseMutex();
         Debug.Log("Set the request to " + requestLine);
-        // else {
-        //   Byte[] buffer = Encoding.ASCII.GetBytes("received");
-        //   s.Write(buffer, 0, 0);
-        // }
       }
     }
     s.Close();
     soc.Close();
   }
 
-  void handleRequest(CreateUpdate cu) {
+  /// <summary> Spawn the reader thread that fetches requests from the socket. </summary>
+  private void spawnReader() {
+    isReaderAlive = true;
+    reader_thread = new Thread(new ThreadStart(readSocket));
+    reader_thread.Start();
+    creator_thread.Abort();
+  }
+
+  /// <summary> Once the creator thread </summary>
+  void Update()
+  {
+    if (isSocketCreated && !isReaderAlive) {
+      spawnReader();
+    }
+
+    Debug.Log(String.Format("Current request:: {0}", request));
+    if (request != "") {
+      RemoteCall request = fetchRequest();
+      handleRequest(request);
+    }
+    
+  }
+
+  private RemoteCall fetchRequest() {
+    RemoteCall cu = JsonUtility.FromJson<RemoteCall>(request);
+    mut.WaitOne();
+    request = "";
+    mut.ReleaseMutex();
+    return cu;
+  }
+  
+
+  void handleRequest(RemoteCall cu) {
     Debug.Log(cu.method);
     switch (cu.method) {
       case "createShowey": compositeController.createShowey(cu.param);          break;
@@ -159,10 +109,16 @@ public class Socketeer_s : MonoBehaviour
       case "updateErrors": sceneController.updateErrors(cu.param);              break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
+    if (cu.close) closeSocket();
   }
+
+  private void closeSocket() {
+    if (reader_thread != null) reader_thread.Abort();
+    if (s != null) s.Close();
+    if (soc != null) soc.Close();
+  }
+
   private void OnApplicationQuit() {
-    reader_thread.Abort();
-    s.Close();
-    soc.Close();
+    closeSocket();
   }
 }

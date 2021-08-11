@@ -15,9 +15,10 @@ public class Maps
 
   // Dictionary to cycle between the camera modes
   public static Dictionary<string, string> camModeMap = new Dictionary<string, string>() {
-    {"static", "kinematic"},
-    {"kinematic", "user"},
-    {"user", "static"}
+    // {"static", "kinematic"},
+    {"first person", "third person"},
+    {"third person", "kinematic"},
+    {"kinematic", "first person"}
   };
 
   // Dictionary to cycle between camera directions
@@ -49,7 +50,7 @@ public class Maps
     {"z", new Vector3(0f, 0f, 0.5f)},
   };
 
-  // Dictionary with offsets for the directions when in user camera mode
+  // Dictionary with offsets for the directions when in first person camera mode
   public static Dictionary<string, Vector3> camUserOffset = new Dictionary<string, Vector3>() {
     {"x", new Vector3(0, 1, 0)},
     {"y", new Vector3(0, 0, -1)},
