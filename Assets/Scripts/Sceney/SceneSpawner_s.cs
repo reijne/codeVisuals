@@ -10,18 +10,23 @@ public class SceneSpawner_s : MonoBehaviour
   [SerializeField] Movement player;
   [SerializeField] GameObject blocky_prefab;
   [SerializeField] GameObject errorEnemy_prefab;
+  [SerializeField] GameObject collectable_prefab;
   public static Vector3 firstSpawn;
   public static Dictionary<int, Vector3> nodePositions = new Dictionary<int, Vector3>();
+  public static List<int> fallingBlocks = new List<int>();
   private ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
   private Vector3 spawnPoint = Vector3Int.zero;
   private List<GameObject> blockys = new List<GameObject>();
   private List<GameObject> enemies = new List<GameObject>();
+  private List<GameObject> collectables = new List<GameObject>();
   private List<Vector3> spawns = new List<Vector3>(); 
   private List<(int, string)> errorList = new List<(int, string)>();
   private Vector3Int currentDirection;
   private bool isPlayerPositioned = false;
+  private string currentLabels = "";
+  private string storedBranch = "";
   private int nodeID = 0;
   // private void Start() {
   //   initFromFile("D:\\School\\master_software_engineering\\Thesis\\Puzzle\\src\\Puzzle\\serialised.show");
@@ -75,9 +80,16 @@ public class SceneSpawner_s : MonoBehaviour
     System.GC.Collect();
   }
 
+  public void clearCollectables() {
+    foreach (GameObject collectable in collectables) Destroy(collectable);
+    collectables = new List<GameObject>();
+    System.GC.Collect();
+  }
+
   #region Parsing
   /// <summary> Parse the labeled traversal of the AST containing nodes and children. </summary>
   public void parseLabeledTraversal(string labels) {
+    currentLabels = labels;
     if (labels == "") return;
     string[] labelList = labels.Split('\n');
     if (labelList.Length == 0) return;
@@ -140,6 +152,55 @@ public class SceneSpawner_s : MonoBehaviour
     }
   }
 
+  public void parseBranches(string branches) {
+    // string[] branchesList = branches.Split(',');
+    // List<int> branchesIDs = new List<int>();
+    
+    // foreach (string branch in branchesList)
+    //   branchesIDs.Add(int.Parse(branch));
+  
+    // storeBranchNodes(branchesIDs);
+    fallingBlocks = new List<int>();
+    string[] branchesSplit = branches.Split('|');
+    string fallers = branchesSplit[0];
+    string tails = branchesSplit[1];
+    storeFallingBlocks(fallers);
+    parseTails(tails);
+  }
+
+  private void storeFallingBlocks(string fallers) {
+    if (fallers == "") return;
+    string[] fallIDlist = fallers.Split(',');
+    foreach (string fallID in fallIDlist) 
+      fallingBlocks.Add(int.Parse(fallID));
+  }
+
+  private void parseTails(string tails) {
+    if (tails == "") return;
+    string[] tailSplit = tails.Split(',');
+    foreach (string loc in tailSplit)
+      spawnCollectable(int.Parse(loc));
+  }
+
+  // public void storeBranchNodes(List<int> branchesIDs) {
+  //   if (currentLabels == "") return;
+  //   string[] labelList = currentLabels.Split('\n');
+  //   if (labelList.Length == 0) return;
+  //   foreach (string label in labelList) {
+  //     if (label == "") continue;
+  //     if (label[0] != '-') {
+  //       string[] parts = label.Trim().Split('-');
+  //       string operation = parts[0];
+  //       string category = parts[1];
+  //       string node = parts[2];
+  //       if (operation == "in") {
+  //         // start storing
+  //         storedBranch = category+node;
+  //       }
+  //     }
+  //   }
+  // }
+
   private int getExistingLoc(int loc) {
     while (!nodePositions.ContainsKey(loc)) {
       loc--;
@@ -162,6 +223,7 @@ public class SceneSpawner_s : MonoBehaviour
     }
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
+    blockyScript.nodeID = nodeID;
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
     blockyScript.spawnTiles();
     // Debug.Log("SPAWNED :: " + blockyName + " @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
@@ -192,6 +254,17 @@ public class SceneSpawner_s : MonoBehaviour
     Debug.Log(String.Format("Spawning enemy @ {0}", pos));
     GameObject enemy = Instantiate(errorEnemy_prefab, pos, Quaternion.identity);
     enemies.Add(enemy);
+  }
+
+  private void spawnCollectable(int nodeID) {
+    if (nodePositions[nodeID] != null) spawnCollectable(nodePositions[nodeID]);
+  }
+
+  private void spawnCollectable(Vector3 pos) {
+    // Todo instantiate
+    pos = getOpenPos(pos, Vector3.up);
+    GameObject collectable = Instantiate(collectable_prefab, pos, Quaternion.identity);
+    collectables.Add(collectable);
   }
 
   // TODO CLEAN THIS SHIT UP
@@ -230,8 +303,13 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Increment the spawnpoint in the current direction to the open spot. </summary>
   private void incrementSpawnpoint() {
-    spawnPoint += currentDirection * Blocky_s.SIZE;
-    while (spawns.Contains(spawnPoint)) spawnPoint += currentDirection * Blocky_s.SIZE;
+    spawnPoint = getOpenPos(spawnPoint, currentDirection);
+  }
+
+  private Vector3 getOpenPos(Vector3 pos, Vector3 dir) {
+    pos += dir * Blocky_s.SIZE;
+    while (spawns.Contains(pos)) pos += dir * Blocky_s.SIZE;
+    return pos;
   }
 
   /// <summary> Pop the direction and position from the stack and restore them. </summary>

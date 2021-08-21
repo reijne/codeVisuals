@@ -14,25 +14,26 @@ public class Interaction : MonoBehaviour, Target
   [SerializeField] GameObject handcube;
   [SerializeField] Material handcube_m;
   [SerializeField] Transform throwSpawnpoint;
-  [SerializeField] Text healthText;
+  [SerializeField] UserInterface_s userInterface;
   [SerializeField] int health;
   public enum interactionType {shooting, throwing};
-  private interactionType interType = interactionType.throwing;
+  public interactionType interType = interactionType.throwing;
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
   private int startingHealth;
   private void Start() {
-    displayHealth();
     startingHealth = health;
+    Debug.Log(userInterface);
+    if (userInterface == null) {Debug.LogError("why are you null fucker");}
+    userInterface.setCount(health);
   }
 
   public void resetHealth() {
     health = startingHealth;
-    displayHealth();
+    userInterface.setCount(health);
   }
 
   private void Update() {
-    // throwCube();
     colourHandCube();
     if (Input.GetButton("Fire1") && Time.time >= nextInteractTime && Movement.doInput) doInteraction();
     if (Input.GetKeyDown(KeyCode.Y)) toggleInteractionType();
@@ -90,14 +91,6 @@ public class Interaction : MonoBehaviour, Target
 
   public void hit(Collision other, Transform culprit) {
     health--;
-    displayHealth();
-  }
-
-  private void displayHealth() {
-    if (health > 0) healthText.text = String.Format("Health <3 :: {0}", health);
-    else {
-      healthText.text = "The Errors have fixed YOU!";
-      Movement.doInput = false;
-    }
+    userInterface.setCount(health);
   }
 }

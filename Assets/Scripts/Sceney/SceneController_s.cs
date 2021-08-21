@@ -5,10 +5,9 @@ using UnityEngine;
 public class SceneController_s : MonoBehaviour
 {
   [SerializeField] Interaction playerInteraction;
+  [SerializeField] UserInterface_s userInterface;
   [SerializeField] Movement playerMovement;
   [SerializeField] SceneSpawner_s sceneSpawner;
-  public enum SceneType { Puzzle, Shooter, Platformer}
-  [NonSerialized] SceneType sceneType = SceneType.Puzzle;
 
   /// <summary> Create a new Sceney instance using the showeydefintion. </summary>
   public void createSceney(string showeyJSON) {
@@ -22,20 +21,27 @@ public class SceneController_s : MonoBehaviour
     Debug.Log("updateing the scene");
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
-    
+    playerMovement.setMovementType(Movement.MovementType.flying);
   }
 
   public void updateErrors(string errors) {
     Debug.Log("updateing the errors");
-    sceneType = SceneType.Shooter;
+    playerInteraction.interType = Interaction.interactionType.throwing;
+    playerMovement.setMovementType(Movement.MovementType.running);
     sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
     playerInteraction.resetHealth();
     Movement.doInput = true;
+    userInterface.setIcon("heart");
   }
 
   public void updateBranches(string branches) {
     Debug.Log("updateing the branches");
+    playerInteraction.interType = Interaction.interactionType.shooting;
+    playerMovement.setMovementType(Movement.MovementType.running);
+    sceneSpawner.clearCollectables();
+    sceneSpawner.parseBranches(branches);
+    userInterface.setIcon("collectable");
   }
 }
 // movement

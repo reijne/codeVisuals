@@ -33,9 +33,6 @@ public class Movement : MonoBehaviour
     setStartPosition(transform.position, transform.rotation);
     // setDesiredPosition(new Vector3(0, 10, 0), new Vector3(1, 10, 0));
     setRotation();
-    setMovementType(Movement.MovementType.running);
-    // Debug.Log("SIZE OF SCREEN");
-    // Debug.Log(Screen.width * Screen.height);
     float calibrationSensitivity = 519915;
     sensitivity = (sensitivity * Screen.width * Screen.height) / calibrationSensitivity;
   }

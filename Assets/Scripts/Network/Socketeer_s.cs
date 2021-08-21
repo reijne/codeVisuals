@@ -19,12 +19,12 @@ public class Socketeer_s : MonoBehaviour
 {
   [SerializeField] CompositeController_s compositeController;
   [SerializeField] SceneController_s sceneController;
+  [SerializeField] int port;
   public static bool doSocket = true;
   private static string request = "";
   private static Thread creator_thread;
   private static Thread reader_thread;
   private static Mutex mut = new Mutex();
-  int local_port = 530;
   IPAddress address = IPAddress.Parse("127.0.0.1");
   TcpListener listener;
   static Stream s;
@@ -43,7 +43,7 @@ public class Socketeer_s : MonoBehaviour
 
   /// <summary> Create a tcp listener to accept a connection and create a stream. </summary>
   void createSocket() {
-    listener = new TcpListener(address, local_port);
+    listener = new TcpListener(address, port);
     listener.Start();
     soc = listener.AcceptSocket(); // blocks
     s = new NetworkStream(soc);
@@ -107,6 +107,7 @@ public class Socketeer_s : MonoBehaviour
       case "createSceney": sceneController.createSceney(cu.param);              break;
       case "updateSceney": sceneController.updateSceney(cu.param);              break;
       case "updateErrors": sceneController.updateErrors(cu.param);              break;
+      case "updateBranches": sceneController.updateBranches(cu.param);          break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
     if (cu.close) closeSocket();

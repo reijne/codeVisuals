@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2856741433102284054}
   - component: {fileID: 4950475956248111276}
+  - component: {fileID: 7610654386922866762}
   m_Layer: 0
   m_Name: Blocky
   m_TagString: Untagged
@@ -44,3 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile_prefab: {fileID: 6356699588366463442, guid: 7ee89ffaa9b83d14289f92cf65c21f72, type: 3}
+  nodeID: 0
+--- !u!65 &7610654386922866762
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2856741433102284052}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

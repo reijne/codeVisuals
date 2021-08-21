@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +10,8 @@ public class Blocky_s : MonoBehaviour
   public static int SIZE = 3; // For spawning consistency, all the blockys are the same size i.e. static
   [SerializeField] GameObject tile_prefab;
   private List<GameObject> tiles = new List<GameObject>();
-  public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();
+  [NonSerialized] public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();
+  public int nodeID; 
   
   /// <summary> Set the positions for the 3D tiles in the blocky. </summary>
   public void setTilePositions(List<(Vector3Int, Color)> tilePosCols) {
@@ -126,6 +127,19 @@ public class Blocky_s : MonoBehaviour
       if (tilepos == gridpos) return col;
     }
     return Color.gray;
+  }
+
+  private void OnTriggerEnter(Collider other) {
+    if (other.tag == "Player" && SceneSpawner_s.fallingBlocks.Contains(nodeID)) {
+      fall();
+    } 
+  }
+
+  private void fall() {
+    foreach (GameObject tile in tiles) {
+      Rigidbody tileBody = tile.GetComponent<Rigidbody>();
+      if (tileBody) tileBody.useGravity = true;
+    }
   }
 
   // TODO salavge this boi
