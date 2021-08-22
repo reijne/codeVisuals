@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2856741433102284054}
   - component: {fileID: 4950475956248111276}
   - component: {fileID: 7610654386922866762}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Blocky
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2856741433102284052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.75, y: 0.5, z: 0.5951235}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile_prefab: {fileID: 6356699588366463442, guid: 7ee89ffaa9b83d14289f92cf65c21f72, type: 3}
+  triggerBox: {fileID: 7610654386922866762}
   nodeID: 0
 --- !u!65 &7610654386922866762
 BoxCollider:

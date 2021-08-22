@@ -9,9 +9,13 @@ public class Blocky_s : MonoBehaviour
 {
   public static int SIZE = 3; // For spawning consistency, all the blockys are the same size i.e. static
   [SerializeField] GameObject tile_prefab;
+  [SerializeField] BoxCollider triggerBox;
   private List<GameObject> tiles = new List<GameObject>();
   [NonSerialized] public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();
   public int nodeID; 
+  private void Start() {
+    triggerBox.size = new Vector3(SIZE+1, SIZE+1, SIZE+1);
+  }
   
   /// <summary> Set the positions for the 3D tiles in the blocky. </summary>
   public void setTilePositions(List<(Vector3Int, Color)> tilePosCols) {

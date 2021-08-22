@@ -40,7 +40,7 @@ public class Movement : MonoBehaviour
   #region (Re)Setters
   /// <summary> Set the movementType according to the Sceney initialisation. </summary>
   public void setMovementType(MovementType moveType) {
-    // Debug.Log(String.Format("Setting move to :: {0}", moveType));
+    Debug.Log(String.Format("Setting move to :: {0}", moveType));
     this.moveType = moveType;
     // Debug.Log(this.moveType);
   }
@@ -92,7 +92,6 @@ public class Movement : MonoBehaviour
   private void handleInput() {
     if (Input.GetKeyDown(KeyCode.T)) toggleMovementType();
     if (Input.GetKeyDown(KeyCode.R)) transform.rotation = Quaternion.identity;
-    if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
   }
 
   private void doCharacterController() {
@@ -104,7 +103,6 @@ public class Movement : MonoBehaviour
 
     if (isGrounded() && Input.GetButtonDown("Jump")) {
       velocity.y += Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
-      Debug.Log("jumping");
     }
 
     velocity.y += GRAVITY * Time.deltaTime;

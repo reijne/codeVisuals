@@ -178,8 +178,11 @@ public class SceneSpawner_s : MonoBehaviour
   private void parseTails(string tails) {
     if (tails == "") return;
     string[] tailSplit = tails.Split(',');
-    foreach (string loc in tailSplit)
+    UserInterface_s.maxCollected = 0;
+    foreach (string loc in tailSplit) {
       spawnCollectable(int.Parse(loc));
+      UserInterface_s.maxCollected++;
+    }
   }
 
   // public void storeBranchNodes(List<int> branchesIDs) {
@@ -214,6 +217,14 @@ public class SceneSpawner_s : MonoBehaviour
   /// <summary> Spawn a node into the scene using the showeyDefinition</summary>
   private void spawnNode(string category, string node) {
     // Debug.Log(category + " - "+ node);
+    if (!showdef.categoryNodeMap.ContainsKey(category)) {
+      Debug.LogError(String.Format("Category {0} not found in showeydefinition", category));
+      return;
+    }
+    if (!showdef.categoryNodeMap[category].nodes.ContainsKey(node)) {
+      Debug.LogError(String.Format("Node {0} not found in showeydefinition", node));
+      return;
+    }
     string blockyName = showdef.categoryNodeMap[category].nodes[node].blockyName;
     if (blockyName == Node_s.skipKeyword) return;
     // Debug.Log("Spawnpoint before adding:  @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);

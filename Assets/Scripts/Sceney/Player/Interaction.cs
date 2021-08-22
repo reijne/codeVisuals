@@ -23,9 +23,6 @@ public class Interaction : MonoBehaviour, Target
   private int startingHealth;
   private void Start() {
     startingHealth = health;
-    Debug.Log(userInterface);
-    if (userInterface == null) {Debug.LogError("why are you null fucker");}
-    userInterface.setCount(health);
   }
 
   public void resetHealth() {

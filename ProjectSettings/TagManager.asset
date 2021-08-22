@@ -7,6 +7,7 @@ TagManager:
   - BlockyController
   - Culture
   - ErrorEnemy
+  - UserInterface
   layers:
   - Default
   - TransparentFX
