@@ -398,7 +398,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textualRepresentation: {fileID: 1075260175}
-  alwaysSelected: 0
   blocky: {fileID: 2036403475}
 --- !u!1 &85230864
 GameObject:

@@ -55,7 +55,7 @@ public class BlockyController_s : MonoBehaviour
   
   /// <summary> Switch to the integrated Blocky builder interface. </summary>
   public void addBlocky() {
-    switchInterfaces();
+    changeInterfaces();
   }
 
   /// <summary> Remove the currently selected Blocky. </summary>
@@ -68,7 +68,7 @@ public class BlockyController_s : MonoBehaviour
       sizeSlider.interactable = true;
       blockySelectorLabel.text = "";
     } else {
-      blockySelector.value = blockySelector.options.Count -1; 
+      blockySelector.value = blockySelector.options.Count - 1; 
       onBlockySelection(blockySelector);
     }
   }
@@ -107,7 +107,7 @@ public class BlockyController_s : MonoBehaviour
     blockyMap[createBlockyNameField.text] = createBlocky.tilePosCols;
     clearCreateBlocky();
     addOptions();
-    switchInterfaces();
+    changeInterfaces();
     selectLastBlocky();
   }
 
@@ -135,7 +135,7 @@ public class BlockyController_s : MonoBehaviour
   #endregion
 
   /// <summary> Switch between the interfaces: ShoweyBuilder and BlockyBuilder. </summary>
-  private void switchInterfaces() {
+  private void changeInterfaces() {
     showeyInterface.SetActive(!showeyInterface.activeSelf);
     blockyInterface.SetActive(!blockyInterface.activeSelf);
     squareHandler.spawnSelectSquares();

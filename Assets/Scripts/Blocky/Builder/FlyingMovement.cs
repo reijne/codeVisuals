@@ -64,12 +64,10 @@ public class FlyingMovement : MonoBehaviour
       
     float dt = Time.deltaTime;
     float dy =  0;
-    if(Input.GetKey(KeyCode.Space))
-    {
+    if(Input.GetKey(KeyCode.Space)) {
       dy = speed * dt;
     }
-    if(Input.GetKey(KeyCode.LeftShift))
-    {
+    if(Input.GetKey(KeyCode.LeftShift)) {
       dy -= speed * dt;
     }
     float dx = Input.GetAxis("Horizontal") * dt * speed;
@@ -81,6 +79,18 @@ public class FlyingMovement : MonoBehaviour
   private void Update() {
     if (Input.GetKeyDown(KeyCode.T)) toggleMovement();
     if (Input.GetKeyDown(KeyCode.R)) moveToStart();
+    if (!disabled && Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2)) disabled = true;
+    TextualHandler.focusText = !disabled;
+    updateMovementButton();
+  }
+
+  private void updateMovementButton() {
+    if (toggleMovementButton == null) return;
+    if (disabled) {
+      toggleMovementButton.image.color = Color.gray;
+    } else {
+      toggleMovementButton.image.color = Color.white;
+    }
   }
 
   public void setRotation() {
@@ -103,14 +113,5 @@ public class FlyingMovement : MonoBehaviour
 
   public void toggleMovement() {
     disabled = !disabled;
-    TextualHandler.focusText = !disabled;
-    // UserMovement ut = GameObject.FindWithTag("MainCamera").GetComponent<UserMovement>();
-    if (toggleMovementButton) {
-      if (toggleMovementButton.image.color == Color.gray) {
-        toggleMovementButton.image.color = Color.white;
-      } else {
-        toggleMovementButton.image.color = Color.gray;
-      }
-    }
   }
 }

@@ -34,20 +34,21 @@ public class Blocky_s : MonoBehaviour
   /// <summary> Spawn a 3D colored tile at the desired position. </summary>
   private void spawnTile(Vector3Int tilepos, Color col) {
     if (istileOutsideBlock(tilepos)) {
-        Debug.LogError("Tile position: " + tilepos + " outside of block with size" + SIZE);
-        return;
-      }
+      Debug.LogError("Tile position: " + tilepos + " outside of block with size" + SIZE);
+      return;
+    }
 
-      GameObject tile = GameObject.Instantiate(tile_prefab);
-      tile.transform.SetParent(this.transform);
-      tile.transform.position = this.transform.position + tilepos;
-      tile.GetComponent<Renderer>().material.color = col;
-      tiles.Add(tile);
+    GameObject tile = GameObject.Instantiate(tile_prefab);
+    tile.transform.SetParent(this.transform);
+    tile.transform.position = this.transform.position + tilepos;
+    tile.GetComponent<Renderer>().material.color = col;
+    tiles.Add(tile);
   }
 
   /// <summary> Destroy the 3D gameobject tile on a specific position. </summary>
   private void despawnTile(Vector3Int tilepos) {
     foreach (GameObject tile in tiles) {
+      if (tile == null) continue;
       if (tile.transform.position == tilepos) {
         // tiles.Remove(tile);
         Destroy(tile);
@@ -132,12 +133,14 @@ public class Blocky_s : MonoBehaviour
     return Color.gray;
   }
 
+  /// <summary> If the player enters the blocky, and its a falling block, fall. </summary>
   private void OnTriggerEnter(Collider other) {
     if (other.tag == "Player" && SceneSpawner_s.fallingBlocks.Contains(nodeID)) {
       fall();
     } 
   }
 
+  /// <summary> Fall into the void. </summary>
   private void fall() {
     foreach (GameObject tile in tiles) {
       Rigidbody tileBody = tile.GetComponent<Rigidbody>();
