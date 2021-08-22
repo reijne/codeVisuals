@@ -30,6 +30,7 @@ public class FlyingMovement : MonoBehaviour
       Debug.Log(toggleMovementButton.image.color);
     }
     moveToStart();
+    Cursor.lockState = CursorLockMode.Confined;
     // setRotation();
   }
 
@@ -102,6 +103,7 @@ public class FlyingMovement : MonoBehaviour
 
   public void toggleMovement() {
     disabled = !disabled;
+    TextualHandler.focusText = !disabled;
     // UserMovement ut = GameObject.FindWithTag("MainCamera").GetComponent<UserMovement>();
     if (toggleMovementButton) {
       if (toggleMovementButton.image.color == Color.gray) {

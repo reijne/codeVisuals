@@ -49,7 +49,7 @@ public class Blocky_s : MonoBehaviour
   private void despawnTile(Vector3Int tilepos) {
     foreach (GameObject tile in tiles) {
       if (tile.transform.position == tilepos) {
-        tiles.Remove(tile);
+        // tiles.Remove(tile);
         Destroy(tile);
         break;
       }
@@ -58,9 +58,8 @@ public class Blocky_s : MonoBehaviour
 
   /// <summary> Remove all the 3D tiles from the blocky </summary>
   public void removeTiles() {
-    foreach (GameObject tile in tiles) {
-      GameObject.Destroy(tile);
-    }
+    foreach (GameObject tile in tiles) GameObject.Destroy(tile);
+    tiles = new List<GameObject>();
   }
 
   /// <summary> Remove the list of positions for the 3D tiles. </summary>

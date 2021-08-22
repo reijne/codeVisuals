@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class TextualHandler : MonoBehaviour
 {
   [SerializeField] private InputField textualRepresentation;
-  [SerializeField] private bool alwaysSelected = true;
   [SerializeField] private Blocky_s blocky;
+  public static bool focusText = false;
   private bool showTextual = false;
   public void toggleTextualRepresentation() {
     showTextual = !showTextual;
@@ -24,6 +24,6 @@ public class TextualHandler : MonoBehaviour
 
   private void FixedUpdate() {
     updateTextualRepresentation();
-    if (alwaysSelected) textualRepresentation.Select();
+    if (focusText) textualRepresentation.Select();
   }
 }

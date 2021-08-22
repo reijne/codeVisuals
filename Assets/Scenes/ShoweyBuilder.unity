@@ -2667,9 +2667,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 428924374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0213e69c4b703054baa9f52e6156c82f, type: 3}
+  m_Script: {fileID: 11500000, guid: 713d54960f8dcfc4eb31af0afe1cbfee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disabled: 1
+  toggleMovementButton: {fileID: 2142592998}
+  speed: 20
+  updateSpeed: 10
+  sensitivity: 100
+  clampAngle: 80
 --- !u!1 &450101697
 GameObject:
   m_ObjectHideFlags: 0
@@ -6964,6 +6970,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1207628055}
   - component: {fileID: 1207628056}
+  - component: {fileID: 1207628057}
   m_Layer: 0
   m_Name: BlockyIndicator
   m_TagString: Untagged
@@ -6998,7 +7005,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile_prefab: {fileID: 6356699588366463442, guid: 7ee89ffaa9b83d14289f92cf65c21f72, type: 3}
+  triggerBox: {fileID: 1207628057}
   nodeID: 0
+--- !u!65 &1207628057
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207628054}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1229601416
 GameObject:
   m_ObjectHideFlags: 0
@@ -10487,6 +10508,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2036403476}
   - component: {fileID: 2036403475}
+  - component: {fileID: 2036403477}
   m_Layer: 0
   m_Name: CreateBlocky
   m_TagString: Untagged
@@ -10507,6 +10529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile_prefab: {fileID: 6356699588366463442, guid: 7ee89ffaa9b83d14289f92cf65c21f72, type: 3}
+  triggerBox: {fileID: 2036403477}
   nodeID: 0
 --- !u!4 &2036403476
 Transform:
@@ -10522,6 +10545,19 @@ Transform:
   m_Father: {fileID: 1269286159}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2036403477
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036403474}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2071163305
 GameObject:
   m_ObjectHideFlags: 0
