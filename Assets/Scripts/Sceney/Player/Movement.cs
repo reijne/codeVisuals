@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour
   [SerializeField] Transform groundCheck;
   public static float GRAVITY = -9.81f;
   public static bool doInput = true;
+  public static bool thirdPerson = false;
   public enum MovementType {running, flying};
   private float groundCheckDistance = 0.5f;
   private LayerMask groundCheckMask;
@@ -87,6 +88,12 @@ public class Movement : MonoBehaviour
       }
       updateCameraRotation();
     }
+    if (thirdPerson) offsetCamera();
+  }
+
+  private void offsetCamera() {
+    Debug.Log("Wow dude its like third person");
+    camTransform.position = transform.position - 2*camTransform.forward + Vector3.up;
   }
 
   private void handleInput() {
@@ -140,7 +147,6 @@ public class Movement : MonoBehaviour
         velocity = Vector3.zero;
         break;}
     }
-
   }
 
   private void updateCameraRotation() {

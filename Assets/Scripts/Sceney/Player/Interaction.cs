@@ -18,11 +18,13 @@ public class Interaction : MonoBehaviour, Target
   [SerializeField] int health;
   public enum interactionType {shooting, throwing};
   public interactionType interType = interactionType.throwing;
+  private LayerMask interactMask;
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
   private int startingHealth;
   private void Start() {
     startingHealth = health;
+    interactMask = LayerMask.GetMask("Default");
   }
 
   public void resetHealth() {
@@ -34,6 +36,15 @@ public class Interaction : MonoBehaviour, Target
     colourHandCube();
     if (Input.GetButton("Fire1") && Time.time >= nextInteractTime && Movement.doInput) doInteraction();
     if (Input.GetKeyDown(KeyCode.Y)) toggleInteractionType();
+    resetParent();
+  }
+
+  private void resetParent() {
+    if (Movement.thirdPerson && handcube.transform.parent != transform) {
+      Vector3 offset = handcube.transform.localPosition;
+      handcube.transform.SetParent(transform);
+      handcube.transform.localPosition = offset;
+    }
   }
 
   private void colourHandCube() {
@@ -62,7 +73,7 @@ public class Interaction : MonoBehaviour, Target
 
   private void shootToDrop() {
     RaycastHit hit;
-    if (Physics.Raycast(eyes.transform.position + 0.5f*eyes.transform.forward, eyes.transform.forward, out hit)) {
+    if (Physics.Raycast(eyes.transform.position + 0.5f*eyes.transform.forward, eyes.transform.forward, out hit, 9999f, interactMask)) {
       if (hit.rigidbody != null) {
         hit.rigidbody.useGravity = !hit.rigidbody.useGravity;
         if (!hit.rigidbody.useGravity) {
@@ -79,7 +90,7 @@ public class Interaction : MonoBehaviour, Target
     Vector3 instantiatePosition = throwSpawnpoint.position+0.1f*eyes.transform.forward;
     GameObject cube = Instantiate(throwCube_prefab, instantiatePosition, throwSpawnpoint.rotation);
     RaycastHit hit;
-    if (Physics.Raycast(eyes.transform.position + 0.5f*eyes.transform.forward, eyes.transform.forward, out hit)) {
+    if (Physics.Raycast(eyes.transform.position + 0.5f*eyes.transform.forward, eyes.transform.forward, out hit, 9999f, interactMask)) {
       cube.GetComponent<Rigidbody>().velocity = throwingPower * (hit.transform.position-handcube.transform.position).normalized;
     } else {
       cube.GetComponent<Rigidbody>().velocity = throwingPower * eyes.transform.forward;

@@ -40,24 +40,23 @@ public class SceneSpawner_s : MonoBehaviour
     showdef = ShoweyDefinition.fromSerialise(serialisedShoweyDefinition);
     currentDirection = SceneMaps.str2dir[showdef.vars.sign + showdef.vars.genDir];
     Blocky_s.SIZE = showdef.vars.blockySize;
+
+    Debug.Log(String.Format("Camera mode:: {0}", showdef.vars.camMode));
+    if (showdef.vars.camMode == "third person") {
+      Movement.thirdPerson = true;
+      Debug.Log("ITS THIRD PERSON");
+    }
     // Debug.Log("Initialised using JSON, blocky suze:: " + Blocky_s.SIZE);
   }
 
-  /// <summary> Open a file panel to select a showeydefinition file. </summary>
+  /// <summary> Open a file panel to select a showeydefinition file and load it. </summary>
     public void initFromFile() {
     string[] paths = StandaloneFileBrowser.OpenFilePanel("Load Showey Definition", "", "show", false);
     if (paths.Length != 0 && paths[0].Length != 0) {
-      initFromFile(paths[0]);
+      string path = paths[0];
+      StreamReader reader = new StreamReader(path);
+      initFromJSON(reader.ReadLine());
     }
-  }
-
-  /// <summary> Initialise the spawner with a showeydefinition from file. </summary>
-  public void initFromFile(string path) {
-    // Debug.Log(path);
-    StreamReader reader = new StreamReader(path);
-    showdef = ShoweyDefinition.fromSerialise(reader.ReadLine());
-    currentDirection = SceneMaps.str2dir[showdef.vars.sign + showdef.vars.genDir];
-    Blocky_s.SIZE = showdef.vars.blockySize;
   }
 
   /// <summary> Clear the scene by removing all gameobjects and reinitialising the variables. </summary>
