@@ -41,12 +41,10 @@ public class SceneSpawner_s : MonoBehaviour
     currentDirection = SceneMaps.str2dir[showdef.vars.sign + showdef.vars.genDir];
     Blocky_s.SIZE = showdef.vars.blockySize;
 
-    Debug.Log(String.Format("Camera mode:: {0}", showdef.vars.camMode));
+    Movement.thirdPerson = false;
     if (showdef.vars.camMode == "third person") {
       Movement.thirdPerson = true;
-      Debug.Log("ITS THIRD PERSON");
     }
-    // Debug.Log("Initialised using JSON, blocky suze:: " + Blocky_s.SIZE);
   }
 
   /// <summary> Open a file panel to select a showeydefinition file and load it. </summary>
@@ -152,13 +150,6 @@ public class SceneSpawner_s : MonoBehaviour
   }
 
   public void parseBranches(string branches) {
-    // string[] branchesList = branches.Split(',');
-    // List<int> branchesIDs = new List<int>();
-    
-    // foreach (string branch in branchesList)
-    //   branchesIDs.Add(int.Parse(branch));
-  
-    // storeBranchNodes(branchesIDs);
     fallingBlocks = new List<int>();
     string[] branchesSplit = branches.Split('|');
     string fallers = branchesSplit[0];
@@ -184,25 +175,6 @@ public class SceneSpawner_s : MonoBehaviour
     }
   }
 
-  // public void storeBranchNodes(List<int> branchesIDs) {
-  //   if (currentLabels == "") return;
-  //   string[] labelList = currentLabels.Split('\n');
-  //   if (labelList.Length == 0) return;
-  //   foreach (string label in labelList) {
-  //     if (label == "") continue;
-  //     if (label[0] != '-') {
-  //       string[] parts = label.Trim().Split('-');
-  //       string operation = parts[0];
-  //       string category = parts[1];
-  //       string node = parts[2];
-  //       if (operation == "in") {
-  //         // start storing
-  //         storedBranch = category+node;
-  //       }
-  //     }
-  //   }
-  // }
-
   private int getExistingLoc(int loc) {
     while (!nodePositions.ContainsKey(loc)) {
       loc--;
@@ -215,7 +187,6 @@ public class SceneSpawner_s : MonoBehaviour
   #region Spawning
   /// <summary> Spawn a node into the scene using the showeyDefinition</summary>
   private void spawnNode(string category, string node) {
-    // Debug.Log(category + " - "+ node);
     if (!showdef.categoryNodeMap.ContainsKey(category)) {
       Debug.LogError(String.Format("Category {0} not found in showeydefinition", category));
       return;
@@ -228,9 +199,11 @@ public class SceneSpawner_s : MonoBehaviour
     if (blockyName == Node_s.skipKeyword) return;
     // Debug.Log("Spawnpoint before adding:  @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     incrementSpawnpoint();
+    // TODO spawn player depending on the camera mode
     if (!isPlayerPositioned) {
       spawnPlayer();
     }
+    // TODO make into func
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
     blockyScript.nodeID = nodeID;
@@ -244,10 +217,7 @@ public class SceneSpawner_s : MonoBehaviour
   /// <summary> Spawn the player in the scene at the correct location. </summary>
   private void spawnPlayer() {
     Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
-    // Debug.Log(String.Format("up vector :: {0}", up));
     Vector3 lookAt = Blocky_s.SIZE*currentDirection + up;
-    // Debug.Log(String.Format("lookAt first part :: {0}", Blocky_s.SIZE*currentDirection));
-    // Debug.Log(String.Format("lookAt vector :: {0}", lookAt));
     player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
     player.cleanLookAt(spawnPoint + lookAt);
     isPlayerPositioned = true;
