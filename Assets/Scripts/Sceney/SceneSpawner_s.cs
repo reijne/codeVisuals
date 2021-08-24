@@ -14,11 +14,11 @@ public class SceneSpawner_s : MonoBehaviour
   public static Vector3 firstSpawn;
   public static Dictionary<int, Vector3> nodePositions = new Dictionary<int, Vector3>();
   public static List<int> fallingBlocks = new List<int>();
-  private ShoweyDefinition showdef;
+  public ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
   private Vector3 spawnPoint = Vector3Int.zero;
-  private List<GameObject> blockys = new List<GameObject>();
+  private List<GameObject> blockies = new List<GameObject>();
   private List<GameObject> enemies = new List<GameObject>();
   private List<GameObject> collectables = new List<GameObject>();
   private List<Vector3> spawns = new List<Vector3>(); 
@@ -62,8 +62,8 @@ public class SceneSpawner_s : MonoBehaviour
     catNodeStack = new List<(string, string)>();
     dirPosStack = new List<(Vector3Int, Vector3)>();
     spawnPoint = Vector3Int.zero;
-    foreach (GameObject blocky in blockys) Destroy(blocky);
-    blockys = new List<GameObject>();
+    foreach (GameObject blocky in blockies) Destroy(blocky);
+    blockies = new List<GameObject>();
     spawns = new List<Vector3>();
     nodePositions = new Dictionary<int, Vector3>();
     nodeID = 0;
@@ -99,6 +99,7 @@ public class SceneSpawner_s : MonoBehaviour
         parseNode(label);
       }
     }
+    if (showdef.vars.camMode == "kinematic") spawnCamera();
   }
 
   /// <summary> Parse the label of a child, containing the operation, type and name of the child. </summary>
@@ -129,8 +130,6 @@ public class SceneSpawner_s : MonoBehaviour
     } else if (operation == "out") {
       catNodeStack.RemoveAt(catNodeStack.Count-1);
     }
-    // TODO remember which nodeID : spawned places
-    
   }
 
   /// <summary> Parse the errors consisting of nodeID and msg. </summary>
@@ -204,13 +203,17 @@ public class SceneSpawner_s : MonoBehaviour
       spawnPlayer();
     }
     // TODO make into func
+    instantiateNode(blockyName);
+  }
+
+  private void instantiateNode(string blockyName) {
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
     blockyScript.nodeID = nodeID;
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
     blockyScript.spawnTiles();
     // Debug.Log("SPAWNED :: " + blockyName + " @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
-    blockys.Add(blockyInstance);
+    blockies.Add(blockyInstance);
     spawns.Add(spawnPoint);
   }
 
@@ -221,6 +224,15 @@ public class SceneSpawner_s : MonoBehaviour
     player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
     player.cleanLookAt(spawnPoint + lookAt);
     isPlayerPositioned = true;
+  }
+
+  private void spawnCamera() {
+    Bounds bounds = new Bounds();
+    foreach (GameObject blocky in blockies) bounds.Encapsulate(blocky.transform.position);
+    Vector3 offset = Maps.relativeDirectionMap[(SceneMaps.dir2str[currentDirection], showdef.vars.camDir)];
+    float dist = (bounds.max.x + bounds.max.y + bounds.max.z) / 3;
+    player.setDesiredPosition(bounds.center + dist*offset, bounds.center + dist*new Vector3(0, offset.y, 0));
+    player.setMovementType(Movement.MovementType.flying);
   }
 
   /// <summary> Spawn in an error enemy on a node location </summary>

@@ -38,7 +38,7 @@ public class SceneController_s : MonoBehaviour
     Debug.Log(errors);
     Debug.Log("End of errors");
     playerInteraction.interType = Interaction.interactionType.throwing;
-    playerMovement.setMovementType(Movement.MovementType.running);
+    setMovement();
     sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
     playerInteraction.resetHealth();
@@ -52,11 +52,16 @@ public class SceneController_s : MonoBehaviour
     Debug.Log(branches);
     Debug.Log("end of branches");
     playerInteraction.interType = Interaction.interactionType.shooting;
-    playerMovement.setMovementType(Movement.MovementType.running);
+    setMovement();
     sceneSpawner.clearCollectables();
     sceneSpawner.parseBranches(branches);
     userInterfaceObject.SetActive(true);
     userInterface.setIcon("collectable");
+  }
+
+  private void setMovement() {
+    if (sceneSpawner.showdef.vars.camMode != "kinematic")
+      playerMovement.setMovementType(Movement.MovementType.running);
   }
 
   public void quit() {
