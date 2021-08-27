@@ -66,6 +66,7 @@ public class SceneSpawner_s : MonoBehaviour
     blockies = new List<GameObject>();
     spawns = new List<Vector3>();
     nodePositions = new Dictionary<int, Vector3>();
+    isPlayerPositioned = false;
     nodeID = 0;
     System.GC.Collect();
   }

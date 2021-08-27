@@ -102,12 +102,13 @@ public class Socketeer_s : MonoBehaviour
   void handleRequest(RemoteCall cu) {
     Debug.Log(cu.method);
     switch (cu.method) {
-      case "createShowey": compositeController.createShowey(cu.param);          break;
-      case "updateShowey": compositeController.loadShoweyDefinition(cu.param);  break;
-      case "createSceney": sceneController.createSceney(cu.param);              break;
-      case "updateSceney": sceneController.updateSceney(cu.param);              break;
-      case "updateErrors": sceneController.updateErrors(cu.param);              break;
-      case "updateBranches": sceneController.updateBranches(cu.param);          break;
+      case "createShowey":    compositeController.createShowey(cu.param);          break;
+      case "updateShowey":    compositeController.loadShoweyDefinition(cu.param);  break;
+      case "createSceney":    sceneController.createSceney(cu.param);              break;
+      case "updateSceney":    sceneController.updateSceney(cu.param);              break;
+      case "updateErrors":    sceneController.updateErrors(cu.param);              break;
+      case "updateBranches":  sceneController.updateBranches(cu.param);          break;
+      case "updateMessage":   sceneController.updateMessage(cu.param);            break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
     if (cu.close) closeSocket();
