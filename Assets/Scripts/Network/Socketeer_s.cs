@@ -113,13 +113,15 @@ public class Socketeer_s : MonoBehaviour
       case "updateEnemy":       sceneController.updateEnemy(cu.param);               break;
       case "updateFalling":     sceneController.updateFalling(cu.param);             break;
       case "updateCollectable": sceneController.updateCollectable(cu.param);         break;
+      case "updateInteraction": sceneController.updateInteraction(cu.param);         break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
     if (cu.close) closeSocket();
   }
 
-  /// <summary> Close the opened socket, reader thread and streamreader. </summary>
+  /// <summary> Close the opened socket, threads and streamreader. </summary>
   private void closeSocket() {
+    if (creator_thread != null) creator_thread.Abort();
     if (reader_thread != null) reader_thread.Abort();
     if (s != null) s.Close();
     if (soc != null) soc.Close();

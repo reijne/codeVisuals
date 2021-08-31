@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // ref: https://learn.unity.com/tutorial/controlling-unity-camera-behaviour#5fc3f6a3edbc2a459f91c6ae
-// TODO Clean this boi up
+// ref: https://forum.unity.com/threads/flying-character.34783/
+// ref: https://answers.unity.com/questions/29741/mouse-look-script.html
+// ref: https://forum.unity.com/threads/how-to-correctly-setup-3d-character-movement-in-unity.981939/#post-6379746
 public class FlyingMovement : MonoBehaviour
 {
   public static Vector3 startPos;
@@ -20,25 +22,19 @@ public class FlyingMovement : MonoBehaviour
   private Vector3 desiredPos;
   private Vector3 desiredLookat;
   
-  // Start is called before the first frame update
+  /// <summary> Set the starting position, move to it, lock the cursor and colour the movement button. </summary>
   void Start()
   {
     startPos = this.transform.position;
     if (toggleMovementButton) {
-      Debug.Log(toggleMovementButton.image.color);
       toggleMovementButton.image.color = Color.gray;
-      Debug.Log(toggleMovementButton.image.color);
     }
     moveToStart();
     Cursor.lockState = CursorLockMode.Confined;
-    // setRotation();
   }
 
-  // ref: https://forum.unity.com/threads/flying-character.34783/
-  // ref: https://answers.unity.com/questions/29741/mouse-look-script.html
-  // ref: https://forum.unity.com/threads/how-to-correctly-setup-3d-character-movement-in-unity.981939/#post-6379746
+  /// <summary> Handle movement. </summary>
   void FixedUpdate() {
-    // if (Camera_s.camMode != Camera_s.CameraMode.Debug) return;
     if (moving) {
       if (!Input.GetKey(KeyCode.LeftControl)) {
         this.transform.position = desiredPos;
@@ -76,6 +72,7 @@ public class FlyingMovement : MonoBehaviour
     // cc.Move(transform.TransformDirection(new Vector3(dx, dy, dz)));
   }
 
+  /// <summary> Handle specified inputs. </summary>
   private void Update() {
     if (Input.GetKeyDown(KeyCode.T)) toggleMovement();
     if (Input.GetKeyDown(KeyCode.R)) moveToStart();
@@ -84,6 +81,7 @@ public class FlyingMovement : MonoBehaviour
     updateMovementButton();
   }
 
+  /// <summary> Update the colour of the movement button. </summary>
   private void updateMovementButton() {
     if (toggleMovementButton == null) return;
     if (disabled) {
@@ -93,17 +91,21 @@ public class FlyingMovement : MonoBehaviour
     }
   }
 
+  /// <summary> Set the rotation of the camera. </summary>
   public void setRotation() {
     Vector3 rot = transform.localRotation.eulerAngles;
     rotY = rot.y;
     rotX = rot.x;
   }
+
+  /// <summary> Set the desired position and target. </summary>
   public void moveCam(Vector3 pos, Vector3 target) {
     moving = true;
     desiredPos = pos;
     desiredLookat = target;
   }
 
+  /// <summary> Move back to the starting position. </summary>
   public static void moveToStart() {
     if (startPos != null) {
       FlyingMovement ft = GameObject.FindWithTag("MainCamera").GetComponent<FlyingMovement>();
@@ -111,6 +113,7 @@ public class FlyingMovement : MonoBehaviour
     }
   }
 
+  /// <summary> Toggle the movement. </summary>
   public void toggleMovement() {
     disabled = !disabled;
   }

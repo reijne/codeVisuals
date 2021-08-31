@@ -16,8 +16,8 @@ public class Interaction : MonoBehaviour, Target
   [SerializeField] Transform throwSpawnpoint;
   [SerializeField] UserInterface_s userInterface;
   [SerializeField] int health;
-  public enum interactionType {shooting, throwing};
-  public interactionType interType = interactionType.throwing;
+  public enum InteractionType {none, shooting, throwing};
+  public InteractionType interType = InteractionType.throwing;
   private LayerMask interactMask;
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
@@ -56,8 +56,8 @@ public class Interaction : MonoBehaviour, Target
   private void colourHandCube() {
     float col = 1 - Mathf.Clamp((Time.time - prevInteractTime) / (nextInteractTime - prevInteractTime), 0, 1);
     switch (interType) {
-      case interactionType.shooting : handcube_m.color = new Color(0, 0, col); break;
-      case interactionType.throwing : handcube_m.color = new Color(col, 0, 0); break;
+      case InteractionType.shooting : handcube_m.color = new Color(0, 0, col); break;
+      case InteractionType.throwing : handcube_m.color = new Color(col, 0, 0); break;
     }
   }
 
@@ -66,17 +66,31 @@ public class Interaction : MonoBehaviour, Target
     prevInteractTime = Time.time;
     nextInteractTime = Time.time + 1f / interactionRate;
     switch (interType) {
-      case interactionType.shooting : shootToDrop(); break;
-      case interactionType.throwing : throwCube(); break;
+      case InteractionType.shooting : shootToDrop(); break;
+      case InteractionType.throwing : throwCube(); break;
     }
   }
 
   /// <summary> Toggle which interaction type will be used. </summary>
   private void toggleInteractionType() {
     switch (interType) {
-      case interactionType.shooting: interType = interactionType.throwing; break;
-      case interactionType.throwing: interType = interactionType.shooting; break;
+      case InteractionType.shooting: interType = InteractionType.throwing; break;
+      case InteractionType.throwing: interType = InteractionType.shooting; break;
     }
+  }
+
+  /// <summary> Set the interaction type. </summary>
+  public void setInteractionType(string interaction) {
+    switch (interaction) {
+      case "shoot" : setInteractionType(InteractionType.shooting); break;
+      case "throw" : setInteractionType(InteractionType.throwing); break;
+      default: setInteractionType(InteractionType.none); break;
+    }
+  }
+
+  /// <summary> Set the interaction type. </summary>
+  public void setInteractionType(InteractionType it) {
+    interType = it;
   }
 
   /// <summary> Shoot a raycast and toggle the gravity of the hit gameobject. </summary>

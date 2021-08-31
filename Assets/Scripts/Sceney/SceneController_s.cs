@@ -32,7 +32,7 @@ public class SceneController_s : MonoBehaviour
 
   /// <summary> Update the Sceney instance by spawning error enemies in the specified locations. </summary>
   public void updateErrors(string errors) {
-    playerInteraction.interType = Interaction.interactionType.throwing;
+    playerInteraction.setInteractionType(Interaction.InteractionType.throwing);
     setRunningMovement();
     sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
@@ -44,10 +44,7 @@ public class SceneController_s : MonoBehaviour
 
   /// <summary> Make non-evaluated branches fall upon interaction and spawn collectables at the end. </summary>
   public void updateBranches(string branches) {
-    Debug.Log("updateing the branches");
-    Debug.Log(branches);
-    Debug.Log("end of branches");
-    playerInteraction.interType = Interaction.interactionType.shooting;
+    playerInteraction.setInteractionType(Interaction.InteractionType.shooting);
     setRunningMovement();
     sceneSpawner.clearCollectables();
     sceneSpawner.parseBranches(branches);
@@ -79,6 +76,11 @@ public class SceneController_s : MonoBehaviour
     int position = 1;
     int.TryParse(fallingPosition, out position);
     sceneSpawner.addFallingBlock(position);
+  }
+
+  /// <summary> Set the type of interaction ability the user gets.  </summary>
+  public void updateInteraction(string interaction) {
+    playerInteraction.setInteractionType(interaction);
   }
 
   /// <summary> Set the movement to be running if the camera mode allows. </summary>

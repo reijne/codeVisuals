@@ -164,13 +164,5 @@ public class Blocky_s : MonoBehaviour
       Vector3Int tilepos = new Vector3Int(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
       tilePositionsColors.Add((tilepos, Colours.StringToColor[color]));
     }
-
-    // if (blockyPositions.Contains(blockpos)) Debug.LogError("Overlapping Blockys detected at position: " + blockpos.ToString());
-
-    // GameObject blocky = Instantiate(blocky_prefab, blockpos, Quaternion.identity);
-    // blocky.GetComponent<Blocky_s>().setTilePositions(tilePositionsColors);
-    // blocky.GetComponent<Blocky_s>().spawnTiles();
-    // blockyList.Add(blocky);
-    // blockyPositions.Add(blockpos);
   }
 }
