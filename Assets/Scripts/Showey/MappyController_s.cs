@@ -16,11 +16,6 @@ public class MappyController_s : MonoBehaviour
   public List<string> categories = new List<string>();
   private int currentCategoryIndex = 0;
   private Vector3 nodeSpawnOffset = new Vector3(0,0,0);
-  
-  // TODO remove this test, hook it up to the Socketeer!
-  // private void Start() {
-  //   createCategoryMap("Program category\nprogram{\nlist[Stmt]_statements\n}\nParameter category\nparameter{}\nBlock category\nblock{\nlist[Stmt]_statements\n}\nExpr category\nfunCall{\nlist[Expr]_args\n}\ndivExpr{\nExpr_lhs\nExpr_rhs\n}\neqExpr{\nExpr_lhs\nExpr_rhs\n}\ngtExpr{\nExpr_lhs\nExpr_rhs\n}\nandExpr{\nExpr_lhs\nExpr_rhs\n}\nboolExpr{\nBoolean_boolean\n}\nmodExpr{\nExpr_lhs\nExpr_rhs\n}\naddExpr{\nExpr_lhs\nExpr_rhs\n}\nnumExpr{}\nlteExpr{\nExpr_lhs\nExpr_rhs\n}\nidExpr{}\nminExpr{\nExpr_lhs\nExpr_rhs\n}\npowExpr{\nExpr_lhs\nExpr_rhs\n}\nbracketExpr{\nExpr_expr\n}\ngteExpr{\nExpr_lhs\nExpr_rhs\n}\nlistExpr{\nlist[Expr]_items\n}\nltExpr{\nExpr_lhs\nExpr_rhs\n}\nstrExpr{}\nmulExpr{\nExpr_lhs\nExpr_rhs\n}\nnotExpr{\nExpr_expr\n}\norExpr{\nExpr_lhs\nExpr_rhs\n}\nType category\nt_list{}\nt_str{}\nt_num{}\nt_bool{}\nBoolean category\nb_false{}\nb_true{}\nStmt category\ndecl{\nType_datatype\n}\nreturnStmt{\nExpr_expr\n}\nfunDef{\nType_datatype\nlist[Parameter]_parameters\nBlock_block\n}\noutputStmt{\nExpr_expr\n}\ninputStmt{}\nwhileStmt{\nExpr_cond\nBlock_block\n}\nexprStmt{\nExpr_expr\n}\nifStmt{\nExpr_cond\nBlock_block\n}\nifElseStmt{\nExpr_cond\nBlock_thenBlock\nBlock_elseBlock\n}\nassStmt{\nExpr_expr\n}\nrepeatStmt{\nBlock_block\n}\n");
-  // }
 
   /// <summary> Parse the intermediate representation containing an AST definition</summary>
   public void createCategoryMap(string astNodes) {
@@ -29,24 +24,19 @@ public class MappyController_s : MonoBehaviour
     List<string> childrenNames = new List<string>();
     string nodeName = "";
     foreach (string line in lines) {
-      if (line.Contains("category")) {
-        // Debug.Log("new category");
+      if (line.Contains("category")) { // new category
         category = line.Split(' ')[0];
         categories.Add(category);
         categoryNodeMap[category] = new List<GameObject>();
         nodeSpawnOffset = new Vector3(0,0,0);
-      } else if (line.Contains("{}")) {
-        // Debug.Log("node without children");
+      } else if (line.Contains("{}")) { // node without children
         categoryNodeMap[category].Add(createNode(line.Trim(new char[]{'{','}'})));
-      } else if (line.Contains("{")) {
-        // Debug.Log("start of node with children");
+      } else if (line.Contains("{")) { // start of node with children
         nodeName = line.Trim('{');
-      } else if (line.Contains("}")) {
-        // Debug.Log("end of node with children");
+      } else if (line.Contains("}")) { // end of node with children
         categoryNodeMap[category].Add(createNode(nodeName, childrenNames));
         childrenNames = new List<string>();
-      } else {
-        // Debug.Log("child");
+      } else { // child
         childrenNames.Add(line);
       }
     }

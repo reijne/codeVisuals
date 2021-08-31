@@ -49,7 +49,7 @@ public class Node_s : MonoBehaviour
     makeNodeOptions();
   }
 
-  /// <summary> Make the static dropdown options for the Blocky visualisation and set . </summary>
+  /// <summary> Make the static dropdown options for the Blocky visualisation and set it. </summary>
   private void makeNodeOptions() {
     bool blockyStillExists = true;
     if (nodeOptions.Count != blockyController.blockySelector.options.Count+1) {

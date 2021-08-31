@@ -52,6 +52,7 @@ public class ShoweyDefinition {
     return blockyMap;
   }
 
+  /// <summary> Make the dictionary from category names to category object. </summary>
   private static Dictionary<string, Category_D> makeCategoryMap(List<Category> categoryList) {
     Dictionary<string, Category_D> categoryMap = new Dictionary<string, Category_D>();
     foreach (Category cat in categoryList) {
@@ -62,6 +63,7 @@ public class ShoweyDefinition {
     return categoryMap;
   }
 
+  /// <summary> Make the dictionary from node names to node object. </summary>
   private static Dictionary<string, Node_D> makeNodeMap(List<Node> nodes) {
     Dictionary<string, Node_D> nodeMap = new Dictionary<string, Node_D>();
     foreach (Node node in nodes) {
@@ -73,6 +75,7 @@ public class ShoweyDefinition {
     return nodeMap;
   }
 
+  /// <summary> Make the dictionary from child name to the child object. </summary>
   private static Dictionary<string, Child> makeChildMap(List<Child> children) {
     Dictionary<string, Child> childMap = new Dictionary<string, Child>();
     foreach (Child child in children) {
@@ -82,7 +85,7 @@ public class ShoweyDefinition {
   }
 }
 
-#region Dictionary definitions used in-Unity for quick lookup
+#region Dictionary definitions used in-Unity for quick lookup O(1)
 public class Category_D {
   public Dictionary<string, Node_D> nodes;
 }

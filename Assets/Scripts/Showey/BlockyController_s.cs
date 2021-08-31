@@ -45,6 +45,7 @@ public class BlockyController_s : MonoBehaviour
     Blocky_s.SIZE = int.Parse(sizeText.text);
   }
 
+  /// <summary> Change the size of Blockies according to the selected value in the slider. </summary>
   public void changeSize() {
     if (sizeSlider.value % 2 == 0) {
       sizeSlider.value += 1;

@@ -64,7 +64,7 @@ public class ShoweyController_s : MonoBehaviour
       {"z", new Vector3(1.2f, 1.2f, signSize)},
     };
   }
-  #endregion
+  #endregion // Setup
 
   #region Updaters
   /// <summary> Update the visual indication of the direction </summary> 

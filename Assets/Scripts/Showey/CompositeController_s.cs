@@ -13,10 +13,6 @@ public class CompositeController_s : MonoBehaviour
   [SerializeField] BlockyController_s blockyController;
   [SerializeField] MappyController_s mappyController;
 
-  // private void Start() {
-  //   loadShoweyDefinition();
-  // }
-
   /// <summary> Create a new showey definition using the flattened abstract tree of a language. </summary>
   public void createShowey(string abstractTree) {
     mappyController.createCategoryMap(abstractTree);
@@ -30,11 +26,6 @@ public class CompositeController_s : MonoBehaviour
     composite += mappyController.toString();
     Debug.Log(composite);
     return composite;
-  }
-
-  private void FixedUpdate() {
-    // toString();
-    // Debug.Log(toSerialize()); // Why was this still on ;-;
   }
 
   public void loadShoweyDefinition() {loadShoweyDefinition(false);}  
