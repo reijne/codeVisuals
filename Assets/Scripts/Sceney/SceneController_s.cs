@@ -26,19 +26,14 @@ public class SceneController_s : MonoBehaviour
 
   /// <summary> Update the Sceney instance to show the labeled traversal visually. </summary>
   public void updateSceney(string labeledTraversal) {
-    Debug.Log("updateing the scene");
-    Debug.Log(labeledTraversal);
-    Debug.Log("End of labeled traversal");
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
   }
 
+  /// <summary> Update the Sceney instance by spawning error enemies in the specified locations. </summary>
   public void updateErrors(string errors) {
-    Debug.Log("updateing the errors");
-    Debug.Log(errors);
-    Debug.Log("End of errors");
     playerInteraction.interType = Interaction.interactionType.throwing;
-    setMovement();
+    setRunningMovement();
     sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
     playerInteraction.resetHealth();
@@ -47,40 +42,65 @@ public class SceneController_s : MonoBehaviour
     userInterface.setIcon("heart");
   }
 
+  /// <summary> Make non-evaluated branches fall upon interaction and spawn collectables at the end. </summary>
   public void updateBranches(string branches) {
     Debug.Log("updateing the branches");
     Debug.Log(branches);
     Debug.Log("end of branches");
     playerInteraction.interType = Interaction.interactionType.shooting;
-    setMovement();
+    setRunningMovement();
     sceneSpawner.clearCollectables();
     sceneSpawner.parseBranches(branches);
     userInterfaceObject.SetActive(true);
     userInterface.setIcon("collectable");
   }
 
+  /// <summary> Display a message on the middle of the screen for a specified duration. </summary>
   public void updateMessage(string messagePlusDuration) {
     userInterface.displayMessage(messagePlusDuration);
   }
 
-  private void setMovement() {
+  /// <summary> Spawn an enemy at the specified location. </summary>
+  public void updateEnemy(string enemyPosition) {
+    int position = 0;
+    int.TryParse(enemyPosition, out position);
+    sceneSpawner.spawnErrorEnemy(position);
+  }
+
+  /// <summary> Spawn a collectable at the specified location. </summary>
+  public void updateCollectable(string collectPosition) {
+    int position = 0;
+    int.TryParse(collectPosition, out position);
+    sceneSpawner.spawnCollectable(position);
+  }
+
+  /// <summary> Make a block falling, when the player interacts with it.  </summary>
+  public void updateFalling(string fallingPosition) {
+    int position = 1;
+    int.TryParse(fallingPosition, out position);
+    sceneSpawner.addFallingBlock(position);
+  }
+
+  /// <summary> Set the movement to be running if the camera mode allows. </summary>
+  private void setRunningMovement() {
     if (sceneSpawner.showdef.vars.camMode != "kinematic")
       playerMovement.setMovementType(Movement.MovementType.running);
   }
 
+  /// <summary> Interface button function to quit the application. </summary>
   public void quit() {
     Application.Quit();
   }
 
+  /// <summary> Interface button function to resume the application. </summary>
   public void resume() {
     menu.SetActive(false);
   }
 
+  /// <summary> Open menu using Esc, and (un)lock the cursor accordingly. </summary>
   private void Update() {
     if (Input.GetKeyDown(KeyCode.Escape)) menu.SetActive(!menu.activeSelf);
     if (menu.activeSelf) Cursor.lockState = CursorLockMode.None;
     else Cursor.lockState = CursorLockMode.Locked;
   }
 }
-// movement
-// errorenemies

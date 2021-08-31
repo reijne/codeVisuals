@@ -72,6 +72,7 @@ public class Movement : MonoBehaviour
     setDesiredPosition(new Vector3(transform.position.x, lookAt.y, transform.position.z), lookAt);
   }
 
+  /// <summary> Set the default rotation of the camera. </summary>
   public void setRotation() {
     Vector3 rot = camTransform.localRotation.eulerAngles;
     rotY = rot.y;
@@ -79,6 +80,7 @@ public class Movement : MonoBehaviour
   }
   #endregion // (Re)Setters
 
+  /// <summary> Handle input, movement and camera. </summary>
   private void Update() {
     handleInput();
     if (doInput) {
@@ -91,16 +93,19 @@ public class Movement : MonoBehaviour
     if (thirdPerson) offsetCamera();
   }
 
+  /// <summary> Offset the camera behind the player for third person. </summary>
   private void offsetCamera() {
     Debug.Log("Wow dude its like third person");
     camTransform.position = transform.position - 2*camTransform.forward + Vector3.up;
   }
 
+  /// <summary> Handle the specific keyboard inputs.  </summary>
   private void handleInput() {
     if (Input.GetKeyDown(KeyCode.T)) toggleMovementType();
     if (Input.GetKeyDown(KeyCode.R)) transform.rotation = Quaternion.identity;
   }
 
+  /// <summary> Move the player according to the horizontal and vertical inputs. </summary>
   private void doCharacterController() {
     if (charController.isGrounded && velocity.y < 0) velocity.y = 0f;
     float x = Input.GetAxis("Horizontal");
@@ -121,6 +126,7 @@ public class Movement : MonoBehaviour
     return Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundCheckMask);
   }
 
+  /// <summary> Fly the player around according to the horizontal and vertical inputs. </summary>
   private void doFlyingController() {
     float dt = Time.deltaTime;
     float dx = Input.GetAxis("Horizontal") * moveSpeed * dt;
@@ -131,12 +137,14 @@ public class Movement : MonoBehaviour
     transform.position += transform.TransformDirection(new Vector3(dx, dy, dz));    
   }
 
+  /// <summary> Fly the player up or down according to space and left shift respectively. </summary>
   private float handleUpDown(float dt) {
     if (Input.GetKey(KeyCode.Space)) return moveSpeed * dt;
     else if (Input.GetKey(KeyCode.LeftShift)) return -moveSpeed * dt;
     else return 0;
   }
 
+  /// <summary> Toggle which type of movement is currently required. </summary>
   public void toggleMovementType() {
     switch (moveType) {
       case MovementType.flying : {
@@ -149,6 +157,7 @@ public class Movement : MonoBehaviour
     }
   }
 
+  /// <summary> Rotate the eyes of the player according to the mouse movements. </summary>
   private void updateCameraRotation() {
     float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
     float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;

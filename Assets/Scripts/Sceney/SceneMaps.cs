@@ -23,7 +23,7 @@ public class SceneMaps {
     {new Vector3Int(0, 0, -1), "-z"},
   };
 
-  /// <summary> Takes a tuple of string (current, relative) direction </summary>
+  /// <summary> Takes a tuple of string (current, relative) to produce a direction </summary>
   public static Dictionary<(string, string), string> relDirMap = new Dictionary<(string, string), string>() {
     {("+x", "left"), "+z"},
     {("+x", "right"), "-z"},

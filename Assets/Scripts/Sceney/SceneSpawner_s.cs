@@ -162,7 +162,11 @@ public class SceneSpawner_s : MonoBehaviour
     if (fallers == "") return;
     string[] fallIDlist = fallers.Split(',');
     foreach (string fallID in fallIDlist) 
-      fallingBlocks.Add(int.Parse(fallID));
+      addFallingBlock(int.Parse(fallID));
+  }
+
+  public void addFallingBlock(int id) {
+    fallingBlocks.Add(id);
   }
 
   private void parseTails(string tails) {
@@ -237,7 +241,7 @@ public class SceneSpawner_s : MonoBehaviour
   }
 
   /// <summary> Spawn in an error enemy on a node location </summary>
-  private void spawnErrorEnemy(int nodeID) {
+  public void spawnErrorEnemy(int nodeID) {
     Debug.Log(String.Format("Spawning enemy on nodeID :: {0}", nodeID));
     if (nodePositions[nodeID] != null) spawnErrorEnemy(nodePositions[nodeID]);
   }
@@ -249,7 +253,7 @@ public class SceneSpawner_s : MonoBehaviour
     enemies.Add(enemy);
   }
 
-  private void spawnCollectable(int nodeID) {
+  public void spawnCollectable(int nodeID) {
     if (nodePositions[nodeID] != null) spawnCollectable(nodePositions[nodeID]);
   }
 

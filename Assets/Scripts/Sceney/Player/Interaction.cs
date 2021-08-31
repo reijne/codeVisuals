@@ -22,16 +22,20 @@ public class Interaction : MonoBehaviour, Target
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
   private int startingHealth;
+
+  /// <summary> Save the starting health for reset and create the default layermast. </summary>
   private void Start() {
     startingHealth = health;
     interactMask = LayerMask.GetMask("Default");
   }
 
+  /// <summary> Reset the health to the starting health and update the interface. </summary>
   public void resetHealth() {
     health = startingHealth;
     userInterface.setCount(health);
   }
 
+  /// <summary> Handle inputs from the user to trigger interaction. </summary>
   private void Update() {
     colourHandCube();
     if (Input.GetButton("Fire1") && Time.time >= nextInteractTime && Movement.doInput) doInteraction();
@@ -39,6 +43,7 @@ public class Interaction : MonoBehaviour, Target
     resetParent();
   }
 
+  /// <summary> Set the cube correctly in 3rd person. </summary>
   private void resetParent() {
     if (Movement.thirdPerson && handcube.transform.parent != transform) {
       Vector3 offset = handcube.transform.localPosition;
@@ -47,6 +52,7 @@ public class Interaction : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Colour the handheld cube according to the interaction time. </summary>
   private void colourHandCube() {
     float col = 1 - Mathf.Clamp((Time.time - prevInteractTime) / (nextInteractTime - prevInteractTime), 0, 1);
     switch (interType) {
@@ -55,6 +61,7 @@ public class Interaction : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Do an interaction, i.e. shoot or throw </summary>
   private void doInteraction() {
     prevInteractTime = Time.time;
     nextInteractTime = Time.time + 1f / interactionRate;
@@ -64,6 +71,7 @@ public class Interaction : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Toggle which interaction type will be used. </summary>
   private void toggleInteractionType() {
     switch (interType) {
       case interactionType.shooting: interType = interactionType.throwing; break;
@@ -71,6 +79,7 @@ public class Interaction : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Shoot a raycast and toggle the gravity of the hit gameobject. </summary>
   private void shootToDrop() {
     RaycastHit hit;
     if (Physics.Raycast(eyes.transform.position + 0.5f*eyes.transform.forward, eyes.transform.forward, out hit, 9999f, interactMask)) {
@@ -86,6 +95,7 @@ public class Interaction : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Throw a cube at the target the user is pointing at or straight out if no target is found. </summary>
   private void throwCube() {
     Vector3 instantiatePosition = throwSpawnpoint.position+0.1f*eyes.transform.forward;
     GameObject cube = Instantiate(throwCube_prefab, instantiatePosition, throwSpawnpoint.rotation);
@@ -97,6 +107,7 @@ public class Interaction : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Target interface function, triggers when hit by a thrown cube (from enemy). </summary>
   public void hit(Collision other, Transform culprit) {
     health--;
     userInterface.setCount(health);

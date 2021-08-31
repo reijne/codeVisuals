@@ -75,7 +75,7 @@ public class Socketeer_s : MonoBehaviour
     creator_thread.Abort();
   }
 
-  /// <summary> Once the creator thread </summary>
+  /// <summary> Once the socket is created spawn the reader thread, and handle the requests filed by it. </summary>
   void Update()
   {
     if (isSocketCreated && !isReaderAlive) {
@@ -90,6 +90,7 @@ public class Socketeer_s : MonoBehaviour
     
   }
 
+  /// <summary> Fetch a request from the reader thread and empty the current request buffer. </summary>
   private RemoteCall fetchRequest() {
     RemoteCall cu = JsonUtility.FromJson<RemoteCall>(request);
     mut.WaitOne();
@@ -98,28 +99,33 @@ public class Socketeer_s : MonoBehaviour
     return cu;
   }
   
-
+  /// <summary> Handle a remote process call request received over socket. </summary>
   void handleRequest(RemoteCall cu) {
     Debug.Log(cu.method);
     switch (cu.method) {
-      case "createShowey":    compositeController.createShowey(cu.param);          break;
-      case "updateShowey":    compositeController.loadShoweyDefinition(cu.param);  break;
-      case "createSceney":    sceneController.createSceney(cu.param);              break;
-      case "updateSceney":    sceneController.updateSceney(cu.param);              break;
-      case "updateErrors":    sceneController.updateErrors(cu.param);              break;
-      case "updateBranches":  sceneController.updateBranches(cu.param);          break;
-      case "updateMessage":   sceneController.updateMessage(cu.param);            break;
+      case "createShowey":      compositeController.createShowey(cu.param);          break;
+      case "updateShowey":      compositeController.loadShoweyDefinition(cu.param);  break;
+      case "createSceney":      sceneController.createSceney(cu.param);              break;
+      case "updateSceney":      sceneController.updateSceney(cu.param);              break;
+      case "updateErrors":      sceneController.updateErrors(cu.param);              break;
+      case "updateBranches":    sceneController.updateBranches(cu.param);            break;
+      case "updateMessage":     sceneController.updateMessage(cu.param);             break;
+      case "updateEnemy":       sceneController.updateEnemy(cu.param);               break;
+      case "updateFalling":     sceneController.updateFalling(cu.param);             break;
+      case "updateCollectable": sceneController.updateCollectable(cu.param);         break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
     if (cu.close) closeSocket();
   }
 
+  /// <summary> Close the opened socket, reader thread and streamreader. </summary>
   private void closeSocket() {
     if (reader_thread != null) reader_thread.Abort();
     if (s != null) s.Close();
     if (soc != null) soc.Close();
   }
 
+  /// <summary> Close the socket upon exiting app. </summary>
   private void OnApplicationQuit() {
     closeSocket();
   }

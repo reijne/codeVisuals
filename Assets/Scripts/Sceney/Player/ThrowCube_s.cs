@@ -20,6 +20,7 @@ public class ThrowCube_s : MonoBehaviour
     }
   }
 
+  /// <summary> On collision, hit the target using the target interface. </summary>
   private void OnCollisionEnter(Collision other) {
     GameObject boom = Instantiate(explosion, transform.position, Quaternion.identity);
     Destroy(boom, 2f);

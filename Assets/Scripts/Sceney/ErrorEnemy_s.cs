@@ -19,16 +19,20 @@ public class ErrorEnemy_s : MonoBehaviour, Target
   private float nextShot;
   private int health = 3;
 
+  /// <summary> Set the player object, and determine when to shoot. </summary>
   private void Start() {
     player = GameObject.FindGameObjectWithTag("Player").transform;
     nextShot = Time.time + 2 * (1f / firerate);
   }
+
+  /// <summary> Handle the behaviour. </summary>
   private void Update() {
     setCanSeePlayer();
     conditionalLook();
     conditionalShoot();
   }
 
+  /// <summary> Determine if we can see the player at this time. </summary>
   private void setCanSeePlayer() {
     RaycastHit hit;
     Vector3 dest = player.position - transform.position;
@@ -38,6 +42,7 @@ public class ErrorEnemy_s : MonoBehaviour, Target
     } else canSeePlayer = false;
   }
 
+  /// <summary> Look at the player if we can see them. </summary>
   private void conditionalLook() {
     if (!canSeePlayer) return;
     else {
@@ -45,6 +50,7 @@ public class ErrorEnemy_s : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Shoot at the player if we can see them. </summary>
   private void conditionalShoot() {
     if (canSeePlayer && Time.time >= nextShot) {
       if (Random.Range(0, 2) == 0) {
@@ -56,6 +62,7 @@ public class ErrorEnemy_s : MonoBehaviour, Target
     }
   }
 
+  /// <summary> Get hit. Destroy our eyes one by one and the body once theyre lost. </summary>
   public void hit(Collision other, Transform culprit) {
     Debug.Log("We hit the fucker");
     switch (health) {
