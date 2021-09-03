@@ -112,6 +112,7 @@ public class Socketeer_s : MonoBehaviour
       case "updateMessage":     sceneController.updateMessage(cu.param);             break;
       case "updateEnemy":       sceneController.updateEnemy(cu.param);               break;
       case "updateFalling":     sceneController.updateFalling(cu.param);             break;
+      case "updateMovement": sceneController.updateMovement(cu.param);         break;
       case "updateCollectable": sceneController.updateCollectable(cu.param);         break;
       case "updateInteraction": sceneController.updateInteraction(cu.param);         break;
       default: Debug.LogError("Unknown request received by socket."); break;

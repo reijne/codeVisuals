@@ -83,6 +83,14 @@ public class SceneController_s : MonoBehaviour
     playerInteraction.setInteractionType(interaction);
   }
 
+  public void updateMovement(string movement) {
+    if (movement == "run") {
+      setRunningMovement();
+    } else {
+      playerMovement.setMovementType(Movement.MovementType.flying);
+    }
+  }
+
   /// <summary> Set the movement to be running if the camera mode allows. </summary>
   private void setRunningMovement() {
     if (sceneSpawner.showdef.vars.camMode != "kinematic")

@@ -9,6 +9,9 @@ public class Interaction : MonoBehaviour, Target
   [SerializeField] float throwingPower;
   [SerializeField] float interactionRate;
   [SerializeField] Camera eyes;
+  [SerializeField] AudioSource ears;
+  [SerializeField] AudioClip up;
+  [SerializeField] AudioClip down;
   [SerializeField] GameObject particles_prefab;
   [SerializeField] GameObject throwCube_prefab;
   [SerializeField] GameObject handcube;
@@ -102,7 +105,11 @@ public class Interaction : MonoBehaviour, Target
         if (!hit.rigidbody.useGravity) {
           hit.rigidbody.velocity = Vector3.zero;
           hit.rigidbody.angularVelocity = Vector3.zero;
+          ears.clip = up;
+        } else {
+          ears.clip = down;
         }
+        ears.Play();
         GameObject parts = Instantiate(particles_prefab, hit.transform);
         Destroy(parts, 3f);
       }
