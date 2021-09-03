@@ -54,8 +54,11 @@ public class Movement : MonoBehaviour
 
   /// <summary> Reset the player to the starting position and rotation. </summary>
   public void resetPosition() {
+    MovementType m = moveType;
+    setMovementType(MovementType.flying);
     transform.position = startPosition;
     transform.rotation = startRotation;
+    setMovementType(m);
   }
 
   /// <summary> Move the player to a position and make them look at the Lookat position. </summary>
@@ -102,7 +105,7 @@ public class Movement : MonoBehaviour
   /// <summary> Handle the specific keyboard inputs.  </summary>
   private void handleInput() {
     if (Input.GetKeyDown(KeyCode.T)) toggleMovementType();
-    if (Input.GetKeyDown(KeyCode.R)) transform.rotation = Quaternion.identity;
+    if (Input.GetKeyDown(KeyCode.R)) resetPosition();
   }
 
   /// <summary> Move the player according to the horizontal and vertical inputs. </summary>

@@ -228,6 +228,7 @@ public class SceneSpawner_s : MonoBehaviour
     Vector3 lookAt = Blocky_s.SIZE*currentDirection + up;
     player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
     player.cleanLookAt(spawnPoint + lookAt);
+    player.setStartPosition(player.transform.position, player.transform.rotation);
     isPlayerPositioned = true;
   }
 
@@ -258,13 +259,12 @@ public class SceneSpawner_s : MonoBehaviour
   }
 
   private void spawnCollectable(Vector3 pos) {
-    // Todo instantiate
     pos = getOpenPos(pos, Vector3.up);
     GameObject collectable = Instantiate(collectable_prefab, pos, Quaternion.identity);
     collectables.Add(collectable);
   }
 
-  // TODO CLEAN THIS SHIT UP
+  // TODO CLEAN THIS UP
   private void setChildPath(string typ, string child) {
     // Store the current direction and position
     // Debug.Log("Spawnpoint added to stack: " + spawnPoint.x + spawnPoint.y + spawnPoint.z);

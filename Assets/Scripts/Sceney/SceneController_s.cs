@@ -28,6 +28,7 @@ public class SceneController_s : MonoBehaviour
   public void updateSceney(string labeledTraversal) {
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
+    playerMovement.resetPosition();
   }
 
   /// <summary> Update the Sceney instance by spawning error enemies in the specified locations. </summary>
