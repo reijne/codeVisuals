@@ -10,9 +10,9 @@ using System.Threading;
 using System.Net.Sockets;
 
 struct RemoteCall {
-  public string method;
-  public string param;
-  public bool close;
+    public string method;   // Which method to call
+    public string param;    // Parameter to pass to method
+    public bool close;      // Whether or not to close the connection after handling call
 }
 
 public class Socketeer_s : MonoBehaviour
