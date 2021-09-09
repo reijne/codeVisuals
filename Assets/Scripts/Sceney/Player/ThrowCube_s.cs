@@ -6,7 +6,7 @@ public class ThrowCube_s : MonoBehaviour
 {
   [SerializeField] GameObject explosion;
   [SerializeField] AudioSource ears;
-  [SerializeField] AudioClip explode;
+  [SerializeField] List<AudioClip> explode;
   public static float frequency = 50;
   public float lifeTime;
   /// <summary> Multiply the lifetime with the frequency of fixedupdate. </summary>
@@ -29,7 +29,7 @@ public class ThrowCube_s : MonoBehaviour
     Destroy(boom, 2f);
     Target t = other.gameObject.GetComponent(typeof(Target)) as Target;
     if (t != null) t.hit(other, transform);
-    ears.clip = explode;
+    ears.clip = explode[Random.Range(0, explode.Count)];
     ears.Play();
   }
 }
