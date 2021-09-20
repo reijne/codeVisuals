@@ -20,7 +20,7 @@ public class Interaction : MonoBehaviour, Target
   [SerializeField] UserInterface_s userInterface;
   [SerializeField] int health;
   public enum InteractionType {none, shooting, throwing};
-  public InteractionType interType = InteractionType.throwing;
+  public InteractionType interType = InteractionType.none;
   private LayerMask interactMask;
   private float nextInteractTime = 0f;
   private float prevInteractTime = 0f;
@@ -66,6 +66,7 @@ public class Interaction : MonoBehaviour, Target
 
   /// <summary> Do an interaction, i.e. shoot or throw </summary>
   private void doInteraction() {
+    Debug.Log(interType);
     prevInteractTime = Time.time;
     nextInteractTime = Time.time + 1f / interactionRate;
     switch (interType) {
@@ -77,8 +78,9 @@ public class Interaction : MonoBehaviour, Target
   /// <summary> Toggle which interaction type will be used. </summary>
   private void toggleInteractionType() {
     switch (interType) {
+      case InteractionType.none    : interType = InteractionType.shooting; break;
       case InteractionType.shooting: interType = InteractionType.throwing; break;
-      case InteractionType.throwing: interType = InteractionType.shooting; break;
+      case InteractionType.throwing: interType = InteractionType.none; break;
     }
   }
 

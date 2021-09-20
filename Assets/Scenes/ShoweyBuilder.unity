@@ -482,7 +482,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1819718230}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.14880952
+  m_Size: 0.14880951
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8077,7 +8077,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Offset Parameters\n LR  = [Left - Right] \n UD = [Up - Down]\n BF  = [Back
+  m_Text: "Offset Parameters\n LR  = [Left - Right] \n DU = [Down - Up]\n BF  = [Back
     - Front]"
 --- !u!222 &1442634078
 CanvasRenderer:

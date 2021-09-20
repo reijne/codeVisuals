@@ -41,7 +41,7 @@ public class Movement : MonoBehaviour
   #region (Re)Setters
   /// <summary> Set the movementType according to the Sceney initialisation. </summary>
   public void setMovementType(MovementType moveType) {
-    Debug.Log(String.Format("Setting move to :: {0}", moveType));
+    // Debug.Log(String.Format("Setting move to :: {0}", moveType));
     this.moveType = moveType;
     // Debug.Log(this.moveType);
   }
@@ -63,7 +63,7 @@ public class Movement : MonoBehaviour
 
   /// <summary> Move the player to a position and make them look at the Lookat position. </summary>
   public void setDesiredPosition(Vector3 position, Vector3 lookAt) {
-    // Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
+    Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
     doInput = false;
     transform.position = position;
     transform.LookAt(lookAt);
@@ -162,6 +162,7 @@ public class Movement : MonoBehaviour
 
   /// <summary> Rotate the eyes of the player according to the mouse movements. </summary>
   private void updateCameraRotation() {
+    // if (SceneSpawner_s.showdef != null && SceneSpawner_s.showdef.vars.camMode == "kinematic") return;
     float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
     float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
     rotX = Mathf.Clamp((rotX - mouseY), -verticalViewClampAngle, verticalViewClampAngle);

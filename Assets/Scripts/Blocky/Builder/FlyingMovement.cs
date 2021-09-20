@@ -30,7 +30,6 @@ public class FlyingMovement : MonoBehaviour
       toggleMovementButton.image.color = Color.gray;
     }
     moveToStart();
-    Cursor.lockState = CursorLockMode.Confined;
   }
 
   /// <summary> Handle movement. </summary>
@@ -116,5 +115,7 @@ public class FlyingMovement : MonoBehaviour
   /// <summary> Toggle the movement. </summary>
   public void toggleMovement() {
     disabled = !disabled;
+    if (disabled) Cursor.lockState = CursorLockMode.None;
+    else Cursor.lockState = CursorLockMode.Confined;
   }
 }

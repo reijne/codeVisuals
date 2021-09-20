@@ -335,7 +335,7 @@ MonoBehaviour:
   throwSpawnpoint: {fileID: 1643165299}
   userInterface: {fileID: 924083192}
   health: 5
-  interType: 1
+  interType: 0
 --- !u!23 &127868371
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2127,7 +2127,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1439294663
 MonoBehaviour:
   m_ObjectHideFlags: 0

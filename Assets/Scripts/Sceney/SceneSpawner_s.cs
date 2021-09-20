@@ -14,7 +14,7 @@ public class SceneSpawner_s : MonoBehaviour
   public static Vector3 firstSpawn;
   public static Dictionary<int, Vector3> nodePositions = new Dictionary<int, Vector3>();
   public static List<int> fallingBlocks = new List<int>();
-  public ShoweyDefinition showdef;
+  public static ShoweyDefinition showdef;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
   private Vector3 spawnPoint = Vector3Int.zero;
@@ -126,7 +126,7 @@ public class SceneSpawner_s : MonoBehaviour
       spawnNode(category, node);
       catNodeStack.Add((category, node));
       nodePositions[nodeID] = spawnPoint;
-      Debug.Log(String.Format("New node {2} position added ID{0} POS{1}", nodeID, nodePositions[nodeID], node));
+      // Debug.Log(String.Format("New node {2} position added ID{0} POS{1}", nodeID, nodePositions[nodeID], node));
       nodeID++;
     } else if (operation == "out") {
       catNodeStack.RemoveAt(catNodeStack.Count-1);
@@ -232,13 +232,16 @@ public class SceneSpawner_s : MonoBehaviour
     isPlayerPositioned = true;
   }
 
+  /// <summary> Spawn the camera using the showdef.camdir relative direction. </summary>
   private void spawnCamera() {
     Bounds bounds = new Bounds();
     foreach (GameObject blocky in blockies) bounds.Encapsulate(blocky.transform.position);
     Vector3 offset = Maps.relativeDirectionMap[(SceneMaps.dir2str[currentDirection], showdef.vars.camDir)];
-    float dist = (bounds.max.x + bounds.max.y + bounds.max.z) / 3;
-    player.setDesiredPosition(bounds.center + dist*offset, bounds.center + dist*new Vector3(0, offset.y, 0));
+    float dist = Mathf.Max(bounds.max.x, bounds.max.y, bounds.max.z);
+    // player.setDesiredPosition(bounds.center + dist*offset, bounds.center + dist*new Vector3(0, offset.y, 0));
+    player.setDesiredPosition(bounds.center + dist*offset, bounds.center);
     player.setMovementType(Movement.MovementType.flying);
+    player.setStartPosition(player.transform.position, player.transform.rotation);
   }
 
   /// <summary> Spawn in an error enemy on a node location </summary>
@@ -265,6 +268,7 @@ public class SceneSpawner_s : MonoBehaviour
   }
 
   // TODO CLEAN THIS UP
+  /// <summary> Set the desired direction and offset based on showdef. </summary>
   private void setChildPath(string typ, string child) {
     // Store the current direction and position
     // Debug.Log("Spawnpoint added to stack: " + spawnPoint.x + spawnPoint.y + spawnPoint.z);
@@ -279,14 +283,18 @@ public class SceneSpawner_s : MonoBehaviour
     Child childClass = showdef.categoryNodeMap[category].nodes[node].children[typ + "_" + child];
     if (childClass.relativeDirection == Child_s.noChangeKeyword) return;
 
-    // Debug.Log(childClass.relativeDirection);
-    // Set the new direction
+    setNewDirection(curdir, childClass);
+    setNewPosition(curdir, childClass);
+  }
+
+  private void setNewDirection(string curdir, Child childClass) {
     string newdir = SceneMaps.relDirMap[(curdir, childClass.relativeDirection)];
     currentDirection = SceneMaps.str2dir[newdir];
     
     curdir = SceneMaps.dir2str[currentDirection];
-    // set the new position
-    // LR x, UD y, BF z
+  }
+
+  private void setNewPosition(string curdir, Child childClass) {
     string left = SceneMaps.relDirMap[(curdir, "left")];
     Vector3Int leftDir = SceneMaps.str2dir[left];
 
