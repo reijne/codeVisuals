@@ -267,11 +267,9 @@ public class SceneSpawner_s : MonoBehaviour
     collectables.Add(collectable);
   }
 
-  // TODO CLEAN THIS UP
   /// <summary> Set the desired direction and offset based on showdef. </summary>
   private void setChildPath(string typ, string child) {
     // Store the current direction and position
-    // Debug.Log("Spawnpoint added to stack: " + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     dirPosStack.Add((currentDirection, spawnPoint)); 
     // Gather the new direction 
     string curdir = SceneMaps.dir2str[currentDirection];
@@ -283,17 +281,19 @@ public class SceneSpawner_s : MonoBehaviour
     Child childClass = showdef.categoryNodeMap[category].nodes[node].children[typ + "_" + child];
     if (childClass.relativeDirection == Child_s.noChangeKeyword) return;
 
-    setNewDirection(curdir, childClass);
+    curdir = setNewDirection(curdir, childClass);
     setNewPosition(curdir, childClass);
   }
 
-  private void setNewDirection(string curdir, Child childClass) {
+  /// <summary> Set the new direction based on previous and showdef relative dir. </summary>
+  private string setNewDirection(string curdir, Child childClass) {
     string newdir = SceneMaps.relDirMap[(curdir, childClass.relativeDirection)];
     currentDirection = SceneMaps.str2dir[newdir];
-    
     curdir = SceneMaps.dir2str[currentDirection];
+    return curdir;
   }
 
+  /// <summary> Set the new position based on the previous and showdef relative offset. </summary>
   private void setNewPosition(string curdir, Child childClass) {
     string left = SceneMaps.relDirMap[(curdir, "left")];
     Vector3Int leftDir = SceneMaps.str2dir[left];
@@ -322,7 +322,6 @@ public class SceneSpawner_s : MonoBehaviour
     (Vector3Int oldDirection, Vector3 oldPosition) = dirPosStack[dirPosStack.Count-1];
     currentDirection = oldDirection;
     spawnPoint = oldPosition;
-    // Debug.Log("Set spawnpoint back to: " + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     dirPosStack.RemoveAt(dirPosStack.Count-1); 
   }
   #endregion // Spawning
