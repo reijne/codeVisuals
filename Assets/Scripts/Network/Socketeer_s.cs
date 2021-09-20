@@ -82,7 +82,7 @@ public class Socketeer_s : MonoBehaviour
       spawnReader();
     }
 
-    Debug.Log(String.Format("Current request:: {0}", request));
+    Debug.Log(String.Format("Current request::\n{0}", request));
     if (request != "") {
       RemoteCall request = fetchRequest();
       handleRequest(request);

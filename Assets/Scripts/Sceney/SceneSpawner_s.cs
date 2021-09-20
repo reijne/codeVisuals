@@ -203,37 +203,41 @@ public class SceneSpawner_s : MonoBehaviour
     if (blockyName == Node_s.skipKeyword) return;
     // Debug.Log("Spawnpoint before adding:  @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     incrementSpawnpoint();
-    // TODO spawn player depending on the camera mode
-    if (!isPlayerPositioned) {
-      spawnPlayer();
-    }
-    // TODO make into func
+    if (!isPlayerPositioned) spawnPlayer();
     instantiateNode(blockyName);
   }
 
+  /// <summary> Instantiate a node in the scene, as Blocky. </summary>
   private void instantiateNode(string blockyName) {
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
+    // This rotation in order to rotate it back using the general direction.
+    // Quaternion rotation = Quaternion.LookRotation(currentDirection) * Quaternion.Inverse(Quaternion.LookRotation(SceneMaps.str2dir[showdef.vars.sign+showdef.vars.genDir]));
+    // This rotation to have the z always be the standard forward.
+    Quaternion rotation = Quaternion.LookRotation(currentDirection);
     blockyScript.nodeID = nodeID;
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
     blockyScript.spawnTiles();
     // Debug.Log("SPAWNED :: " + blockyName + " @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
+    blockyInstance.transform.rotation = rotation;
     blockies.Add(blockyInstance);
     spawns.Add(spawnPoint);
   }
 
   /// <summary> Spawn the player in the scene at the correct location. </summary>
   private void spawnPlayer() {
-    Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
-    Vector3 lookAt = Blocky_s.SIZE*currentDirection + up;
-    player.setDesiredPosition(spawnPoint + up, spawnPoint + lookAt);
-    player.cleanLookAt(spawnPoint + lookAt);
+    // Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
+    Vector3 lookAt = Blocky_s.SIZE*currentDirection + Vector3.up;
+    Debug.Log(String.Format("Spawning player at{0}", spawnPoint + Blocky_s.SIZE * Vector3.up));
+    player.setDesiredPosition(spawnPoint + Blocky_s.SIZE * Vector3.up, spawnPoint + lookAt);
+    // player.cleanLookAt(spawnPoint + lookAt);
     player.setStartPosition(player.transform.position, player.transform.rotation);
     isPlayerPositioned = true;
   }
 
   /// <summary> Spawn the camera using the showdef.camdir relative direction. </summary>
   private void spawnCamera() {
+    Debug.Log("not spawning camera pls right?");
     Bounds bounds = new Bounds();
     foreach (GameObject blocky in blockies) bounds.Encapsulate(blocky.transform.position);
     Vector3 offset = Maps.relativeDirectionMap[(SceneMaps.dir2str[currentDirection], showdef.vars.camDir)];
@@ -311,6 +315,7 @@ public class SceneSpawner_s : MonoBehaviour
     spawnPoint = getOpenPos(spawnPoint, currentDirection);
   }
 
+  /// <summary> Get an open Blocky spot, in the current direction. </summary>
   private Vector3 getOpenPos(Vector3 pos, Vector3 dir) {
     pos += dir * Blocky_s.SIZE;
     while (spawns.Contains(pos)) pos += dir * Blocky_s.SIZE;

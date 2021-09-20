@@ -66,7 +66,7 @@ public class Movement : MonoBehaviour
     Debug.Log(String.Format("Position: {0} Lookat {1}", position,lookAt));
     doInput = false;
     transform.position = position;
-    transform.LookAt(lookAt);
+    camTransform.LookAt(lookAt);
     doInput = true;
   }
 
