@@ -11,6 +11,7 @@ public class FlyingMovement : MonoBehaviour
 {
   public static Vector3 startPos;
   public bool disabled = true;
+  [SerializeField] private InputField nameField;
   [SerializeField] private Button toggleMovementButton;
   [SerializeField] private float speed = 20;
   [SerializeField] private float updateSpeed = 10;
@@ -73,8 +74,8 @@ public class FlyingMovement : MonoBehaviour
 
   /// <summary> Handle specified inputs. </summary>
   private void Update() {
-    if (Input.GetKeyDown(KeyCode.T)) toggleMovement();
-    if (Input.GetKeyDown(KeyCode.R)) moveToStart();
+    if (Input.GetKeyDown(KeyCode.T) && !nameField.isFocused) toggleMovement();
+    if (Input.GetKeyDown(KeyCode.R) && !nameField.isFocused) moveToStart();
     if (!disabled && Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2)) disabled = true;
     TextualHandler.focusText = !disabled;
     updateMovementButton();

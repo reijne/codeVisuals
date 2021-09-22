@@ -482,7 +482,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1819718230}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.14880951
+  m_Size: 0.14880952
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2670,6 +2670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   disabled: 1
+  nameField: {fileID: 896663859}
   toggleMovementButton: {fileID: 2142592998}
   speed: 20
   updateSpeed: 10
