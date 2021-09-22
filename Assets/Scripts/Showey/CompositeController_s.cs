@@ -139,4 +139,10 @@ public class CompositeController_s : MonoBehaviour
     }
     return children;
   }
+
+  /// <summary> Shortcut commands for save and load </summary>
+  private void Update() {
+    if (Input.GetKeyDown(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) saveShoweyDefinition();
+    if (Input.GetKeyDown(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.O)) loadShoweyDefinition();
+  }
 }

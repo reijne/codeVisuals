@@ -274,9 +274,10 @@ public class SceneSpawner_s : MonoBehaviour
       return;
 
     Child childClass = showdef.categoryNodeMap[category].nodes[node].children[typ + "_" + child];
-    if (childClass.relativeDirection == Child_s.noChangeKeyword) return;
-
-    curdir = setNewDirection(curdir, childClass);
+    
+    if (childClass.relativeDirection != Child_s.noChangeKeyword)
+      curdir = setNewDirection(curdir, childClass);
+    
     setNewPosition(curdir, childClass);
   }
 
