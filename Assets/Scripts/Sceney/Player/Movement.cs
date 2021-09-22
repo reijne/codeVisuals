@@ -22,8 +22,6 @@ public class Movement : MonoBehaviour
   private Vector3 startPosition;
   private Vector3 velocity;
   private Quaternion startRotation;
-  private Vector3 desiredPosition;
-  private Vector3 desiredLookat;
   private float rotX = 0.0f; // rotation around the right/x axis
   private bool skipone = false;
 
@@ -32,7 +30,6 @@ public class Movement : MonoBehaviour
     groundCheckMask = LayerMask.GetMask("Default");
     Cursor.lockState = CursorLockMode.Locked;
     setStartPosition(transform.position, transform.rotation);
-    // setDesiredPosition(new Vector3(0, 10, 0), new Vector3(1, 10, 0));
     setRotation();
     float calibrationSensitivity = 519915;
     sensitivity = (sensitivity * Screen.width * Screen.height) / calibrationSensitivity;
@@ -41,9 +38,7 @@ public class Movement : MonoBehaviour
   #region (Re)Setters
   /// <summary> Set the movementType according to the Sceney initialisation. </summary>
   public void setMovementType(MovementType moveType) {
-    // Debug.Log(String.Format("Setting move to :: {0}", moveType));
     this.moveType = moveType;
-    // Debug.Log(this.moveType);
   }
 
   /// <summary> Store the starting position and rotation, used for resetting the player </summary>
@@ -90,7 +85,13 @@ public class Movement : MonoBehaviour
   /// <summary> Handle input, movement and camera. </summary>
   private void Update() {
     handleInput();
+    handleMovement();
+    handleOutOfBounds();
+    if (thirdPerson) offsetCamera();
+  }
 
+  /// <summary> Handle the movement based on the movement type. </summary>
+  private void handleMovement() {
     if (skipone) {
       skipone = false;
     } else {
@@ -102,14 +103,11 @@ public class Movement : MonoBehaviour
         updateCameraRotation();
       }
     }
-    handleOutOfBounds();
-    if (thirdPerson) offsetCamera();
   }
 
   /// <summary> Reset the player once they go out of bounds </summary>
   private void handleOutOfBounds() {
-    if (moveType == MovementType.running && transform.position.y < -5*SceneSpawner_s.BlockyBounds.extents.y) {
-      Debug.Log(String.Format("blockybounds y {0}", -5f*SceneSpawner_s.BlockyBounds.extents.y));
+    if (moveType == MovementType.running && transform.position.y < -2*Blocky_s.SIZE-2*SceneSpawner_s.BlockyBounds.extents.y) {
       resetPosition();
     }
   }
@@ -180,7 +178,6 @@ public class Movement : MonoBehaviour
 
   /// <summary> Rotate the eyes of the player according to the mouse movements. </summary>
   private void updateCameraRotation() {
-    // if (SceneSpawner_s.showdef != null && SceneSpawner_s.showdef.vars.camMode == "kinematic") return;
     float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
     float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
     rotX = Mathf.Clamp((rotX - mouseY), -verticalViewClampAngle, verticalViewClampAngle);

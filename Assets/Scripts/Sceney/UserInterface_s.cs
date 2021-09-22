@@ -15,20 +15,23 @@ public class UserInterface_s : MonoBehaviour
   public static int maxCollected = 100;
   private float removeDelay;
 
-  /// <summary> Set the counter at the top of the screen. Or display a lost message. </summary>
+  /// <summary> Set the counter at the top of the screen. </summary>
   public void setCount(int count) {
     collectableText.text = count.ToString();
   }
 
+  /// <summary> Set the health at the top of the screen, next to the hearth icon or display loss. </summary>
   public void setHealth(int count) {
     heartText.text = count.ToString();
     if (count <= 0) midText.text = "The Errors have fixed YOU!";
   }
 
+  /// <summary> Enable the heart element, to show health icon and text. </summary>
   public void enableHeartElement() {
     heartElement.SetActive(true);
   }
 
+  /// <summary> Enable the collectable element, to show icon and text. </summary>
   public void enableCollectElement() {
     collectableElement.SetActive(true);
   }

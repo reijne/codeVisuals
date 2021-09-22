@@ -27,14 +27,7 @@ public class SceneSpawner_s : MonoBehaviour
   private Vector3Int currentDirection;
   private bool isPlayerPositioned = false;
   private string currentLabels = "";
-  private string storedBranch = "";
   private int nodeID = 0;
-  // private void Start() {
-  //   initFromFile("D:\\School\\master_software_engineering\\Thesis\\Puzzle\\src\\Puzzle\\serialised.show");
-  //   parseLabeledTraversal("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\n-out-Stmt-statements\nout-Program-program");
-  //   spawnErrorEnemy(2);
-  //   spawnErrorEnemy(1);
-  // }
 
   /// <summary> Initialise the spawner with a showeydefinition from json. </summary>
   public void initFromJSON(string serialisedShoweyDefinition) {
@@ -129,18 +122,15 @@ public class SceneSpawner_s : MonoBehaviour
       spawnNode(category, node);
       catNodeStack.Add((category, node));
       nodePositions[nodeID] = spawnPoint;
-      // Debug.Log(String.Format("New node {2} position added ID{0} POS{1}", nodeID, nodePositions[nodeID], node));
       nodeID++;
     } else if (operation == "out") {
       catNodeStack.RemoveAt(catNodeStack.Count-1);
     }
   }
 
-  /// <summary> Parse the errors consisting of nodeID and msg. </summary>
+  /// <summary> Parse the errors consisting of nodeID and msg. Spawn error enemies on locs. </summary>
   public void parseErrors(string errors) {
-    // Debug.Log(String.Format("In parseErrors, errors : {0}", errors));
     string[] errorSplit = errors.Split('\n');
-    // Debug.Log(errorSplit);
     foreach (string error in errorSplit) {
       if (error == "") continue;
       string[] parts = error.Split('|');
@@ -152,6 +142,7 @@ public class SceneSpawner_s : MonoBehaviour
     }
   }
 
+  /// <summary> Parse the branches and make them falling blocks, spawn collectable at the end. </summary>
   public void parseBranches(string branches) {
     fallingBlocks = new List<int>();
     string[] branchesSplit = branches.Split('|');
@@ -161,6 +152,7 @@ public class SceneSpawner_s : MonoBehaviour
     parseTails(tails);
   }
 
+  /// <summary> Store the blocks that are fallers. </summary>
   private void storeFallingBlocks(string fallers) {
     if (fallers == "") return;
     string[] fallIDlist = fallers.Split(',');
@@ -168,10 +160,12 @@ public class SceneSpawner_s : MonoBehaviour
       addFallingBlock(int.Parse(fallID));
   }
 
+  /// <summary> Add a falling block. </summary>
   public void addFallingBlock(int id) {
     fallingBlocks.Add(id);
   }
 
+  /// <summary> Parse the end of every branch to spawn a colectable. </summary>
   private void parseTails(string tails) {
     if (tails == "") return;
     string[] tailSplit = tails.Split(',');
@@ -181,7 +175,10 @@ public class SceneSpawner_s : MonoBehaviour
       UserInterface_s.maxCollected++;
     }
   }
+  #endregion // Parsing
 
+  #region Spawning
+  /// <summary> Get an existing node position to ensure spawning when a node is skipped in visuals. </summary>
   private int getExistingLoc(int loc) {
     while (!nodePositions.ContainsKey(loc)) {
       loc--;
@@ -189,9 +186,7 @@ public class SceneSpawner_s : MonoBehaviour
     }
     return loc;
   }
-  #endregion // Parsing
-
-  #region Spawning
+  
   /// <summary> Spawn a node into the scene using the showeyDefinition</summary>
   private void spawnNode(string category, string node) {
     if (!showdef.categoryNodeMap.ContainsKey(category)) {
@@ -204,7 +199,6 @@ public class SceneSpawner_s : MonoBehaviour
     }
     string blockyName = showdef.categoryNodeMap[category].nodes[node].blockyName;
     if (blockyName == Node_s.skipKeyword) return;
-    // Debug.Log("Spawnpoint before adding:  @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     incrementSpawnpoint();
     if (!isPlayerPositioned) spawnPlayer();
     instantiateNode(blockyName);
@@ -214,14 +208,10 @@ public class SceneSpawner_s : MonoBehaviour
   private void instantiateNode(string blockyName) {
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
-    // This rotation in order to rotate it back using the general direction.
-    // Quaternion rotation = Quaternion.LookRotation(currentDirection) * Quaternion.Inverse(Quaternion.LookRotation(SceneMaps.str2dir[showdef.vars.sign+showdef.vars.genDir]));
-    // This rotation to have the z always be the standard forward.
     Quaternion rotation = Quaternion.LookRotation(currentDirection);
     blockyScript.nodeID = nodeID;
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
     blockyScript.spawnTiles();
-    // Debug.Log("SPAWNED :: " + blockyName + " @" + spawnPoint.x + spawnPoint.y + spawnPoint.z);
     blockyInstance.transform.rotation = rotation;
     blockies.Add(blockyInstance);
     spawns.Add(spawnPoint);
@@ -229,16 +219,14 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Spawn the player in the scene at the correct location. </summary>
   private void spawnPlayer() {
-    // Vector3Int up = Blocky_s.SIZE*SceneMaps.str2dir[SceneMaps.relDirMap[(SceneMaps.dir2str[currentDirection], "up")]];
     Vector3 lookAt = Blocky_s.SIZE*currentDirection + Vector3.up;
     Debug.Log(String.Format("Spawning player at{0}", spawnPoint + Blocky_s.SIZE * Vector3.up));
     player.setDesiredPosition(spawnPoint + Blocky_s.SIZE * Vector3.up, spawnPoint + lookAt);
-    // player.cleanLookAt(spawnPoint + lookAt);
     player.setStartPosition(player.transform.position, player.transform.rotation);
     isPlayerPositioned = true;
   }
 
-
+  /// <summary> Create the bounding box of all Blockies. </summary>
   private void createBounds() {
     BlockyBounds = new Bounds();
     foreach (GameObject blocky in blockies) BlockyBounds.Encapsulate(blocky.transform.position);
@@ -248,7 +236,6 @@ public class SceneSpawner_s : MonoBehaviour
   private void spawnCamera() {
     Vector3 offset = Maps.relativeDirectionMap[(SceneMaps.dir2str[currentDirection], showdef.vars.camDir)];
     float dist = Mathf.Max(BlockyBounds.max.x, BlockyBounds.max.y, BlockyBounds.max.z);
-    // player.setDesiredPosition(BlockyBounds.center + dist*offset, BlockyBounds.center + dist*new Vector3(0, offset.y, 0));
     player.setDesiredPosition(BlockyBounds.center + dist*offset, BlockyBounds.center);
     player.setMovementType(Movement.MovementType.flying);
     player.setStartPosition(player.transform.position, player.transform.rotation);
@@ -256,21 +243,21 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Spawn in an error enemy on a node location </summary>
   public void spawnErrorEnemy(int nodeID) {
-    // Debug.Log(String.Format("Spawning enemy on nodeID :: {0}", nodeID));
     if (nodePositions[nodeID] != null) spawnErrorEnemy(nodePositions[nodeID]);
   }
 
   /// <summary> Spawn in an error enemy on the specified position. </summary>
   private void spawnErrorEnemy(Vector3 pos) {
-    // Debug.Log(String.Format("Spawning enemy @ {0}", pos));
     GameObject enemy = Instantiate(errorEnemy_prefab, pos, Quaternion.identity);
     enemies.Add(enemy);
   }
 
+  /// <summary> Spawn a collectable at a node position. </summary>
   public void spawnCollectable(int nodeID) {
     if (nodePositions[nodeID] != null) spawnCollectable(nodePositions[nodeID]);
   }
 
+  /// <summary> Spawn a collectable at a given vector3 position. </summary>
   private void spawnCollectable(Vector3 pos) {
     pos = getOpenPos(pos, Vector3.up);
     GameObject collectable = Instantiate(collectable_prefab, pos, Quaternion.identity);
@@ -279,9 +266,7 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Set the desired direction and offset based on showdef. </summary>
   private void setChildPath(string typ, string child) {
-    // Store the current direction and position
     dirPosStack.Add((currentDirection, spawnPoint)); 
-    // Gather the new direction 
     string curdir = SceneMaps.dir2str[currentDirection];
     (string category, string node) = catNodeStack[catNodeStack.Count-1];
 
