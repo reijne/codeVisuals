@@ -15,6 +15,7 @@ public class SceneSpawner_s : MonoBehaviour
   public static Dictionary<int, Vector3> nodePositions = new Dictionary<int, Vector3>();
   public static List<int> fallingBlocks = new List<int>();
   public static ShoweyDefinition showdef;
+  public static Bounds BlockyBounds;
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
   private Vector3 spawnPoint = Vector3Int.zero;
@@ -66,6 +67,7 @@ public class SceneSpawner_s : MonoBehaviour
     blockies = new List<GameObject>();
     spawns = new List<Vector3>();
     nodePositions = new Dictionary<int, Vector3>();
+    BlockyBounds = new Bounds();
     isPlayerPositioned = false;
     nodeID = 0;
     System.GC.Collect();
@@ -100,6 +102,7 @@ public class SceneSpawner_s : MonoBehaviour
         parseNode(label);
       }
     }
+    createBounds();
     if (showdef.vars.camMode == "kinematic") spawnCamera();
   }
 
@@ -135,9 +138,9 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Parse the errors consisting of nodeID and msg. </summary>
   public void parseErrors(string errors) {
-    Debug.Log(String.Format("In parseErrors, errors : {0}", errors));
+    // Debug.Log(String.Format("In parseErrors, errors : {0}", errors));
     string[] errorSplit = errors.Split('\n');
-    Debug.Log(errorSplit);
+    // Debug.Log(errorSplit);
     foreach (string error in errorSplit) {
       if (error == "") continue;
       string[] parts = error.Split('|');
@@ -235,28 +238,31 @@ public class SceneSpawner_s : MonoBehaviour
     isPlayerPositioned = true;
   }
 
+
+  private void createBounds() {
+    BlockyBounds = new Bounds();
+    foreach (GameObject blocky in blockies) BlockyBounds.Encapsulate(blocky.transform.position);
+  }
+
   /// <summary> Spawn the camera using the showdef.camdir relative direction. </summary>
   private void spawnCamera() {
-    Debug.Log("not spawning camera pls right?");
-    Bounds bounds = new Bounds();
-    foreach (GameObject blocky in blockies) bounds.Encapsulate(blocky.transform.position);
     Vector3 offset = Maps.relativeDirectionMap[(SceneMaps.dir2str[currentDirection], showdef.vars.camDir)];
-    float dist = Mathf.Max(bounds.max.x, bounds.max.y, bounds.max.z);
-    // player.setDesiredPosition(bounds.center + dist*offset, bounds.center + dist*new Vector3(0, offset.y, 0));
-    player.setDesiredPosition(bounds.center + dist*offset, bounds.center);
+    float dist = Mathf.Max(BlockyBounds.max.x, BlockyBounds.max.y, BlockyBounds.max.z);
+    // player.setDesiredPosition(BlockyBounds.center + dist*offset, BlockyBounds.center + dist*new Vector3(0, offset.y, 0));
+    player.setDesiredPosition(BlockyBounds.center + dist*offset, BlockyBounds.center);
     player.setMovementType(Movement.MovementType.flying);
     player.setStartPosition(player.transform.position, player.transform.rotation);
   }
 
   /// <summary> Spawn in an error enemy on a node location </summary>
   public void spawnErrorEnemy(int nodeID) {
-    Debug.Log(String.Format("Spawning enemy on nodeID :: {0}", nodeID));
+    // Debug.Log(String.Format("Spawning enemy on nodeID :: {0}", nodeID));
     if (nodePositions[nodeID] != null) spawnErrorEnemy(nodePositions[nodeID]);
   }
 
   /// <summary> Spawn in an error enemy on the specified position. </summary>
   private void spawnErrorEnemy(Vector3 pos) {
-    Debug.Log(String.Format("Spawning enemy @ {0}", pos));
+    // Debug.Log(String.Format("Spawning enemy @ {0}", pos));
     GameObject enemy = Instantiate(errorEnemy_prefab, pos, Quaternion.identity);
     enemies.Add(enemy);
   }

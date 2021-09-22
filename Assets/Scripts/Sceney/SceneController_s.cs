@@ -14,7 +14,7 @@ public class SceneController_s : MonoBehaviour
     sceneSpawner.initFromFile();
     // old updateSceney("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\nin-Stmt-assStmt\n-in-Expr-expr\nin-Expr-inputExpr\r\n    out-Expr-inputExpr\n-out-Expr-expr\nout-Stmt-assStmt\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-modExpr\n-in-Expr-lhs\nin-Expr-idExpr\nout-Expr-idExpr\n-out-Expr-lhs\n-in-Expr-rhs\nin-Expr-numExpr\nout-Expr-numExpr\n-out-Expr-rhs\nout-Expr-modExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\nin-Stmt-outputStmt\n-in-Expr-expr\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-expr\nout-Stmt-outputStmt\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\nin-Stmt-outputStmt\n-in-Expr-expr\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_false\r\n    out-Boolean-b_false\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-expr\nout-Stmt-outputStmt\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-statements\nout-Program-program");
     updateSceney("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\n\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\n\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\n\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-statements\nout-Program-program");
-    // updateErrors("6|Expected a bool, got unexpected type\n4|Input expr not yet evaluated\n7|Modulo requires number arguments on both sides");
+    updateErrors("2|Expected a bool, got unexpected type\n4|Input expr not yet evaluated\n7|Modulo requires number arguments on both sides");
     // updateBranches("10,11,12|12");
   }
 
@@ -39,7 +39,7 @@ public class SceneController_s : MonoBehaviour
     playerInteraction.resetHealth();
     Movement.doInput = true;
     userInterfaceObject.SetActive(true);
-    userInterface.setIcon("heart");
+    userInterface.enableHeartElement();
   }
 
   /// <summary> Make non-evaluated branches fall upon interaction and spawn collectables at the end. </summary>
@@ -49,7 +49,7 @@ public class SceneController_s : MonoBehaviour
     sceneSpawner.clearCollectables();
     sceneSpawner.parseBranches(branches);
     userInterfaceObject.SetActive(true);
-    userInterface.setIcon("collectable");
+    userInterface.enableCollectElement();
   }
 
   /// <summary> Display a message on the middle of the screen for a specified duration. </summary>
@@ -62,6 +62,7 @@ public class SceneController_s : MonoBehaviour
     int position = 0;
     int.TryParse(enemyPosition, out position);
     sceneSpawner.spawnErrorEnemy(position);
+    userInterface.enableHeartElement();
   }
 
   /// <summary> Spawn a collectable at the specified location. </summary>
@@ -69,6 +70,7 @@ public class SceneController_s : MonoBehaviour
     int position = 0;
     int.TryParse(collectPosition, out position);
     sceneSpawner.spawnCollectable(position);
+    userInterface.enableCollectElement();
   }
 
   /// <summary> Make a block falling, when the player interacts with it.  </summary>
@@ -111,7 +113,12 @@ public class SceneController_s : MonoBehaviour
   /// <summary> Open menu using Esc, and (un)lock the cursor accordingly. </summary>
   private void Update() {
     if (Input.GetKeyDown(KeyCode.Escape)) menu.SetActive(!menu.activeSelf);
-    if (menu.activeSelf) Cursor.lockState = CursorLockMode.None;
-    else Cursor.lockState = CursorLockMode.Locked;
+    if (menu.activeSelf) {
+      Cursor.lockState = CursorLockMode.None;
+      Time.timeScale = 0;
+    } else {
+      Cursor.lockState = CursorLockMode.Locked;
+      Time.timeScale = 1;
+    }
   }
 }

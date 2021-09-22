@@ -24,8 +24,8 @@ public class Movement : MonoBehaviour
   private Quaternion startRotation;
   private Vector3 desiredPosition;
   private Vector3 desiredLookat;
-  private float rotY = 0.0f; // rotation around the up/y axis
   private float rotX = 0.0f; // rotation around the right/x axis
+  private bool skipone = false;
 
   /// <summary> Start the player by setting the start position and rotation. </summary>
   private void Start() {
@@ -56,9 +56,14 @@ public class Movement : MonoBehaviour
   public void resetPosition() {
     MovementType m = moveType;
     setMovementType(MovementType.flying);
+    Debug.Log(String.Format("Resetting from{0}", transform.position));
     transform.position = startPosition;
+    Debug.Log(String.Format("Resetting to{0}", transform.position));
+    Debug.Log(String.Format("Resetting to{0}", startPosition));
     transform.rotation = startRotation;
     setMovementType(m);
+    velocity = Vector3.zero;
+    skipone = true;
   }
 
   /// <summary> Move the player to a position and make them look at the Lookat position. </summary>
@@ -78,7 +83,6 @@ public class Movement : MonoBehaviour
   /// <summary> Set the default rotation of the camera. </summary>
   public void setRotation() {
     Vector3 rot = camTransform.localRotation.eulerAngles;
-    rotY = rot.y;
     rotX = rot.x;
   }
   #endregion // (Re)Setters
@@ -86,14 +90,28 @@ public class Movement : MonoBehaviour
   /// <summary> Handle input, movement and camera. </summary>
   private void Update() {
     handleInput();
-    if (doInput) {
-      switch (moveType) {
-        case MovementType.flying: doFlyingController(); break;
-        default: doCharacterController(); break;
+
+    if (skipone) {
+      skipone = false;
+    } else {
+      if (doInput) {
+        switch (moveType) {
+          case MovementType.flying: doFlyingController(); break;
+          default: doCharacterController(); break;
+        }
+        updateCameraRotation();
       }
-      updateCameraRotation();
     }
+    handleOutOfBounds();
     if (thirdPerson) offsetCamera();
+  }
+
+  /// <summary> Reset the player once they go out of bounds </summary>
+  private void handleOutOfBounds() {
+    if (moveType == MovementType.running && transform.position.y < -5*SceneSpawner_s.BlockyBounds.extents.y) {
+      Debug.Log(String.Format("blockybounds y {0}", -5f*SceneSpawner_s.BlockyBounds.extents.y));
+      resetPosition();
+    }
   }
 
   /// <summary> Offset the camera behind the player for third person. </summary>
@@ -105,7 +123,7 @@ public class Movement : MonoBehaviour
   /// <summary> Handle the specific keyboard inputs.  </summary>
   private void handleInput() {
     if (Input.GetKeyDown(KeyCode.T)) toggleMovementType();
-    if (Input.GetKeyDown(KeyCode.R)) resetPosition();
+    if (Input.GetKey(KeyCode.R)) resetPosition();
   }
 
   /// <summary> Move the player according to the horizontal and vertical inputs. </summary>

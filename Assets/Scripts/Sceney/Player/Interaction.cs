@@ -35,7 +35,7 @@ public class Interaction : MonoBehaviour, Target
   /// <summary> Reset the health to the starting health and update the interface. </summary>
   public void resetHealth() {
     health = startingHealth;
-    userInterface.setCount(health);
+    userInterface.setHealth(health);
   }
 
   /// <summary> Handle inputs from the user to trigger interaction. </summary>
@@ -66,7 +66,6 @@ public class Interaction : MonoBehaviour, Target
 
   /// <summary> Do an interaction, i.e. shoot or throw </summary>
   private void doInteraction() {
-    Debug.Log(interType);
     prevInteractTime = Time.time;
     nextInteractTime = Time.time + 1f / interactionRate;
     switch (interType) {
@@ -133,6 +132,6 @@ public class Interaction : MonoBehaviour, Target
   /// <summary> Target interface function, triggers when hit by a thrown cube (from enemy). </summary>
   public void hit(Collision other, Transform culprit) {
     health--;
-    userInterface.setCount(health);
+    userInterface.setHealth(health);
   }
 }

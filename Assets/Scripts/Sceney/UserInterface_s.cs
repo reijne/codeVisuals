@@ -6,29 +6,31 @@ using UnityEngine.UI;
 
 public class UserInterface_s : MonoBehaviour
 {
-  [SerializeField] Sprite heart;
-  [SerializeField] Sprite collectable;
-  [SerializeField] Image icon;
-  [SerializeField] Text topText;
+  [SerializeField] GameObject collectableElement;
+  [SerializeField] GameObject heartElement;
+  [SerializeField] Text heartText;
+  [SerializeField] Text collectableText;
   [SerializeField] Text midText;
   [NonSerialized] public int collected = 0;
   public static int maxCollected = 100;
   private float removeDelay;
 
-  /// <summary> Set the icon according to the name. </summary>
-  public void setIcon(string iconName) {
-    switch (iconName) {
-      case "heart" : icon.sprite = heart; break;
-      case "collectable" : icon.sprite = collectable; break;
-    }
-    topText.gameObject.SetActive(true);
-    icon.gameObject.SetActive(true);
-  }
-
   /// <summary> Set the counter at the top of the screen. Or display a lost message. </summary>
   public void setCount(int count) {
-    topText.text = count.ToString();
-    if (count <= 0 && icon.sprite == heart) midText.text = "The Errors have fixed YOU!";
+    collectableText.text = count.ToString();
+  }
+
+  public void setHealth(int count) {
+    heartText.text = count.ToString();
+    if (count <= 0) midText.text = "The Errors have fixed YOU!";
+  }
+
+  public void enableHeartElement() {
+    heartElement.SetActive(true);
+  }
+
+  public void enableCollectElement() {
+    collectableElement.SetActive(true);
   }
 
   /// <summary> Increase the amount of collectables. </summary>
