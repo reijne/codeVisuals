@@ -59,6 +59,20 @@ public class BlockyController_s : MonoBehaviour
     changeInterfaces();
   }
 
+  /// <summary> Alter the currently selected blocky </summary>
+  public void changeBlocky() {
+    string name = "";
+    if (blockySelector.options.Count > blockySelector.value) {
+      name = blockySelector.options[blockySelector.value].text;
+      List<(Vector3Int, Color)> tilepos = new List<(Vector3Int, Color)>(blockyMap[name]); 
+      createBlocky.setTilePositions(tilepos);
+      removeSelected();
+    }
+    changeInterfaces();
+    createBlockyNameField.text = name;
+    createBlocky.spawnTiles();
+  }
+
   /// <summary> Remove the currently selected Blocky. </summary>
   public void removeSelected() {
     if (blockySelectorLabel.text == "") return;
