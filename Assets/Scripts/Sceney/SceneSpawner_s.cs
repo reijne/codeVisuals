@@ -243,6 +243,7 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Spawn in an error enemy on a node location </summary>
   public void spawnErrorEnemy(int nodeID) {
+    nodeID = getExistingLoc(nodeID);
     if (nodePositions[nodeID] != null) spawnErrorEnemy(nodePositions[nodeID]);
   }
 
@@ -254,6 +255,7 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Spawn a collectable at a node position. </summary>
   public void spawnCollectable(int nodeID) {
+    nodeID = getExistingLoc(nodeID);
     if (nodePositions[nodeID] != null) spawnCollectable(nodePositions[nodeID]);
   }
 
