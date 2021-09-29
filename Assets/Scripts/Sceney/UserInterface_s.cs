@@ -13,7 +13,7 @@ public class UserInterface_s : MonoBehaviour
   [SerializeField] Text midText;
   [NonSerialized] public int collected = 0;
   public static int maxCollected = 100;
-  private float removeDelay;
+  private float removeDelay = 0;
 
   /// <summary> Set the counter at the top of the screen. </summary>
   public void setCount(int count) {
@@ -60,7 +60,7 @@ public class UserInterface_s : MonoBehaviour
   }
 
   /// <summary> Remove the displayed message after the duration has passed. </summary>
-  IEnumerator removeMessage() {
+  public IEnumerator removeMessage() {
     yield return new WaitForSeconds(removeDelay);;
     midText.text = "";
   }

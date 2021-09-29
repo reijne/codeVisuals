@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +11,15 @@ public class SceneController_s : MonoBehaviour
   [SerializeField] GameObject menu;
   [SerializeField] Movement playerMovement;
   [SerializeField] SceneSpawner_s sceneSpawner;
-  // private void Start() {
-  //   sceneSpawner.initFromFile();
-  //   // old updateSceney("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\nin-Stmt-assStmt\n-in-Expr-expr\nin-Expr-inputExpr\r\n    out-Expr-inputExpr\n-out-Expr-expr\nout-Stmt-assStmt\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-modExpr\n-in-Expr-lhs\nin-Expr-idExpr\nout-Expr-idExpr\n-out-Expr-lhs\n-in-Expr-rhs\nin-Expr-numExpr\nout-Expr-numExpr\n-out-Expr-rhs\nout-Expr-modExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\nin-Stmt-outputStmt\n-in-Expr-expr\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-expr\nout-Stmt-outputStmt\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\nin-Stmt-outputStmt\n-in-Expr-expr\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_false\r\n    out-Boolean-b_false\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-expr\nout-Stmt-outputStmt\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-statements\nout-Program-program");
-  //   updateSceney("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\n\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\n\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\n\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-statements\nout-Program-program");
-  //   updateErrors("2|Expected a bool, got unexpected type\n4|Input expr not yet evaluated\n7|Modulo requires number arguments on both sides");
-  //   // updateBranches("10,11,12|12");
-  // }
+  
+  private void Start() {
+    sceneSpawner.initFromFile();
+    // old updateSceney("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-decl\n-in-Type-datatype\nin-Type-t_num\r\n    out-Type-t_num\n-out-Type-datatype\nout-Stmt-decl\nin-Stmt-assStmt\n-in-Expr-expr\nin-Expr-inputExpr\r\n    out-Expr-inputExpr\n-out-Expr-expr\nout-Stmt-assStmt\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-modExpr\n-in-Expr-lhs\nin-Expr-idExpr\nout-Expr-idExpr\n-out-Expr-lhs\n-in-Expr-rhs\nin-Expr-numExpr\nout-Expr-numExpr\n-out-Expr-rhs\nout-Expr-modExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\nin-Stmt-outputStmt\n-in-Expr-expr\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-expr\nout-Stmt-outputStmt\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\nin-Stmt-outputStmt\n-in-Expr-expr\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_false\r\n    out-Boolean-b_false\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-expr\nout-Stmt-outputStmt\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-statements\nout-Program-program");
+    updateSceney("in-Program-program\n-in-list[Stmt]-statements\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\nin-Stmt-ifElseStmt\n-in-Expr-cond\nin-Expr-boolExpr\n-in-Boolean-boolean\nin-Boolean-b_true\r\n    out-Boolean-b_true\n-out-Boolean-boolean\nout-Expr-boolExpr\n-out-Expr-cond\n-in-list[Stmt]-thenBlock\n\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\n\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-thenBlock\n-in-list[Stmt]-elseBlock\n\n-out-Stmt-elseBlock\nout-Stmt-ifElseStmt\n-out-Stmt-statements\nout-Program-program");
+    // updateErrors("2|Expected a bool, got unexpected type\n4|Input expr not yet evaluated\n7|Modulo requires number arguments on both sides");
+    // updateBranches("10,11,12|12");
+    updateSequence("0,1,2+2.0");
+  }
 
   /// <summary> Create a new Sceney instance using the showeydefintion. </summary>
   public void createSceney(string showeyJSON) {
@@ -28,13 +31,13 @@ public class SceneController_s : MonoBehaviour
     sceneSpawner.clearScene();
     sceneSpawner.parseLabeledTraversal(labeledTraversal);
     playerMovement.resetPosition();
+    userInterface.displayMessage("", 0);
   }
 
   /// <summary> Update the Sceney instance by spawning error enemies in the specified locations. </summary>
   public void updateErrors(string errors) {
     playerInteraction.setInteractionType(Interaction.InteractionType.throwing);
     setRunningMovement();
-    sceneSpawner.clearEnemies();
     sceneSpawner.parseErrors(errors);
     playerInteraction.resetHealth();
     Movement.doInput = true;
@@ -46,7 +49,6 @@ public class SceneController_s : MonoBehaviour
   public void updateBranches(string branches) {
     playerInteraction.setInteractionType(Interaction.InteractionType.shooting);
     setRunningMovement();
-    sceneSpawner.clearCollectables();
     sceneSpawner.parseBranches(branches);
     userInterfaceObject.SetActive(true);
     userInterface.enableCollectElement();
@@ -63,6 +65,7 @@ public class SceneController_s : MonoBehaviour
     int.TryParse(enemyPosition, out position);
     sceneSpawner.spawnErrorEnemy(position);
     userInterface.enableHeartElement();
+    playerInteraction.addHealth(2);
   }
 
   /// <summary> Spawn a collectable at the specified location. </summary>
@@ -85,6 +88,7 @@ public class SceneController_s : MonoBehaviour
     playerInteraction.setInteractionType(interaction);
   }
 
+  /// <summary> Update the type of movement used in the scene. </summary>
   public void updateMovement(string movement) {
     if (movement == "run") {
       setRunningMovement();
@@ -98,6 +102,29 @@ public class SceneController_s : MonoBehaviour
     if (SceneSpawner_s.showdef == null) return;
     if (SceneSpawner_s.showdef.vars.camMode != "kinematic")
       playerMovement.setMovementType(Movement.MovementType.running);
+  }
+
+  /// <summary> Statically highlight a node. </summary>
+  public void updateHighlight(string id) {
+    sceneSpawner.highlightNode(int.Parse(id));
+  }
+
+  /// <summary> Set a sequence of highlighted blockies that are cycled with duration. </summary>
+  public void updateSequence(string sequencePlusDuration) {
+    string [] split = sequencePlusDuration.Split('+');
+    string sequenceString = split[0];
+    string durationString = split[1];
+    float duration = 1;
+    float.TryParse(durationString, out duration);
+    
+    List<int> sequence = new List<int>();
+
+    foreach (string ss in sequenceString.Split(',')) {
+      int id = int.Parse(ss);
+      sequence.Add(id);
+    }
+
+    sceneSpawner.updateSequence(sequence, duration);
   }
 
   /// <summary> Interface button function to quit the application. </summary>

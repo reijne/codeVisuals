@@ -28,8 +28,19 @@ public class Interaction : MonoBehaviour, Target
 
   /// <summary> Save the starting health for reset and create the default layermast. </summary>
   private void Start() {
-    startingHealth = health;
+    setHealth(health);
     interactMask = LayerMask.GetMask("Default");
+  }
+
+  /// <summary> Set the starting amount of health, such that its available for reset. </summary>
+  public void setHealth(int health) {
+    startingHealth = health;
+  }
+
+  /// <summary> Add an amount of health to the current starting amount. </summary>
+  public void addHealth(int health) {
+    startingHealth += health;
+    resetHealth();
   }
 
   /// <summary> Reset the health to the starting health and update the interface. </summary>

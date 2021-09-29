@@ -665,6 +665,10 @@ MonoBehaviour:
   blocky_prefab: {fileID: 2856741433102284052, guid: cbdc225c141751b46a9d6276aab8806b, type: 3}
   errorEnemy_prefab: {fileID: 2682593675351145603, guid: 3aa80403c8907cf40b5ec72f4bc5f176, type: 3}
   collectable_prefab: {fileID: 1277862868151397346, guid: bc56a3ce0ebd0634d893af91538bf6c0, type: 3}
+  lightDuration: 0
+  lightSequence: 
+  lightID: 0
+  doLight: 0
 --- !u!4 &389835537
 Transform:
   m_ObjectHideFlags: 0
@@ -2219,7 +2223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1439294663
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,8 +8,11 @@ using UnityEngine;
 public class Blocky_s : MonoBehaviour
 {
   public static int SIZE = 3; // For spawning consistency, all the blockys are the same size i.e. static
+  public static Blocky_s highlightedBlocky;
   [SerializeField] GameObject tile_prefab;
   [SerializeField] BoxCollider triggerBox;
+  [SerializeField] Material shinyTileMaterial;
+  [SerializeField] Material tileMaterial;
   private List<GameObject> tiles = new List<GameObject>();
   [NonSerialized] public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();
   public int nodeID; 
@@ -145,6 +148,26 @@ public class Blocky_s : MonoBehaviour
     foreach (GameObject tile in tiles) {
       Rigidbody tileBody = tile.GetComponent<Rigidbody>();
       if (tileBody) tileBody.useGravity = true;
+    }
+  }
+
+  public void highlight() {
+    if (highlightedBlocky != null) highlightedBlocky.dehighlight();
+    foreach (GameObject tile in tiles) {
+      Color c = tile.GetComponent<MeshRenderer>().material.color;
+      tile.GetComponent<MeshRenderer>().material = shinyTileMaterial;
+      tile.GetComponent<MeshRenderer>().material.color = c;
+      Color emission = new Color(c.r, c.g, c.b, shinyTileMaterial.color.a);
+      tile.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", emission);
+    }
+    highlightedBlocky = this;
+  }
+
+  public void dehighlight() {
+    foreach (GameObject tile in tiles) {
+      Color c = tile.GetComponent<MeshRenderer>().material.color;
+      tile.GetComponent<MeshRenderer>().material = tileMaterial;
+      tile.GetComponent<MeshRenderer>().material.color = c;
     }
   }
 

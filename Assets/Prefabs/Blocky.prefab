@@ -46,6 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tile_prefab: {fileID: 6356699588366463442, guid: 7ee89ffaa9b83d14289f92cf65c21f72, type: 3}
   triggerBox: {fileID: 7610654386922866762}
+  shinyTileMaterial: {fileID: 2100000, guid: 4dbda032557302c419c746bf64b6b7e4, type: 2}
+  tileMaterial: {fileID: 2100000, guid: dca5c9c3755d0fb499f702f7f03765e9, type: 2}
   nodeID: 0
 --- !u!65 &7610654386922866762
 BoxCollider:

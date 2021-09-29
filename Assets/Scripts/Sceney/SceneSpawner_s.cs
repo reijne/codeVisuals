@@ -28,6 +28,11 @@ public class SceneSpawner_s : MonoBehaviour
   private bool isPlayerPositioned = false;
   private string currentLabels = "";
   private int nodeID = 0;
+  // Highlighter variables
+  public float lightDuration;
+  public List<int> lightSequence;
+  public int lightID;
+  public bool doLight = false;
 
   /// <summary> Initialise the spawner with a showeydefinition from json. </summary>
   public void initFromJSON(string serialisedShoweyDefinition) {
@@ -63,6 +68,9 @@ public class SceneSpawner_s : MonoBehaviour
     BlockyBounds = new Bounds();
     isPlayerPositioned = false;
     nodeID = 0;
+    doLight = false;
+    clearEnemies();
+    clearCollectables();
     System.GC.Collect();
   }
 
@@ -70,13 +78,11 @@ public class SceneSpawner_s : MonoBehaviour
   public void clearEnemies() {
     foreach (GameObject enemy in enemies) Destroy(enemy);
     enemies = new List<GameObject>();
-    System.GC.Collect();
   }
 
   public void clearCollectables() {
     foreach (GameObject collectable in collectables) Destroy(collectable);
     collectables = new List<GameObject>();
-    System.GC.Collect();
   }
 
   #region Parsing
@@ -217,6 +223,12 @@ public class SceneSpawner_s : MonoBehaviour
     spawns.Add(spawnPoint);
   }
 
+  /// <summary> Highlight a node in the scene </summary>
+  public void highlightNode(int id) {
+    if (blockies.Count > 0 && id < blockies.Count)
+    blockies[id].GetComponent<Blocky_s>().highlight();
+  }
+
   /// <summary> Spawn the player in the scene at the correct location. </summary>
   private void spawnPlayer() {
     Vector3 lookAt = Blocky_s.SIZE*currentDirection + Vector3.up;
@@ -324,4 +336,21 @@ public class SceneSpawner_s : MonoBehaviour
     dirPosStack.RemoveAt(dirPosStack.Count-1); 
   }
   #endregion // Spawning
+
+  /// <summary> Set the sequence of highlighting blocks and start the highlighter with duration. </summary>
+  public void updateSequence(List<int> sequence, float duration) {
+    lightDuration = duration;
+    lightSequence = sequence;
+    lightID = 0;
+    doLight = true;
+    StartCoroutine("lightSequencer");
+  }
+
+  /// <summary> Highlight the nodes in the lightsequence for the duration, then cycle on. </summary>
+  IEnumerator lightSequencer() {
+    while (doLight) {
+      highlightNode(lightSequence[lightID++ % lightSequence.Count]);
+      yield return new WaitForSeconds(lightDuration);
+    }
+  }
 }
