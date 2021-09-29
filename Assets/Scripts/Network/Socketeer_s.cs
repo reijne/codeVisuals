@@ -115,7 +115,7 @@ public class Socketeer_s : MonoBehaviour
       case "updateMovement":    sceneController.updateMovement(cu.param);            break;
       case "updateCollectable": sceneController.updateCollectable(cu.param);         break;
       case "updateInteraction": sceneController.updateInteraction(cu.param);         break;
-      case "updateHighlight":   sceneController.updateHighlight(cu.param);            break;
+      case "updateHighlight":   sceneController.updateHighlight(cu.param);           break;
       case "updateSequence":    sceneController.updateSequence(cu.param);            break;
       default: Debug.LogError("Unknown request received by socket."); break;
     }
