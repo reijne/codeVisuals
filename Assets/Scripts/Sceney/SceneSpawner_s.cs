@@ -19,6 +19,7 @@ public class SceneSpawner_s : MonoBehaviour
   private List<(string, string)> catNodeStack = new List<(string, string)>();
   private List<(Vector3Int, Vector3)> dirPosStack = new List<(Vector3Int, Vector3)>();
   private Vector3 spawnPoint = Vector3Int.zero;
+  private Dictionary<int, Blocky_s> blockyPositions = new Dictionary<int, Blocky_s>();
   private List<GameObject> blockies = new List<GameObject>();
   private List<GameObject> enemies = new List<GameObject>();
   private List<GameObject> collectables = new List<GameObject>();
@@ -65,6 +66,7 @@ public class SceneSpawner_s : MonoBehaviour
     blockies = new List<GameObject>();
     spawns = new List<Vector3>();
     nodePositions = new Dictionary<int, Vector3>();
+    blockyPositions = new Dictionary<int, Blocky_s>();
     BlockyBounds = new Bounds();
     isPlayerPositioned = false;
     nodeID = 0;
@@ -214,6 +216,7 @@ public class SceneSpawner_s : MonoBehaviour
   private void instantiateNode(string blockyName) {
     GameObject blockyInstance = Instantiate(blocky_prefab, spawnPoint, Quaternion.identity);
     Blocky_s blockyScript = blockyInstance.GetComponent<Blocky_s>();
+    blockyPositions[nodeID] = blockyScript;
     Quaternion rotation = Quaternion.LookRotation(currentDirection);
     blockyScript.nodeID = nodeID;
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
@@ -225,8 +228,9 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Highlight a node in the scene </summary>
   public void highlightNode(int id) {
-    if (blockies.Count > 0 && id < blockies.Count)
-    blockies[id].GetComponent<Blocky_s>().highlight();
+    if (blockyPositions.ContainsKey(id)) blockyPositions[id].highlight();
+    // if (blockies.Count > 0 && id < blockies.Count)
+    //   blockies[id].GetComponent<Blocky_s>().highlight();
   }
 
   /// <summary> Spawn the player in the scene at the correct location. </summary>
@@ -339,6 +343,7 @@ public class SceneSpawner_s : MonoBehaviour
 
   /// <summary> Set the sequence of highlighting blocks and start the highlighter with duration. </summary>
   public void updateSequence(List<int> sequence, float duration) {
+    StopCoroutine("lightSequencer");
     lightDuration = duration;
     lightSequence = sequence;
     lightID = 0;
