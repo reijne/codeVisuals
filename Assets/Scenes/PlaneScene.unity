@@ -304,7 +304,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpHeight: 5
   sensitivity: 100
   verticalViewClampAngle: 90
   camTransform: {fileID: 963194228}
@@ -2187,7 +2186,11 @@ MonoBehaviour:
 
     Space
 
-    LShift'
+    LShift
+
+    T
+
+    Y'
 --- !u!222 &1314987573
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2703,7 +2706,11 @@ MonoBehaviour:
     - Jump / Fly up
 
     -
-    Fly down'
+    Fly down
+
+    - Toggle Fly/Run
+
+    - Toggle Ability'
 --- !u!222 &2045198605
 CanvasRenderer:
   m_ObjectHideFlags: 0
