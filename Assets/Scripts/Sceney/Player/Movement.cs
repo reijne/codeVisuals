@@ -6,7 +6,6 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
   [SerializeField] float moveSpeed;
-  [SerializeField] float jumpHeight;
   [SerializeField] float sensitivity;
   [SerializeField] float verticalViewClampAngle;
   [SerializeField] Transform camTransform;
@@ -133,6 +132,7 @@ public class Movement : MonoBehaviour
     charController.Move(move * Time.deltaTime * moveSpeed);
 
     if (isGrounded() && Input.GetButtonDown("Jump")) {
+      float jumpHeight = SceneSpawner_s.showdef.vars.blockySize + 1;
       velocity.y += Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
     }
 
