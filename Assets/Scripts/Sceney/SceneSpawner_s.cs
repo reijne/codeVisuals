@@ -220,6 +220,7 @@ public class SceneSpawner_s : MonoBehaviour
     Quaternion rotation = Quaternion.LookRotation(currentDirection);
     blockyScript.nodeID = nodeID;
     blockyScript.setTilePositions(showdef.blockyMap[blockyName]);
+    blockyScript.nodeNAME = blockyName;
     blockyScript.spawnTiles();
     blockyInstance.transform.rotation = rotation;
     blockies.Add(blockyInstance);

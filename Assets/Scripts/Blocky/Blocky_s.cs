@@ -16,6 +16,7 @@ public class Blocky_s : MonoBehaviour
   private List<GameObject> tiles = new List<GameObject>();
   [NonSerialized] public List<(Vector3Int, Color)> tilePosCols = new List<(Vector3Int, Color)>();
   public int nodeID; 
+  public string nodeNAME;
   private void Start() {
     triggerBox.size = new Vector3(SIZE+1, SIZE+1, SIZE+1);
   }

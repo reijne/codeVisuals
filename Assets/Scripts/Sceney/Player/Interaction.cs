@@ -82,6 +82,7 @@ public class Interaction : MonoBehaviour, Target
     switch (interType) {
       case InteractionType.shooting : shootToDrop(); break;
       case InteractionType.throwing : throwCube(); break;
+      case InteractionType.none: infoRetriever(); break;
     }
   }
 
@@ -106,6 +107,17 @@ public class Interaction : MonoBehaviour, Target
   /// <summary> Set the interaction type. </summary>
   public void setInteractionType(InteractionType it) {
     interType = it;
+  }
+
+  /// <summary> Shoot raycast to get information in display. </summary>
+  private void infoRetriever() {
+    RaycastHit hit;
+    if (Physics.Raycast(eyes.transform.position + 0.5f*eyes.transform.forward, eyes.transform.forward, out hit, 9999f, interactMask)) {
+      Blocky_s blockyScript =  hit.transform.parent.GetComponent<Blocky_s>();
+      if (blockyScript != null) {
+        userInterface.displayMessage(blockyScript.nodeNAME, 1.0f);
+      }
+    }
   }
 
   /// <summary> Shoot a raycast and toggle the gravity of the hit gameobject. </summary>
