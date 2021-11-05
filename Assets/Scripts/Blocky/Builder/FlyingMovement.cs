@@ -14,7 +14,6 @@ public class FlyingMovement : MonoBehaviour
   [SerializeField] private InputField nameField;
   [SerializeField] private Button toggleMovementButton;
   [SerializeField] private float speed = 20;
-  [SerializeField] private float updateSpeed = 10;
   [SerializeField] private float sensitivity = 100f;
   [SerializeField] private float clampAngle = 80f;
   private float rotY = 0.0f; // rotation around the up/y axis
