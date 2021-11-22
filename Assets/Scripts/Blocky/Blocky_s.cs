@@ -152,6 +152,7 @@ public class Blocky_s : MonoBehaviour
     }
   }
 
+  /// <summary> Highlight uniquely current blocky by setting the material. </summary>
   public void highlight() {
     if (highlightedBlocky != null) highlightedBlocky.dehighlight();
     foreach (GameObject tile in tiles) {
@@ -164,6 +165,7 @@ public class Blocky_s : MonoBehaviour
     highlightedBlocky = this;
   }
 
+  /// <summary> Stop highlighting this blocky, reset standard material. </summary>
   public void dehighlight() {
     foreach (GameObject tile in tiles) {
       Color c = tile.GetComponent<MeshRenderer>().material.color;
@@ -172,7 +174,7 @@ public class Blocky_s : MonoBehaviour
     }
   }
 
-  // TODO salavge this boi
+  // Creating a blocky from a string representation - salavge this boi
   void createBlockyFromString(string blockyString, Vector3 blockpos) {
     List<(Vector3Int, Color)> tilePositionsColors = new List<(Vector3Int, Color)>();
     string[] blockySplit = blockyString.Split('\n');
