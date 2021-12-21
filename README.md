@@ -1,4 +1,5 @@
-# codeVisuals
+# Live interactive code visualisation and Educational Games
+
 Bridging the gulf of execution and evaluation by enabling users to inspect and interact with their code in a game environment where the mechanics, entities and relations are dependent on the input code.
 
 Features:
